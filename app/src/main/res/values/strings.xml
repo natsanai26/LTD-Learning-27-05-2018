@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">LTD-Learning</string>
+    <string name="search">
+        <item>Coruse_1</item>
+        <item>Coruse_2</item>
+        <item>Coruse_3</item>
+        <item>Coruse_4</item>
+        <item>Coruse_5</item>
+        <item>Coruse_6</item>
+        <item>Coruse_7</item>
+        <item>Coruse_8</item>
+        <item>Coruse_9</item>
+        <item>Coruse_10</item>
+    </string>
 </resources>
