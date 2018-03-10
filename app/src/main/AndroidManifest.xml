@@ -21,6 +21,7 @@
         <activity android:name=".SearchActivity"></activity>
         <activity android:name=".CourseDetail"></activity>
         <activity android:name=".Register"></activity>
+        <activity android:name=".CourseDetailForMyCourse"></activity>
     </application>
 
 </manifest>

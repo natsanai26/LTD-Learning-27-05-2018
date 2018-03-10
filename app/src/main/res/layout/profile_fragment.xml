@@ -18,7 +18,7 @@
             android:id="@+id/ic_logo"
             android:layout_width="200dp"
             android:layout_height="100dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/l2d_project" />
 
@@ -30,10 +30,10 @@
     android:layout_height="wrap_content">
     <EditText
         android:id="@+id/username"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:background="@drawable/layout_border"
         android:layout_width="250dp"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="username" />
@@ -42,7 +42,7 @@
         android:id="@+id/password"
         android:background="@drawable/layout_border"
         android:layout_width="250dp"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:ems="10"
         android:inputType="textPassword"
         android:hint="password"/>
@@ -66,10 +66,12 @@
         android:background="@drawable/layout_border_btn"
         android:paddingLeft="10dp"
         android:text="Login"
-        android:textColor="@android:color/black"
+        android:textColor="#FFFFFF"
         android:textSize="15dp"
         android:textStyle="normal" />
 </LinearLayout>
+
+
     <LinearLayout
         android:gravity="center"
         android:layout_width="match_parent"
@@ -82,58 +84,38 @@
             android:background="@drawable/layout_border_btn"
             android:paddingLeft="10dp"
             android:text="Register"
-            android:textColor="@android:color/black"
+            android:textColor="#FFFFFF"
             android:textSize="15dp"
             android:textStyle="normal"  />
     </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:gravity="center"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_height="wrap_content">-->
+        <!--<Button-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:id="@+id/loginFacebook"-->
+            <!--android:layout_width="70dp"-->
+            <!--android:layout_height="70dp"-->
+            <!--android:background="@drawable/layout_border_facebook"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textSize="15dp"-->
+            <!--android:textStyle="normal"  />-->
+        <!--<Button-->
+            <!--android:id="@+id/loginGoogle"-->
+            <!--android:layout_width="120dp"-->
+            <!--android:layout_height="45dp"-->
+            <!--android:background="@drawable/layout_border_google"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textSize="15dp"-->
+            <!--android:textStyle="normal"  />-->
+    <!--</LinearLayout>-->
 
 
-    <TextView
-        android:id="@+id/pprofile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
-    <TextView
-        android:id="@+id/pusername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/pname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/psurname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <LinearLayout
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/logoutButton"
-            android:layout_width="250dp"
-            android:layout_height="45dp"
-            android:background="@drawable/layout_border_btn"
-            android:paddingLeft="10dp"
-            android:text="Logout"
-            android:textColor="@android:color/black"
-            android:textSize="15dp"
-            android:textStyle="normal"  />
-    </LinearLayout>
 </LinearLayout>
 </ScrollView>
 <!--<?xml version="1.0" encoding="utf-8"?>-->

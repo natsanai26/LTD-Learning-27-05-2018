@@ -8,52 +8,81 @@ import java.util.List;
 
 public class Profile
 {
+
+
     public int getIdmember() {
         return idmember;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public void setIdmember(int idmember) {
+        this.idmember = idmember;
     }
 
-    public String getMtype() {
-        return mtype;
+    public String getName() {
+        return name;
     }
 
-    public String getMpasswd() {
-        return mpasswd;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getMusername() {
-        return musername;
+    public String getSurname() {
+        return surname;
     }
 
-    public String getMprofile() {
-        return mprofile;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public String getMname() {
-        return mname;
+    public String getUsername() {
+        return username;
     }
 
-    public String getMemail() {
-        return memail;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     private int idmember;
-    private List<Teacher> teachers;
-    private String mtype;
-    private String mpasswd;
-    private String musername;
-    private String mprofile;
-    private String msurname;
+    private String name;
+    private String surname;
+    private String username;
+    private String passwd;
+    private String email;
+    private String type;
+    private String profile;
 
-    public String getMsurname() {
-        return msurname;
-    }
-
-    private String mname;
-    private String memail;
 
 
 }

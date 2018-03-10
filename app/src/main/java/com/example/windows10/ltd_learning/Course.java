@@ -9,104 +9,88 @@ import java.util.List;
  */
 
 public class Course {
+
+
     /**
-     * id : 25
-     * categoryId : 19
-     * name : Test01
-     * detail : Test01
-     * sectionList : [{"id":28,"courseId":25,"content":"test_01","contentType":"TEXT","rank":1,"sub-section":[{"id":29,"courseId":25,"parentSectionId":28,"content":"test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"parentSectionId":29,"content":"High","contentType":"TEXT","rank":1}]},{"id":30,"courseId":25,"parentSectionId":28,"content":"test_03","contentType":"TEXT","rank":2}]},{"id":29,"courseId":25,"parentSectionId":28,"content":"test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"parentSectionId":29,"content":"High","contentType":"TEXT","rank":1}]},{"id":30,"courseId":25,"parentSectionId":28,"content":"test_03","contentType":"TEXT","rank":2},{"id":36,"courseId":25,"parentSectionId":29,"content":"High","contentType":"TEXT","rank":1}]
-     * createdDate : 1501779600000
-     * key : key999
+     * courses : [{"id":109,"categoryId":22,"name":"Engineering Material 2","detail":"The interdisciplinary field of materials science","sectionList":[],"createdDate":null,"key":"key999","teacher":{"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}},"rating":0},{"id":108,"categoryId":22,"name":"Introduction to API","detail":"Introduction to API","sectionList":[],"createdDate":null,"key":"key999","teacher":{"idteacher":1,"member":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}},"rating":0},{"id":107,"categoryId":22,"name":"Introduction to API2","detail":"Introduction to API","sectionList":[],"createdDate":null,"key":"key999","teacher":{"idteacher":1,"member":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}},"rating":0},{"id":106,"categoryId":22,"name":"Introduction to API3","detail":"Introduction to API","sectionList":[],"createdDate":null,"key":"key999","teacher":{"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}},"rating":0},{"id":57,"categoryId":37,"name":"general theory of relativity","detail":"Albert Einstein","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":{"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}},"rating":0},{"id":56,"categoryId":37,"name":"Momentum","detail":"p=m.v","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":{"idteacher":1,"member":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}},"rating":0},{"id":48,"categoryId":39,"name":"Hi2","detail":"Nantaporn2","sectionList":[45,46,47,48,49,50,51,52],"createdDate":1512147600000,"key":"key999","teacher":{"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}},"rating":0},{"id":47,"categoryId":38,"name":"Golf2","detail":"Natsanai2","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":{"idteacher":1,"member":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}},"rating":0},{"id":46,"categoryId":78,"name":"Mit2","detail":"Sumit2","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":null,"rating":0},{"id":45,"categoryId":35,"name":"Wax2","detail":"Suchao2","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":null,"rating":0},{"id":44,"categoryId":35,"name":"Art1","detail":"Watcharakorn1","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":null,"rating":0},{"id":43,"categoryId":36,"name":"Trigonometry","detail":"sin cos tan","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":null,"rating":0},{"id":42,"categoryId":36,"name":"graph theory","detail":"edges","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":null,"rating":0},{"id":40,"categoryId":22,"name":"golf1","detail":"Natsanai1","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":null,"rating":0},{"id":39,"categoryId":19,"name":"Electrical Chemistry","detail":"Na+ Cl-","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":null,"rating":0},{"id":38,"categoryId":19,"name":"Chemistry","detail":"Chem","sectionList":[],"createdDate":1512147600000,"key":"key999","teacher":null,"rating":0},{"id":37,"categoryId":37,"name":" Newton's law","detail":"sigma(F) = m.a","sectionList":[],"createdDate":1509469200000,"key":"key999","teacher":null,"rating":0},{"id":36,"categoryId":43,"name":"first","detail":"watcharakorn","sectionList":[],"createdDate":1509469200000,"key":"key999","teacher":null,"rating":0},{"id":35,"categoryId":38,"name":"to","detail":"suopashok","sectionList":[],"createdDate":1509469200000,"key":"key999","teacher":null,"rating":0},{"id":34,"categoryId":38,"name":"Astronomy","detail":"stars","sectionList":[],"createdDate":1509469200000,"key":"key999","teacher":{"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}},"rating":0},{"id":33,"categoryId":39,"name":"golf","detail":"natsanai","sectionList":[37],"createdDate":1509469200000,"key":"key999","teacher":{"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}},"rating":0},{"id":32,"categoryId":35,"name":"mit","detail":"sumit","sectionList":[],"createdDate":1509469200000,"key":"key999","teacher":{"idteacher":1,"member":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}},"rating":4},{"id":28,"categoryId":35,"name":"SOA","detail":"easy","sectionList":[],"createdDate":1509469200000,"key":"key999","teacher":{"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}},"rating":4},{"id":27,"categoryId":36,"name":"Discrete mathematics","detail":"discrete function","sectionList":[],"createdDate":1509469200000,"key":"key999","teacher":{"idteacher":1,"member":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}},"rating":5},{"id":25,"categoryId":19,"name":"Engineering Material","detail":"covalent and metallic bond, crystal systems","sectionList":[28,29,30,36,43],"createdDate":1501779600000,"key":"key999","teacher":{"idteacher":1,"member":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}},"rating":3.5}]
+     * status : {"status":true,"message":"request successfully"}
      */
+    @SerializedName("response")
+    private StatusBean status;
+    private List<CoursesBean> courses;
 
-    private int id;
-    private int categoryId;
-    private String name;
-    private String detail;
-    private long createdDate;
-    private String key;
-    private List<SectionListBean> sectionList;
-
-    public Course(String courseName){
-        name = courseName;
-
+    public StatusBean getStatus() {
+        return status;
     }
 
-    public int getId() {
-        return id;
+    public void setStatus(StatusBean status) {
+        this.status = status;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public List<CoursesBean> getCourses() {
+        return courses;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public void setCourses(List<CoursesBean> courses) {
+        this.courses = courses;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public long getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(long createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public List<SectionListBean> getSectionList() {
-        return sectionList;
-    }
-
-    public void setSectionList(List<SectionListBean> sectionList) {
-        this.sectionList = sectionList;
-    }
-
-    public static class SectionListBean {
+    public static class StatusBean {
         /**
-         * id : 28
-         * courseId : 25
-         * content : test_01
-         * contentType : TEXT
-         * rank : 1
-         * sub-section : [{"id":29,"courseId":25,"parentSectionId":28,"content":"test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"parentSectionId":29,"content":"High","contentType":"TEXT","rank":1}]},{"id":30,"courseId":25,"parentSectionId":28,"content":"test_03","contentType":"TEXT","rank":2}]
-         * parentSectionId : 28
+         * status : true
+         * message : request successfully
+         */
+
+        private boolean status;
+        private String message;
+
+        public boolean isStatus() {
+            return status;
+        }
+
+        public void setStatus(boolean status) {
+            this.status = status;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
+
+    public static class CoursesBean extends Course {
+        /**
+         * id : 109
+         * categoryId : 22
+         * name : Engineering Material 2
+         * detail : The interdisciplinary field of materials science
+         * sectionList : []
+         * createdDate : null
+         * key : key999
+         * teacher : {"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}}
+         * rating : 0.0
          */
 
         private int id;
-        private int courseId;
-        private String content;
-        private String contentType;
-        private int rank;
-        private int parentSectionId;
-        @SerializedName("sub-section")
-        private List<SubsectionBeanX> subsection;
+        private int categoryId;
+        private String name;
+        private String detail;
+        private Object createdDate;
+        private String key;
+        private TeacherBean teacher;
+        private double rating;
+        private List<?> sectionList;
+
+        public CoursesBean(){
+        }
+        public CoursesBean(String courseName,int id){
+            this.id = id;
+            name = courseName;
+
+        }
 
         public int getId() {
             return id;
@@ -116,243 +100,212 @@ public class Course {
             this.id = id;
         }
 
-        public int getCourseId() {
-            return courseId;
+        public int getCategoryId() {
+            return categoryId;
         }
 
-        public void setCourseId(int courseId) {
-            this.courseId = courseId;
+        public void setCategoryId(int categoryId) {
+            this.categoryId = categoryId;
         }
 
-        public String getContent() {
-            return content;
+        public String getName() {
+            return name;
         }
 
-        public void setContent(String content) {
-            this.content = content;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public String getContentType() {
-            return contentType;
+        public String getDetail() {
+            return detail;
         }
 
-        public void setContentType(String contentType) {
-            this.contentType = contentType;
+        public void setDetail(String detail) {
+            this.detail = detail;
         }
 
-        public int getRank() {
-            return rank;
+        public Object getCreatedDate() {
+            return createdDate;
         }
 
-        public void setRank(int rank) {
-            this.rank = rank;
+        public void setCreatedDate(Object createdDate) {
+            this.createdDate = createdDate;
         }
 
-        public int getParentSectionId() {
-            return parentSectionId;
+        public String getKey() {
+            return key;
         }
 
-        public void setParentSectionId(int parentSectionId) {
-            this.parentSectionId = parentSectionId;
+        public void setKey(String key) {
+            this.key = key;
         }
 
-        public List<SubsectionBeanX> getSubsection() {
-            return subsection;
+        public TeacherBean getTeacher() {
+            return teacher;
         }
 
-        public void setSubsection(List<SubsectionBeanX> subsection) {
-            this.subsection = subsection;
+        public void setTeacher(TeacherBean teacher) {
+            this.teacher = teacher;
         }
 
-        public static class SubsectionBeanX {
+        public double getRating() {
+            return rating;
+        }
+
+        public void setRating(double rating) {
+            this.rating = rating;
+        }
+
+        public List<?> getSectionList() {
+            return sectionList;
+        }
+
+        public void setSectionList(List<?> sectionList) {
+            this.sectionList = sectionList;
+        }
+
+        public static class TeacherBean {
             /**
-             * id : 29
-             * courseId : 25
-             * parentSectionId : 28
-             * content : test_02
-             * contentType : TEXT
-             * rank : 1
-             * sub-section : [{"id":36,"courseId":25,"parentSectionId":29,"content":"High","contentType":"TEXT","rank":1}]
+             * idteacher : 2
+             * member : {"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}
              */
 
-            private int id;
-            private int courseId;
-            private int parentSectionId;
-            private String content;
-            private String contentType;
-            private int rank;
-            @SerializedName("sub-section")
-            private List<SubsectionBean> subsection;
+            private int idteacher;
+            private MemberBean member;
 
-            public int getId() {
-                return id;
+            public int getIdteacher() {
+                return idteacher;
             }
 
-            public void setId(int id) {
-                this.id = id;
+            public void setIdteacher(int idteacher) {
+                this.idteacher = idteacher;
             }
 
-            public int getCourseId() {
-                return courseId;
+            public MemberBean getMember() {
+                return member;
             }
 
-            public void setCourseId(int courseId) {
-                this.courseId = courseId;
+            public void setMember(MemberBean member) {
+                this.member = member;
             }
 
-            public int getParentSectionId() {
-                return parentSectionId;
-            }
-
-            public void setParentSectionId(int parentSectionId) {
-                this.parentSectionId = parentSectionId;
-            }
-
-            public String getContent() {
-                return content;
-            }
-
-            public void setContent(String content) {
-                this.content = content;
-            }
-
-            public String getContentType() {
-                return contentType;
-            }
-
-            public void setContentType(String contentType) {
-                this.contentType = contentType;
-            }
-
-            public int getRank() {
-                return rank;
-            }
-
-            public void setRank(int rank) {
-                this.rank = rank;
-            }
-
-            public List<SubsectionBean> getSubsection() {
-                return subsection;
-            }
-
-            public void setSubsection(List<SubsectionBean> subsection) {
-                this.subsection = subsection;
-            }
-
-            public static class SubsectionBean {
+            public static class MemberBean {
                 /**
-                 * id : 36
-                 * courseId : 25
-                 * parentSectionId : 29
-                 * content : High
-                 * contentType : TEXT
-                 * rank : 1
+                 * idmember : 136
+                 * name : Somsak
+                 * surname : Chaipranee
+                 * username : q2
+                 * passwd : $2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi
+                 * email : q2@gmail.com
+                 * socialId : null
+                 * socialType : null
+                 * photoUrl : null
+                 * type : teacher
+                 * profile : xxx
                  */
 
-                private int id;
-                private int courseId;
-                private int parentSectionId;
-                private String content;
-                private String contentType;
-                private int rank;
+                private int idmember;
+                private String name;
+                private String surname;
+                private String username;
+                private String passwd;
+                private String email;
+                private Object socialId;
+                private Object socialType;
+                private Object photoUrl;
+                private String type;
+                private String profile;
 
-                public int getId() {
-                    return id;
+                public int getIdmember() {
+                    return idmember;
                 }
 
-                public void setId(int id) {
-                    this.id = id;
+                public void setIdmember(int idmember) {
+                    this.idmember = idmember;
                 }
 
-                public int getCourseId() {
-                    return courseId;
+                public String getName() {
+                    return name;
                 }
 
-                public void setCourseId(int courseId) {
-                    this.courseId = courseId;
+                public void setName(String name) {
+                    this.name = name;
                 }
 
-                public int getParentSectionId() {
-                    return parentSectionId;
+                public String getSurname() {
+                    return surname;
                 }
 
-                public void setParentSectionId(int parentSectionId) {
-                    this.parentSectionId = parentSectionId;
+                public void setSurname(String surname) {
+                    this.surname = surname;
                 }
 
-                public String getContent() {
-                    return content;
+                public String getUsername() {
+                    return username;
                 }
 
-                public void setContent(String content) {
-                    this.content = content;
+                public void setUsername(String username) {
+                    this.username = username;
                 }
 
-                public String getContentType() {
-                    return contentType;
+                public String getPasswd() {
+                    return passwd;
                 }
 
-                public void setContentType(String contentType) {
-                    this.contentType = contentType;
+                public void setPasswd(String passwd) {
+                    this.passwd = passwd;
                 }
 
-                public int getRank() {
-                    return rank;
+                public String getEmail() {
+                    return email;
                 }
 
-                public void setRank(int rank) {
-                    this.rank = rank;
+                public void setEmail(String email) {
+                    this.email = email;
+                }
+
+                public Object getSocialId() {
+                    return socialId;
+                }
+
+                public void setSocialId(Object socialId) {
+                    this.socialId = socialId;
+                }
+
+                public Object getSocialType() {
+                    return socialType;
+                }
+
+                public void setSocialType(Object socialType) {
+                    this.socialType = socialType;
+                }
+
+                public Object getPhotoUrl() {
+                    return photoUrl;
+                }
+
+                public void setPhotoUrl(Object photoUrl) {
+                    this.photoUrl = photoUrl;
+                }
+
+                public String getType() {
+                    return type;
+                }
+
+                public void setType(String type) {
+                    this.type = type;
+                }
+
+                public String getProfile() {
+                    return profile;
+                }
+
+                public void setProfile(String profile) {
+                    this.profile = profile;
                 }
             }
         }
     }
-
-
-//    private String mName;
-//    private String mDetail;
-//    private int mID;
-//    private int mCatID;
-//    private int mCreateDate;
-//
-//    public Course(String name){
-//        mName = name;
-//    }
-//
-//    public void setCreateDate(int createDate){
-//        mCreateDate = createDate;
-//    }
-//
-//    public int getCreateDate(){
-//        return mCreateDate;
-//    }
-//    public void setDetail(String detail){
-//        mDetail = detail;
-//    }
-//
-//    public String getDetail(){
-//        return mDetail;
-//    }
-//    public void setCatID(int id){
-//        mCatID = id;
-//    }
-//    public int getCatID(){
-//        return mCatID;
-//    }
-//
-//    public void setID(int id){
-//        mID = id;
-//    }
-//
-//    public int getID(){
-//        return mID;
-//    }
-//
-//    public void setName(String name){
-//        mName = name;
-//    }
-//    public String getName(){
-//        return mName;
-//    }
-
 }
+
+

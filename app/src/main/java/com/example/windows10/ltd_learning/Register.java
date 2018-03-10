@@ -68,12 +68,12 @@ public class Register extends AppCompatActivity {
                 Gson gson = new Gson();
                 Profile profile = gson.fromJson(json,Profile.class);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("username", profile.getMusername());
-                editor.putString("password", profile.getMpasswd());
-                editor.putString("name", profile.getMname());
-                editor.putString("surname", profile.getMsurname());
-                editor.putString("profile", profile.getMprofile());
-                editor.putString("email", profile.getMemail());
+                editor.putString("username", profile.getUsername());
+                editor.putString("password", profile.getPasswd());
+                editor.putString("name", profile.getName());
+                editor.putString("surname", profile.getSurname());
+                editor.putString("profile", profile.getProfile());
+                editor.putString("email", profile.getEmail());
                 editor.commit();
                 Intent intent = new Intent(Register.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -97,12 +97,12 @@ public class Register extends AppCompatActivity {
 
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("mname", name);
-            jsonObject.accumulate("msurname", surname);
-            jsonObject.accumulate("musername", username);
-            jsonObject.accumulate("mpasswd", password);
-            jsonObject.accumulate("mprofile", profile);
-            jsonObject.accumulate("memail", email);
+            jsonObject.accumulate("name", name);
+            jsonObject.accumulate("surname", surname);
+            jsonObject.accumulate("username", username);
+            jsonObject.accumulate("passwd", password);
+            jsonObject.accumulate("profile", profile);
+            jsonObject.accumulate("email", email);
 
 
             // 4. convert JSONObject to JSON to String

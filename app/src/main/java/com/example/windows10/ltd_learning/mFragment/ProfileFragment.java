@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
@@ -40,162 +41,231 @@ import java.io.InputStreamReader;
  */
 
 public class ProfileFragment extends Fragment {
-    TextView loginResult;
-    SharedPreferences sharedPreferences;
-    View rootView;
-    LayoutInflater myInflater;
-    ViewGroup myContainer;
-    EditText username;
-    EditText password;
-    TextView email;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    private SharedPreferences sharedPreferences;
+    private final String URL_LOGIN = "http://158.108.207.7:8090/elearning/member/login";
+    private final String URL_UPDATE_MEMBER = "http://158.108.207.7:8090/elearning/member/update";
+    //login
+    private EditText username;
+    private EditText password;
+    private Button loginButton;
+    private Button registerButton;
+    private TextView loginResult;
+    //logon
+    private TextView pProfile;
+    private TextView pUsername;
+    private TextView pName;
+    private TextView pSurname;
+    private TextView pEmail;
+    private static final String MyPREFERENCES = "MyPrefs" ;
+
+    private Button changePasswd;
+    private Button logoutButton;
+    private Button editProfile;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //username.setVisibility(EditText.GONE);
-        myInflater = inflater;
-        myContainer = container;
         sharedPreferences = getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
-        rootView = myInflater.inflate(R.layout.profile_fragment,container,false);
-        final String usernameL = sharedPreferences.getString("username","not found");
-        String passwordL = sharedPreferences.getString("password","not found");
-
+        final int idMember = sharedPreferences.getInt("idMember",-1);
         // Permission StrictMode
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        View rootView;
+        if (idMember==-1)
+        {
+            rootView = inflater.inflate(R.layout.profile_fragment, container, false);
+            bindViewLogin(rootView);
 
-        Button loginButton = (Button) rootView.findViewById(R.id.loginButton);
-        username = (EditText) rootView.findViewById(R.id.username);
-        password = (EditText)rootView.findViewById(R.id.password);
-
-        email = (TextView)rootView.findViewById(R.id.email);
-
-        loginResult = (TextView) rootView.findViewById(R.id.loginResult);
-
-                loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (username.getText().toString().equals("")||password.getText().toString().equals(""))
-                {
-                    loginResult.setText("**username or password is empty!");
-                    return;
+            registerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //mCallback.someEvent(new RegisterFragment());
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_id,new RegisterFragment()).commit();
                 }
-                //String url = "http://158.108.207.4/WAD_06/moocCheckLogin/chkLogin.php";
-                String url = "http://158.108.207.7:8090/elearning/member/login";
-                /*
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("username", username.getText().toString()));
-                params.add(new BasicNameValuePair("password", password.getText().toString()));
-
-                String resultServer  = getHttpPost(url,params);
-
-                if (resultServer.equals("login success")) {
+            });
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (username.getText().toString().equals("")||password.getText().toString().equals(""))
+                    {
+                        loginResult.setText("**username or password is empty!");
+                        return;
+                    }
+                    String json = POST(URL_LOGIN,username.getText().toString(),password.getText().toString());
+                    if(json.contains("false"))
+                    {
+                        loginResult.setText("login fail!");
+                    }
+                    else {
+                        if(json.equals(""))
+                        {
+                            loginResult.setText("INTERNET_DISCONNECTED");
+                            return;
+                        }
+                        Gson gson = new Gson();
+                        Profile profile = gson.fromJson(json,Profile.class);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("checkLogin",true);
+                        editor.putInt("idMember",profile.getIdmember());
+                        editor.putString("pProfile",profile.getProfile());
+                        editor.putString("pUsername",profile.getUsername());
+                        editor.putString("pName",profile.getName());
+                        editor.putString("pSurname",profile.getSurname());
+                        editor.putString("pEmail",profile.getEmail());
+                        editor.commit();
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                   // putExtraName();
+                }
+            });
+        }
+        else
+        {
+            rootView = inflater.inflate(R.layout.profile_logon, container, false);
+            bindViewLogon(rootView);
+            pProfile.setText(sharedPreferences.getString("pProfile","not found"));
+            pUsername.setText(sharedPreferences.getString("pUsername","not found"));
+            pName.setText(sharedPreferences.getString("pName","not found"));
+            pSurname.setText(sharedPreferences.getString("pSurname","not found"));
+            pEmail.setText(sharedPreferences.getString("pEmail","not found"));
+            logoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("username", username.getText().toString());
-                    editor.putString("password", password.getText().toString());
-                    editor.commit();
-                    //rootView = myInflater.inflate(R.layout.profile_fragment_logon,myContainer,false);
-
-                    MainActivity.bottomNavigationItem.setCurrentItem(0);
-
-                }
-                else
-                {
-                    loginResult.setText(resultServer);
-                }
-
-        */      String json = POST(url,username.getText().toString(),password.getText().toString());
-                Gson gson = new Gson();
-                Profile profile = gson.fromJson(json,Profile.class);
-
-                if (!json.equals(""))
-                {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("username", profile.getMusername());
-                    editor.putString("password", profile.getMpasswd());
-                    editor.putString("name", profile.getMname());
-                    editor.putString("surname", profile.getMsurname());
-                    editor.putString("profile", profile.getMprofile());
-                    editor.putString("email", profile.getMemail());
-
+                    editor.clear();
+                    editor.putBoolean("checkLogin",false);
                     editor.commit();
                     Intent intent = new Intent(getContext(),MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-//                    MainActivity.bottomNavigationItem.setCurrentItem(0);
+
                 }
-                else
-                {
-                    loginResult.setText("login fail!");
+            });
+            editProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String txt = String.format("{\n" +
+                                    "        \"idmember\":%d,\n" +
+                                    "        \"name\": \"%s\",\n" +
+                                    "        \"surname\": \"%s\",\n" +
+                                    "        \"email\": \"%s\",\n" +
+                                    "        \"profile\": \"%s\"\n" +
+                                    "}",
+                            idMember,
+                            pName.getText().toString(),
+                            pSurname.getText().toString(),
+                            pEmail.getText().toString(),
+                            pProfile.getText().toString());
+                    Gson gson = new Gson();
+                    Profile p = gson.fromJson(sendPut(txt,URL_UPDATE_MEMBER),Profile.class);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.putString("pProfile",p.getProfile());
+                    editor.putString("pName",p.getName());
+                    editor.putString("pSurname",p.getSurname());
+                    editor.putString("pEmail",p.getEmail());
+                    editor.commit();
+
+                    Toast.makeText(getContext(),"Saved!",Toast.LENGTH_SHORT).show();
+
                 }
-
-                //Toast.makeText(getContext(),POST(url,username.getText().toString(),password.getText().toString()),Toast.LENGTH_LONG).show();
-
-            }
-        });
-        String emailL = sharedPreferences.getString("email","not found");
-        String ppProfile = sharedPreferences.getString("profile","not found");
-        String ppName = sharedPreferences.getString("name","not found");
-        String ppSurname = sharedPreferences.getString("surname","not found");
-        email.setText(emailL);
-        Button logoutButton = (Button)rootView.findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.commit();
-                Toast.makeText(getContext(),"logout", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getContext(),MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-//                MainActivity.bottomNavigationItem.setCurrentItem(0);
-            }
-        });
-        Button registerButton = (Button)rootView.findViewById(R.id.registerButton);
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), Register.class);
-                startActivity(intent);
-            }
-        });
-        TextView pProfile = (TextView)rootView.findViewById(R.id.pprofile);
-        TextView pUsername = (TextView)rootView.findViewById(R.id.pusername);
-        TextView pName = (TextView)rootView.findViewById(R.id.pname);
-        TextView pSurname = (TextView)rootView.findViewById(R.id.psurname);
-        ImageView pImage = (ImageView)rootView.findViewById(R.id.ic_logo);
-        email.setText("Email : "+emailL);
-        pProfile.setText("Profile : "+ppProfile);
-        pUsername.setText("Username : "+usernameL);
-        pName.setText("Name : "+ppName);
-        pSurname.setText("Surname : "+ppSurname);
-        if (!usernameL.equals("not found")&&!passwordL.equals("not found"))
-        {
-            pImage.setImageResource(R.drawable.businessman);
-            username.setVisibility(View.GONE);
-            password.setVisibility(View.GONE);
-            loginButton.setVisibility(View.GONE);
-            loginResult.setVisibility(View.GONE);
-            registerButton.setVisibility(View.GONE);
-
+            });
+            changePasswd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getFragmentManager().beginTransaction().replace(R.id.content_id,new ChangePasswordFragment()).addToBackStack(null).commit();
+                }
+            });
         }
-        else
-        {
-            pProfile.setVisibility(View.GONE);
-            pUsername.setVisibility(View.GONE);
-            pName.setVisibility(View.GONE);
-            pSurname.setVisibility(View.GONE);
-
-            logoutButton.setVisibility(View.GONE);
-            email.setVisibility(View.GONE);
-        }
-
         return rootView;
+    }
+
+    public void bindViewLogin(View view)
+    {
+        username = (EditText)view.findViewById(R.id.username);
+        password = (EditText)view.findViewById(R.id.password);
+        loginButton = (Button)view.findViewById(R.id.loginButton);
+
+        registerButton = (Button)view.findViewById(R.id.registerButton);
+        loginResult = (TextView)view.findViewById(R.id.loginResult);
+    }
+    public void bindViewLogon(View view)
+    {
+        pProfile = (TextView)view.findViewById(R.id.pprofile);
+        pUsername = (TextView)view.findViewById(R.id.pusername);
+        pName = (TextView)view.findViewById(R.id.pname);
+        pSurname = (TextView)view.findViewById(R.id.psurname);
+        pEmail = (TextView)view.findViewById(R.id.pemail) ;
+
+        changePasswd = (Button)view.findViewById(R.id.changePasswd);
+        logoutButton = (Button)view.findViewById(R.id.logoutButton);
+        editProfile = (Button) view.findViewById(R.id.editProfile);
+    }
+    public String sendPut(String data, String url) {
+        int responseCode = -1;
+        String s="";
+        HttpClient httpClient = new DefaultHttpClient();
+        try {
+            HttpPut request = new HttpPut(url);
+            StringEntity params =new StringEntity(data,"UTF-8");
+            params.setContentType("application/json");
+            request.addHeader("content-type", "application/json");
+            request.addHeader("Accept", "*/*");
+            request.addHeader("Accept-Encoding", "gzip,deflate,sdch");
+            request.addHeader("Accept-Language", "en-US,en;q=0.8");
+            request.setEntity(params);
+            HttpResponse response = httpClient.execute(request);
+            responseCode = response.getStatusLine().getStatusCode();
+            if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 204) {
+
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader((response.getEntity().getContent())));
+
+                String output;
+
+                // System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
+                while ((output = br.readLine()) != null) {
+                    s+=output;
+                }
+                //Toast.makeText(getContext(),s,Toast.LENGTH_LONG).show();
+            }
+            else{
+
+            }
+
+        }catch (Exception ex) {
+
+        }
+
+        return s;
+
+    }
+
+    private void putExtraName(){
+        int pid = sharedPreferences.getInt("idMember",0);
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.putExtra("user_id",pid);
+
+        SharedPreferences sp = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("checkLogin",true);
+        editor.putInt("user_ID",pid);
+        editor.commit();
+
+        Log.d("JSON","##IDfromPro"+String.valueOf(pid));
+        startActivity(intent);
+
+    }
+    private void putLogOut(){
+        SharedPreferences sp = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("checkLogin",false);
+        editor.commit();
+
     }
     public static String POST(String url, String username,String password){
         InputStream inputStream = null;
@@ -212,8 +282,8 @@ public class ProfileFragment extends Fragment {
 
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("musername", username);
-            jsonObject.accumulate("mpasswd", password);
+            jsonObject.accumulate("username", username);
+            jsonObject.accumulate("passwd", password);
 
 
             // 4. convert JSONObject to JSON to String

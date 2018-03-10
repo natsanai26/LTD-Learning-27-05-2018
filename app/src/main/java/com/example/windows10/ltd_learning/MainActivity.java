@@ -1,9 +1,15 @@
 package com.example.windows10.ltd_learning;
 
+import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.renderscript.Type;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,42 +18,53 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.example.windows10.ltd_learning.mFragment.DetailCatFragment;
 import com.example.windows10.ltd_learning.mFragment.HomeFragment;
 import com.example.windows10.ltd_learning.mFragment.MyCouresFragment;
 import com.example.windows10.ltd_learning.mFragment.ProfileFragment;
+import com.example.windows10.ltd_learning.mFragment.SearchFragment;
 import com.example.windows10.ltd_learning.mRecycler.Adapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.sql.Array;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private SharedPreferences sharedPreferences;
+    private ActionBar ab;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private static final  String URL_getAllCat = "http://158.108.207.7:8090/elearning/category";
+    private static CategoryAll[] cat_all;
+    private List<String> category_name;
+    private ArrayAdapter adapter_array;
+    private String[] mDrawerTitle = {"Cover", "Guitar", "Bass", "Drum"};
+    private static final String MyPREFERENCES = "MyPrefs";
+    private DrawerLayout myDrawer;
+    private ActionBarDrawerToggle myTogle;
+    private boolean isCheckAfLogin = false,isCheckForEnroll =false;
+    private Toolbar toolbar;
+    private static boolean CheckOnSearch = false;
     private static Course[] course_all;
     private static final String URL = "http://158.108.207.7:8090/elearning/course";
     private MaterialSearchView searchView;
-    private ListView listView;
-    public static AHBottomNavigation bottomNavigationItem;
+    private ListView mListView;
+    public  AHBottomNavigation bottomNavigationItem;
+    private int user_id;
     private static String[] course_new;
     private RecyclerView mRecyclerView;
     private String[] course_S = {"Course ONE","Course TWO","Course TREE","Course FOUR","Course FIVE","Course SIX","Course SEVEN","Course EIGHT"};
@@ -60,45 +77,120 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        getInfoCategory();
         Intent intent  = getIntent();
         course_new = intent.getStringArrayExtra("key");
-        if(course_new != null){
+        user_id = intent.getIntExtra("user_id",0);
+        if(course_new != null ){
             Log.d("JSON","##"+course_new[20]);
             finish();
         }
+        myDrawer = (DrawerLayout) findViewById(R.id.drawer_id);
+        mListView = (ListView) findViewById(R.id.drawer);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.lit_item_category, mDrawerTitle);
+        mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                DetailCatFragment fragment = new DetailCatFragment();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("id_category",cat_all[i].getId());
+                editor.commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_id, fragment).commit();
+                toolbar.setTitle(cat_all[i].getCategoryName());
+                Log.d("JSON","## From item click "+cat_all[i].getId()+"..."+i);
+                myDrawer.closeDrawers();
+            }
+        });
+
 //        getInfomation();
 
+//        myDrawer = (DrawerLayout) findViewById(R.id.drawer_id);
+//        myTogle = new ActionBarDrawerToggle(this,myDrawer,R.string.open,R.string.close);
+//        myDrawer.addDrawerListener(myTogle);
+//        myTogle.syncState();
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        Toolbar toolbar  = (Toolbar) findViewById(R.id.toolbar);
+        toolbar  = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("LTD Learning");
+        ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setHomeAsUpIndicator(R.drawable.ic_action_list);
+//        configureNavigationDrawer();
+
+        toolbar.setTitle("Home");
         toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
-        listView = (ListView)findViewById(R.id.listView_id);
+
         bottomNavigationItem = (AHBottomNavigation) findViewById(R.id.myBottomNavigation_ID);
+        bottomNavigationItem.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigationItem.setBehaviorTranslationEnabled(false);
-        bottomNavigationItem.setAccentColor(Color.parseColor("#ffd2a5"));
-        bottomNavigationItem.setInactiveColor(Color.parseColor("#747474"));
+        bottomNavigationItem.setAccentColor(Color.parseColor("#343434"));
+        bottomNavigationItem.setInactiveColor(Color.parseColor("#FFFFFF"));
+        bottomNavigationItem.setTranslucentNavigationEnabled(true);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
         AHBottomNavigation.OnTabSelectedListener onTabSelectedListener1 = new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
-                switch(position)
-                {
+                SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                isCheckAfLogin = sp.getBoolean("checkLogin",false);
+                Log.d("JSON","####TesIsCheck"+isCheckAfLogin);
+                if(!isCheckAfLogin) {
+                    switch (position) {
 
-                    case 0:
-                        HomeFragment homeFragment = new HomeFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content_id,homeFragment).commit();
+                        case 0:
+                            HomeFragment homeFragment = new HomeFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, homeFragment).commit();
+                            toolbar.setTitle("Home");
+                            break;
+                        case 1:
+                            SearchFragment searchFragment = new SearchFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, searchFragment).commit();
 
-                        break;
-                    case 1:
-                        MyCouresFragment myCouresFragment  = new MyCouresFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content_id,myCouresFragment).commit();
-                        break;
-                    case 2:
-                        ProfileFragment profileFragment = new ProfileFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content_id,profileFragment).commit();
-                        break;
+                            CheckOnSearch = true;
+                            toolbar.setTitle("Search");
+                            break;
+//                        case 2:
+//                            MyCouresFragment myCouresFragment = new MyCouresFragment();
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, myCouresFragment).commit();
+//                            toolbar.setTitle("MyCourses");
+//                            break;
+                        case 2:
+                            ProfileFragment profileFragment = new ProfileFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, profileFragment).commit();
+                            toolbar.setTitle("Login");
+                            break;
+                    }
+                }
+                else{
+                    switch (position) {
+
+                        case 0:
+                            HomeFragment homeFragment = new HomeFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, homeFragment).commit();
+                            toolbar.setTitle("Home");
+                            break;
+                        case 1:
+                            SearchFragment searchFragment = new SearchFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, searchFragment).commit();
+                            CheckOnSearch = true;
+                            toolbar.setTitle("Search");
+                            break;
+                        case 2:
+                            MyCouresFragment myCouresFragment = new MyCouresFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, myCouresFragment).commit();
+                            toolbar.setTitle("MyCourses");
+                            break;
+                        case 3:
+                            ProfileFragment profileFragment = new ProfileFragment();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, profileFragment).commit();
+                            toolbar.setTitle("Profile");
+                            break;
+                    }
+
                 }
 
                 return true;
@@ -109,8 +201,89 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
 //       searchView = (MaterialSearchView)findViewById(R.id.search_view);
         this.createNavItems();
+    }
+
+    private void getInfoCategory(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getAllCat, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+
+                java.lang.reflect.Type collectionType = new TypeToken<Collection<CategoryAll>>() {}.getType();
+                Collection<CategoryAll> enums = gson.fromJson(response,collectionType);
+                CategoryAll[] categoryAllsResult = enums.toArray(new CategoryAll[enums.size()]);
+
+                setAllCat(categoryAllsResult);
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("JSON","Error JSON");
+                    }
+                });
+        MySingleton.getInstance(this).addToReauestQue(stringRequest);
+
+
+    }
+    private void setAllCat(CategoryAll[] cats){
+
+        cat_all = cats;
+        addCategory();
+    }
+
+    public void addCategory(){
+        category_name = new ArrayList<String>();
+        Log.d("JSON","Data Cat ALL"+cat_all[0].getCategoryName()+" "+cat_all[0].getId());
+        if(cat_all != null){
+            for (int i = 0; i < cat_all.length; i++) {
+                category_name.add(cat_all[i].getCategoryName());
+            }
+        }else {
+            category_name.add("Test my CAT 1");
+            category_name.add("Test my CAT 2");
+            category_name.add("Test my CAT 3");
+        }
+
+        adapter_array = new ArrayAdapter(this,R.layout.lit_item_category,category_name);
+        mListView.setAdapter(adapter_array);
+
+    }
+
+
+    private void configureNavigationDrawer(){
+        myDrawer = (DrawerLayout) findViewById(R.id.drawer_id);
+//        NavigationView navView = (NavigationView)findViewById(R.id.nav_view_id);
+//        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                android.support.v4.app.Fragment f = null;
+//                int itemId = item.getItemId();
+//
+//                if (itemId == R.id.refresh) {
+//                    f = new RefreshFragment();
+//                } else if (itemId == R.id.stop) {
+//                    f = new StopFragment();
+//                }
+//
+//                if (f != null) {
+//                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.toolbar_container, f);
+//                    transaction.commit();
+//                    myDrawer.closeDrawers();
+//                    return true;
+//                }
+//
+//                return false;
+//            }
+//        });
+
     }
 
     private void getInfomation(){
@@ -125,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                 java.lang.reflect.Type collectionType = new TypeToken<Collection<Course>>() {}.getType();
                 Collection<Course> enums = gson.fromJson(response,collectionType);
                 Course[] courseResult = enums.toArray(new Course[enums.size()]);
-                Log.d("JSON","##"+courseResult[2].getName());
+                Log.d("JSON","##"+courseResult[0].getCourses().get(2).getName());
 
             }
         },
@@ -140,17 +313,38 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNavItems(){
         AHBottomNavigationItem homeItem = new AHBottomNavigationItem("Home",R.drawable.ic_home);
-        AHBottomNavigationItem myCourseItem = new AHBottomNavigationItem("",R.drawable.ic_null);
+        AHBottomNavigationItem searchItem = new AHBottomNavigationItem("Search",R.drawable.ic_search);
+        AHBottomNavigationItem myCourseItem = new AHBottomNavigationItem("MyCourse",R.drawable.ic_school);
+        AHBottomNavigationItem loginItem = new AHBottomNavigationItem("Login",R.drawable.ic_input);
         AHBottomNavigationItem profileItem = new AHBottomNavigationItem("Profile",R.drawable.ic_account);
-        bottomNavigationItem.addItem(homeItem);
-        bottomNavigationItem.addItem(myCourseItem);
-        bottomNavigationItem.addItem(profileItem);
+        SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        isCheckAfLogin = sp.getBoolean("checkLogin",false);
+        Log.d("JSON","####TesIsCheckOnCreateItem "+isCheckAfLogin);
+       if(!isCheckAfLogin){
+           bottomNavigationItem.addItem(homeItem);
+           bottomNavigationItem.addItem(searchItem);
+           bottomNavigationItem.addItem(loginItem);
+       }else {
+
+
+           bottomNavigationItem.addItem(homeItem);
+           bottomNavigationItem.addItem(searchItem);
+           bottomNavigationItem.addItem(myCourseItem);
+           bottomNavigationItem.addItem(profileItem);
+
+       }
+//        bottomNavigationItem.addItem(myCourseItem);
 
 
 
-        bottomNavigationItem.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
-
-        bottomNavigationItem.setCurrentItem(0);
+        bottomNavigationItem.setDefaultBackgroundColor(Color.parseColor("#045757"));
+        isCheckForEnroll = sp.getBoolean("check_for_enroll",false);
+        Log.d("JSON","####Test to login "+isCheckForEnroll);
+        if(!isCheckForEnroll){
+            bottomNavigationItem.setCurrentItem(0);
+        }else {
+            bottomNavigationItem.setCurrentItem(2);
+        }
     }
 
 
@@ -158,19 +352,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_item,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.search){
-            Toast.makeText(this,"Hello Search",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this,SearchActivity.class);
-            intent.putExtra("key_name",course_new);
-            startActivity(intent);
+        int itemId = item.getItemId();
+        switch (itemId){
+            case android.R.id.home :
+                myDrawer.openDrawer(GravityCompat.START);
+                return true;
         }
+//        if(id == R.id.search){
+//            Toast.makeText(this,"Hello Search",Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(this,SearchActivity.class);
+//            intent.putExtra("key_name",course_new);
+//            startActivity(intent);
+//        }
         return super.onOptionsItemSelected(item);
     }
 }

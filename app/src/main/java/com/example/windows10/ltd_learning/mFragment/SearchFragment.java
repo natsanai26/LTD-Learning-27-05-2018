@@ -1,14 +1,21 @@
 package com.example.windows10.ltd_learning.mFragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,95 +33,172 @@ import android.widget.Toast;
 import com.example.windows10.ltd_learning.Course;
 import com.example.windows10.ltd_learning.MainActivity;
 import com.example.windows10.ltd_learning.R;
+import com.example.windows10.ltd_learning.SectionPageAdapter;
 import com.example.windows10.ltd_learning.mRecycler.Adapter;
+import com.example.windows10.ltd_learning.mRecycler.CustomAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Windows10 on 10/10/2017.
  */
 
-public class SearchFragment extends Fragment implements MaterialSearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Object> {
-    private MaterialSearchView searchView;
-    private ListView listView;
-    private RecyclerView rv;
-    private String[] course = {"Course ONE","Course TWO","Course TREE","Course FOUR","Course FIVE","Course SIX","Course SEVEN","Course EIGHT"};
-    private ArrayAdapter<String> adapter;
-    String mCurFilter;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.windows10.ltd_learning.Course;
+import com.example.windows10.ltd_learning.R;
+import com.example.windows10.ltd_learning.mRecycler.Adapter;
+import com.example.windows10.ltd_learning.mRecycler.Snap;
+import com.example.windows10.ltd_learning.mRecycler.SnapAdapter;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Windows10 on 10/11/2017.
+ */
+
+public class SearchFragment extends Fragment {
+    private final String URL_GET_COURSE = "http://158.108.207.7:8090/elearning/course";
+
+    private EditText textSearch;
+    private Button searchButton;
+    private Button byCourseName;
+    private Button byTeacherName;
+    private String searchBy="name";
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.search_fragment,container,false);
-        listView = (ListView)rootView.findViewById(R.id.listView_id);
-        searchView = (MaterialSearchView)rootView.findViewById(R.id.search_view_search);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.search_fragment,container,false);
+        bindView(view);
 
-        setHasOptionsMenu(true);
-
-
-        return rootView;
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_item, menu);
-        MenuItem item = menu.findItem(R.id.search);
-        MaterialSearchView sv = new MaterialSearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
-        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
-        MenuItemCompat.setActionView(item, sv);
-        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,course);
-        listView.setAdapter(adapter);
-        sv.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+        getCourse(URL_GET_COURSE);
+        byCourseName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                System.out.println("search query submit");
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(newText != null && !newText.isEmpty()){
-                    List<String> lstFound = new ArrayList<String>();
-                    for(String item:course){
-                        if(item.contains(newText))
-                            lstFound.add(item);
-                    }
-                    ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,lstFound);
-                    listView.setAdapter(adapter);
-                }
-                return true;
+            public void onClick(View view) {
+                searchBy="name";
+                textSearch.setHint("course name");
             }
         });
+        byTeacherName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchBy="teacherName";
+                textSearch.setHint("teacher name");
+            }
+        });
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getCourse(URL_GET_COURSE+"?"+searchBy+"="+textSearch.getText().toString());
+            }
+        });
+
+        return view;
+    }
+    public void getCourse(String url)
+    {
+        new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... url) {
+                String result = "";
+                try {
+
+                    HttpGet httpGet = new HttpGet(url[0]);
+                    HttpClient client = new DefaultHttpClient();
+
+                    HttpResponse response = client.execute(httpGet);
+
+                    int statusCode = response.getStatusLine().getStatusCode();
+
+                    if (statusCode == 200) {
+                        InputStream inputStream = response.getEntity().getContent();
+                        BufferedReader reader = new BufferedReader
+                                (new InputStreamReader(inputStream));
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            result += line;
+                        }
+                    }
+
+                } catch (ClientProtocolException e) {
+                    Log.d("ClientProtocolException",e.getMessage());
+
+                } catch (IOException e) {
+                    Log.d("IOException",e.getMessage());
+                }
+                return result;
+            }
+            protected void onPostExecute(String jsonString)  {
+                showData(jsonString);
+            }
+        }.execute(url);
+    }
+    public void showData(String jsonString)
+    {
+        if (!jsonString.equals(""))
+        {
+            Gson gson = new Gson();
+            Course data = gson.fromJson(jsonString,Course.class);
+
+            Course.StatusBean response = data.getStatus();
+
+            if (response.isStatus())
+            {
+                List<Course.CoursesBean> courses = data.getCourses();
+                RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_search);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(new CustomAdapter(getContext(), courses));
+                recyclerView.setHasFixedSize(true);
+
+            }
+            else
+            {
+                RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_search);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(null);
+            }
+        }
+        else
+        {
+            RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_search);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(null);
+        }
+    }
+    public void bindView(View view)
+    {
+        textSearch = view.findViewById(R.id.editText_search);
+        searchButton = view.findViewById(R.id.search_button);
+        byCourseName = view.findViewById(R.id.byCName);
+        byTeacherName = view.findViewById(R.id.byTName);
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String newText) {
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        mCurFilter = !TextUtils.isEmpty(newText) ? newText : null;
-        getLoaderManager().restartLoader(0, null, this);
-        return true;
-    }
-
-    @Override
-    public Loader<Object> onCreateLoader(int id, Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Object> loader, Object data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Object> loader) {
-
-    }
 }
+

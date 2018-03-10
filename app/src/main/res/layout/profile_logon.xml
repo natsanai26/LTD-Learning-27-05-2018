@@ -1,0 +1,246 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:orientation="vertical"
+    android:background="#e4e4e4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/user_512"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="Username"
+            android:textColor="#000000"/>
+
+        <android.support.v7.widget.CardView
+            card_view:cardBackgroundColor="#ffffff"
+            android:layout_width="match_parent"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_margin="10dp"
+            card_view:cardElevation="5dp"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/pusername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:background="#DCDCDC"
+                android:text="username"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#000000" />
+
+        </android.support.v7.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="Name"
+            android:textColor="#000000"/>
+        <android.support.v7.widget.CardView
+            card_view:cardBackgroundColor="#ffffff"
+            android:layout_width="match_parent"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_margin="10dp"
+            card_view:cardElevation="5dp"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/pname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:text="name"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#000000"
+                android:backgroundTint="#ffffff"
+                />
+
+        </android.support.v7.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="Lastname"
+            android:textColor="#000000"/>
+        <android.support.v7.widget.CardView
+            card_view:cardBackgroundColor="#ffffff"
+            android:layout_width="match_parent"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_margin="10dp"
+            card_view:cardElevation="5dp"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/psurname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:text="surname"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#000000"
+                android:backgroundTint="#ffffff"/>
+
+        </android.support.v7.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="Email"
+            android:textColor="#000000"/>
+        <android.support.v7.widget.CardView
+            card_view:cardBackgroundColor="#ffffff"
+            android:layout_width="match_parent"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_margin="10dp"
+            card_view:cardElevation="5dp"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/pemail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:text="email"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#000000"
+                android:backgroundTint="#ffffff"/>
+
+
+        </android.support.v7.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="Profile detail"
+            android:textColor="#000000"/>
+        <android.support.v7.widget.CardView
+            card_view:cardBackgroundColor="#ffffff"
+            android:layout_width="match_parent"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_margin="10dp"
+            card_view:cardElevation="5dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.34">
+
+            <EditText
+                android:id="@+id/pprofile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:text="profile"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#000000"
+                android:backgroundTint="#ffffff"/>
+
+        </android.support.v7.widget.CardView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/editProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_border_btn"
+                android:paddingLeft="10dp"
+                android:text="Edit profile"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:textStyle="normal"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginRight="10dp"
+                android:gravity="end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/changePasswd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_border_btn"
+                android:paddingLeft="10dp"
+                android:text="change password"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:textStyle="normal"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_border_btn"
+                android:paddingLeft="15dp"
+                android:text="Logout"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:textStyle="normal"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+</ScrollView>
