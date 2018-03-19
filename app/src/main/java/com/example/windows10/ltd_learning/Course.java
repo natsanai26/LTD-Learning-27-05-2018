@@ -82,6 +82,8 @@ public class Course {
         private String key;
         private TeacherBean teacher;
         private double rating;
+        private Object progress;
+        private double voter;
         private List<?> sectionList;
 
         public CoursesBean(){
@@ -90,6 +92,11 @@ public class Course {
             this.id = id;
             name = courseName;
 
+        }
+        public CoursesBean(String courseName,int id,double rate){
+            this.id = id;
+            name = courseName;
+            rating = rate;
         }
 
         public int getId() {
@@ -144,6 +151,22 @@ public class Course {
             return teacher;
         }
 
+        public double getVoter() {
+            return voter;
+        }
+
+        public void setVoter(double voter) {
+            this.voter = voter;
+        }
+
+        public Object getProgress() {
+            return progress;
+        }
+
+        public void setProgress(Object progress) {
+            this.progress = progress;
+        }
+
         public void setTeacher(TeacherBean teacher) {
             this.teacher = teacher;
         }
@@ -156,14 +179,6 @@ public class Course {
             this.rating = rating;
         }
 
-        public List<?> getSectionList() {
-            return sectionList;
-        }
-
-        public void setSectionList(List<?> sectionList) {
-            this.sectionList = sectionList;
-        }
-
         public static class TeacherBean {
             /**
              * idteacher : 2
@@ -172,6 +187,24 @@ public class Course {
 
             private int idteacher;
             private MemberBean member;
+            private String name;
+            private String surname;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getSurname() {
+                return surname;
+            }
+
+            public void setSurname(String surname) {
+                this.surname = surname;
+            }
 
             public int getIdteacher() {
                 return idteacher;

@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("id_category",cat_all[i].getId());
                 editor.commit();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_id, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_id, fragment).addToBackStack(null).commit();
                 toolbar.setTitle(cat_all[i].getCategoryName());
                 Log.d("JSON","## From item click "+cat_all[i].getId()+"..."+i);
                 myDrawer.closeDrawers();

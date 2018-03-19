@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.windows10.ltd_learning.Course;
@@ -47,6 +48,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         holder.courseName.setText(mData.get(position).getName());
+        holder.ratingBar.setRating((float) mData.get(position).getRating());
+        holder.teacherName.setText(mData.get(position).getTeacher().getName()+" "+mData.get(position).getTeacher().getSurname());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,9 +58,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                     @Override
                     public void onClick(View view) {
                         Course.CoursesBean course_onclick = mData.get(position);
-                        List<?> sectionList = course_onclick.getSectionList();
+                        //List<?> sectionList = course_onclick.getSectionList();
                         Intent intent = new Intent(mContext,CourseDetail.class);
-                        Log.d("JSON","##>>From onClickCourse"+sectionList);
+                        //Log.d("JSON","##>>From onClickCourse"+sectionList);
                         intent.putExtra("course_id",course_onclick.getId());
                         Log.d("JSON","##>>From onClickCourse"+course_onclick.getId());
                         intent.putExtra("course_name",course_onclick.getName());
@@ -84,9 +87,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView courseName;
+        public RatingBar ratingBar;
+        public TextView teacherName;
         public MyViewHolder(View itemView) {
             super(itemView);
             courseName = itemView.findViewById(R.id.name);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
+            teacherName = itemView.findViewById(R.id.teacher_name);
         }
     }
 }

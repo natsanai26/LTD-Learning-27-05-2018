@@ -65,12 +65,12 @@ public class DetailCatFragment extends Fragment {
     private ArrayAdapter adapter;
     private List<CourseById> list_course;
     private static Course course_all;
-    private static String  URL_getCourseByID = "http://158.108.207.7:8090/elearning/course?courseId=";
+    private static String URL_getCourseByID = "http://158.108.207.7:8090/elearning/course?courseId=";
     private static final String URL_getAllCourse = "http://158.108.207.7:8090/elearning/course";
     private static CategoryAll course_by_cat;
     private static final String URL_getByCat_Id = "http://158.108.207.7:8090/elearning/category?id=";
     private int category_id;
-    private static final String MyPREFERENCES = "MyPrefs" ;
+    private static final String MyPREFERENCES = "MyPrefs";
     private SharedPreferences sharedPreferences;
     private View rootView;
 
@@ -87,19 +87,20 @@ public class DetailCatFragment extends Fragment {
 //                startActivity(intent);
 //            }
 //        });
-        category_id = sharedPreferences.getInt("id_category",-1);
-        Log.d("JSON","## From DetailCat "+category_id);
+        category_id = sharedPreferences.getInt("id_category", -1);
+        Log.d("JSON", "## From DetailCat " + category_id);
         getInfomation(category_id);
         return rootView;
     }
-    public void getInfomation(int id){
-        Log.d("JSON","####TestURL"+URL_getByCat_Id+String.valueOf(category_id));
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getByCat_Id+id, new Response.Listener<String>() {
+
+    public void getInfomation(int id) {
+        Log.d("JSON", "####TestURL" + URL_getByCat_Id + String.valueOf(category_id));
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getByCat_Id + id, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
-                CategoryAll courseByCat = gson.fromJson(response,CategoryAll.class);
+                CategoryAll courseByCat = gson.fromJson(response, CategoryAll.class);
 
                 setCourseByCat(courseByCat);
             }
@@ -107,28 +108,28 @@ public class DetailCatFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
+                        Log.d("JSON", "Error JSON");
                     }
                 });
         MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);
 
     }
-    private void setCourseByCat(CategoryAll course){
+
+    private void setCourseByCat(CategoryAll course) {
         course_by_cat = course;
         id_in_courseCat = new ArrayList<Integer>();
-        Log.d("JSON","From set Course in DetailCat "+course_by_cat.getCategoryName()+" ==== "+course_by_cat.getCourseList().get(0));
-        for(int i = 0 ;i< course_by_cat.getCourseList().size();i++ ){
-            id_in_courseCat.add(i,course_by_cat.getCourseList().get(i));
+        Log.d("JSON", "From set Course in DetailCat " + course_by_cat.getCategoryName() + " ==== " + course_by_cat.getCourseList().get(0));
+        for (int i = 0; i < course_by_cat.getCourseList().size(); i++) {
+            id_in_courseCat.add(i, course_by_cat.getCourseList().get(i));
         }
-        Log.d("JSON","From set Course Check ID"+id_in_courseCat);
-        String list_id = TextUtils.join(",",id_in_courseCat);
-        Log.d("JSON","From set Course Check ID"+list_id);
-        Log.d("JSON","From set Course Check ID"+URL_getCourseByID+list_id);
-        getCourseFromId(URL_getCourseByID+list_id);
+        Log.d("JSON", "From set Course Check ID" + id_in_courseCat);
+        String list_id = TextUtils.join(",", id_in_courseCat);
+        Log.d("JSON", "From set Course Check ID" + list_id);
+        Log.d("JSON", "From set Course Check ID" + URL_getCourseByID + list_id);
+        getCourseFromId(URL_getCourseByID + list_id);
     }
 
-    public void getCourseFromId(String url)
-    {
+    public void getCourseFromId(String url) {
         new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... url) {
@@ -153,95 +154,44 @@ public class DetailCatFragment extends Fragment {
                     }
 
                 } catch (ClientProtocolException e) {
-                    Log.d("ClientProtocolException",e.getMessage());
+                    Log.d("ClientProtocolException", e.getMessage());
 
                 } catch (IOException e) {
-                    Log.d("IOException",e.getMessage());
+                    Log.d("IOException", e.getMessage());
                 }
                 return result;
             }
-            protected void onPostExecute(String jsonString)  {
+
+            protected void onPostExecute(String jsonString) {
                 showData(jsonString);
             }
         }.execute(url);
     }
 
-    public void showData(String jsonString)
-    {
-        if (!jsonString.equals(""))
-        {
+    public void showData(String jsonString) {
+        if (!jsonString.equals("")) {
             Gson gson = new Gson();
-            Course data = gson.fromJson(jsonString,Course.class);
+            Course data = gson.fromJson(jsonString, Course.class);
 
             Course.StatusBean response = data.getStatus();
 
-            if (response.isStatus())
-            {
+            if (response.isStatus()) {
                 List<Course.CoursesBean> courses = data.getCourses();
                 RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_detail_cat);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(new CustomAdapter(getContext(), courses));
                 recyclerView.setHasFixedSize(true);
 
-            }
-            else
-            {
+            } else {
                 RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_detail_cat);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(null);
             }
-        }
-        else
-        {
+        } else {
             RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_detail_cat);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setAdapter(null);
         }
     }
 
-//    private void getCourseFromId(String list_id){
-//        Log.d("JSON","From getCourse by ID"+URL_getCourseByID+list_id);
-//            StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getCourseByID+list_id, new Response.Listener<String>() {
-//                @Override
-//                public void onResponse(String response) {
-////                List<Course> courses = Arrays.asList(gson.fromJson(response,Course[].class));
-//                    Log.d("JSON",response);
-//                    GsonBuilder builder = new GsonBuilder();
-//                    Gson gson = builder.create();
-//                    CourseById courseById = gson.fromJson(response,CourseById.class);
-//
-//                    setCourseById(courseById);
-//                }
-//
-//            },
-//                    new Response.ErrorListener() {
-//                        @Override
-//                        public void onErrorResponse(VolleyError error) {
-//                            Log.d("JSON","Error JSON");
-//                        }
-//                    });
-//            MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);
-//
-//    }
-//
-//    private void setCourseById(CourseById course){
-//        courseById_category = course;
-//        Log.d("JSON","From set Course By ID "+courseById_category.getCourses().get(0).getName());
-////        setupAdapter();
-//    }
-
-//    private void setupAdapter(){
-//        list_course = new ArrayList<>();
-//        List<String> list_course_name = new ArrayList<String>();
-//        Log.d("JSON","Check CourseCat"+courseById_category);
-//        List<CourseById.CoursesBean> courseById_cb = courseById_category.getCourses();
-//        for(int i =0; i < courseById_category.getCourses().size() ; i++ ){
-//            list_course.add(new CourseById.CoursesBean(courseById_category.getCourses().get(i).getName()
-//                    ,courseById_category.getCourses().get(i).getId()));
-//            list_course_name.add(i,courseById_category.getCourses().get(i).getName());
-//        }
-//        adapter = new ArrayAdapter(getActivity().getApplicationContext(),R.layout.list_item_mycourse,list_course_name);
-//        listView.setAdapter(adapter);
-//
-//    }
 }

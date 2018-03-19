@@ -16,6 +16,7 @@ import java.util.List;
 
 import android.view.inputmethod.CorrectionInfo;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.model,parent,false);
         ViewHolder mViewHolder = new ViewHolder(v,mContext,mCourse);
         imageView = (ImageView) v.findViewById(R.id.imageView_home);
-        getImageCourse();
+//        getImageCourse();
         return  mViewHolder;
 //        return new ViewHolder(LayoutInflater.from(parent.getContext())
 //               .inflate(R.layout.model, parent, false));
@@ -63,6 +64,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Course.CoursesBean course = (Course.CoursesBean) mCourse.get(position);
+        holder.ratingBar.setRating((float) course.getRating());
         holder.nameTextView.setText(course.getName());
 
 //        holder.nameTextView.setText(Integer.toString(mCourse.get(position).getId()));
@@ -84,7 +86,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
+        public RatingBar ratingBar;
         private SharedPreferences sharedPreferences;
         private int idUser;
         private boolean isEnroll;
@@ -100,6 +102,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             this.ctx = context;
             sharedPreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
             nameTextView = (TextView) itemView.findViewById(R.id.nameTxt);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
             itemView.setOnClickListener(this);
         }
 

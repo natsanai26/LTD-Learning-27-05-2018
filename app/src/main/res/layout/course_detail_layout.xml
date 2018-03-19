@@ -21,104 +21,160 @@
             app:useDefaultControls="true"/>
 
     </RelativeLayout>
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:id="@+id/ln_courseName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/course_name"
-        android:text="This is a Course Name"
-        android:textSize="30dp"
-        android:textStyle="bold"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/detail"
-        android:text="This is detail"
-        android:textSize="25dp"
-        android:textStyle="italic"/>
-    <TextView
-        android:id="@+id/testIdUser"
-        android:text="TestIDUser"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/testIdCourse"
-        android:text="TestIDCourse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:text="Course Name"
+        android:textColor="#000000"
+        android:textSize="20dp" />
+
+    </LinearLayout>
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_below="@+id/ln_courseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/rateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Rate now" />
+        </LinearLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/detail"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="This is detail"-->
+        <!--android:textSize="25dp"-->
+        <!--android:textStyle="italic" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/testIdUser"-->
+        <!--android:text="TestIDUser"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+    <!--<TextView-->
+        <!--android:id="@+id/testIdCourse"-->
+        <!--android:text="TestIDCourse"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+    <LinearLayout
+        android:gravity="end"
+        android:paddingRight="10dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/ln_enroll_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <Button
         android:id="@+id/button_enroll"
         android:text="enroll"
-        android:layout_width="100dp"
-        android:layout_height="50dp" />
+        android:layout_width="110dp"
+        android:layout_height="60dp" />
+    </LinearLayout>
+    </RelativeLayout>
+
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/transition"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <Button
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btn"
-            android:text="Section1"
-            android:textSize="20dp"
-            />
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="Contents"
+            android:textColor="#000000"
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/e1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
             android:text="element1"
-            android:visibility="gone"
-            />
+            android:textSize="20dp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/e2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
             android:text="element2"
-            android:visibility="gone"
-            />
+            android:textSize="20dp"
+            android:visibility="gone" />
+
+
         <TextView
             android:id="@+id/e3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
             android:text="element3"
-            android:visibility="gone"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn2"
             android:textSize="20dp"
-            android:text="Section2"
-            />
+            android:visibility="gone" />
+
+        <!--<Button-->
+            <!--android:id="@+id/btn2"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="10dp"-->
+            <!--android:text="Section2"-->
+            <!--android:textSize="20dp" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="10dp"-->
+            <!--android:text="Section1"-->
+            <!--android:textSize="20dp" />-->
+
         <TextView
             android:id="@+id/e4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
             android:text="element4"
-            android:visibility="gone"
-            />
+            android:textSize="20dp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/e5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
             android:text="element3"
-            android:visibility="gone"
-            />
+            android:textSize="20dp"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/e6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
             android:text="element3"
-            android:visibility="gone"
-            />
+            android:textSize="20dp"
+            android:visibility="gone" />
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/dynamic_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+        </LinearLayout>
+
     </LinearLayout>
-    </LinearLayout>
+</LinearLayout>
 </ScrollView>

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,11 +31,13 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.example.windows10.ltd_learning.CategoryAll;
 import com.example.windows10.ltd_learning.Course;
 import com.example.windows10.ltd_learning.CourseByCat;
+import com.example.windows10.ltd_learning.CourseNew;
 import com.example.windows10.ltd_learning.CourseTop;
 import com.example.windows10.ltd_learning.MainActivity;
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.SearchActivity;
+import com.example.windows10.ltd_learning.SectionList;
 import com.example.windows10.ltd_learning.ViewPagerAdapter;
 import com.example.windows10.ltd_learning.mRecycler.Adapter;
 import com.example.windows10.ltd_learning.mRecycler.Snap;
@@ -49,7 +52,9 @@ import org.json.JSONObject;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -69,21 +74,20 @@ public class HomeFragment extends Fragment {
     private static CategoryAll[] cat_all;
     private static Course[] course_all;
     SharedPreferences sharedPreferences;
+    private List<String> listOfURLPic = new ArrayList<String>();
     private static CourseTop courseTop;
-    private static CourseByCat course_by_cat_1,course_by_cat_2,course_by_cat_3,course_by_cat_4;
-    private static final String URL_getTopCourse = "http://158.108.207.7:8090/elearning/course?top=5";
-    private static final String URL_getAllCourse = "http://158.108.207.7:8090/elearning/course";
-    private static final String URL_getByCat_1 = "http://158.108.207.7:8090/elearning/category?id=19";
-    private static final String URL_getByCat_2 = "http://158.108.207.7:8090/elearning/category?id=38";
-    private static final String URL_getByCat_3 = "http://158.108.207.7:8090/elearning/category?id=36";
-    private static final String URL_getByCat_4 = "http://158.108.207.7:8090/elearning/category?id=37";
+    private static CourseNew courseNew;
+    private static CourseByCat course_by_cat_1, course_by_cat_2, course_by_cat_3, course_by_cat_4;
+    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
+    private static final String URL_getNewCourse = "http://158.108.207.7:8090/elearning/course?new=10";
+    private static final String URL_getTopCourse = "http://158.108.207.7:8090/elearning/course?top=10";
+
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.home_fragment,container,false);
-
+        View rootView = inflater.inflate(R.layout.home_fragment, container, false);
         vp_image = (ViewPager) rootView.findViewById(R.id.viewPager_id);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this.getActivity());
         vp_image.setAdapter(viewPagerAdapter);
@@ -92,19 +96,18 @@ public class HomeFragment extends Fragment {
         dotsCount = viewPagerAdapter.getCount();
         dots = new ImageView[dotsCount];
 
-        for(int i = 0; i<dotsCount;i++){
+        for (int i = 0; i < dotsCount; i++) {
             dots[i] = new ImageView(this.getActivity());
-            dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),R.drawable.nonactive_dot));
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-            params.setMargins(8,0,8,0);
-            sliderDotpanel.addView(dots[i],params);
-
+            params.setMargins(8, 0, 8, 0);
+            sliderDotpanel.addView(dots[i], params);
         }
 
-        dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),R.drawable.active_dot));
+        dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
 
         vp_image.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -115,10 +118,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
 
-                for(int i = 0; i < dotsCount ;i++){
-                    dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),R.drawable.nonactive_dot));
+                for (int i = 0; i < dotsCount; i++) {
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
                 }
-                dots[position].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(),R.drawable.active_dot));
+                dots[position].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
 
             }
 
@@ -130,40 +133,61 @@ public class HomeFragment extends Fragment {
 
 
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new MyTimerTask(),2000 ,4000);
+        timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
 
         sharedPreferences = getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        String username = sharedPreferences.getString("username","not found");
-        String password = sharedPreferences.getString("password","not found");
+        String username = sharedPreferences.getString("username", "not found");
+        String password = sharedPreferences.getString("password", "not found");
 
 
-        if (!username.equals("not found")&&!password.equals("not found"))
-        {
+        if (!username.equals("not found") && !password.equals("not found")) {
 //            MainActivity.bottomNavigationItem.enableItemAtPosition(2);
 //            MainActivity.bottomNavigationItem.getItem(2).setDrawable(R.drawable.ic_school);
 //            MainActivity.bottomNavigationItem.getItem(2).setTitle("MyCourse");
-        }
-        else
-        {
+        } else {
 //            MainActivity.bottomNavigationItem.disableItemAtPosition(2);
 
         }
 //        getInfomation();
         getInfoTopCourse();
+        getInfoNewCourse();
         rv = (RecyclerView) rootView.findViewById(R.id.home_RV);
         rv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         rv.setNestedScrollingEnabled(false);
         return rootView;
     }
-    private void getInfoTopCourse(){
+
+    private void getInfoNewCourse(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getNewCourse, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("##JSON", response);
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+                CourseNew course = gson.fromJson(response, CourseNew.class);
+                Log.d("##JSON", "Fromm NewCourse"+course.getResponse().getMessage() + " " + course.getCourses().get(0).getName() + " " + course.getCourses().size());
+                setNewCourse(course);
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("JSON", "Error JSON");
+                    }
+                });
+        MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);
+
+    }
+    private void getInfoTopCourse() {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getTopCourse, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("##JSON",response);
+                Log.d("##JSON", response);
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
-                CourseTop course = gson.fromJson(response,CourseTop.class);
-                Log.d("##JSON",course.getResponse().getMessage()+" "+course.getCourses().get(0).getName()+" "+course.getCourses().size());
+                CourseTop course = gson.fromJson(response, CourseTop.class);
+                Log.d("##JSON", course.getResponse().getMessage() + " " + course.getCourses().get(0).getName() + " " + course.getCourses().size());
                 setTopCourse(course);
 
             }
@@ -171,280 +195,118 @@ public class HomeFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
+                        Log.d("JSON", "Error JSON");
                     }
                 });
         MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);
 
     }
 
-    public class MyTimerTask extends TimerTask{
+    public class MyTimerTask extends TimerTask {
         final boolean keeprunning = true;
+
         @Override
         public void run() {
 
-                if(getActivity() == null){
-                    return;
-                }
+            if (getActivity() == null) {
+                return;
+            }
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (vp_image.getCurrentItem() == 0) {
-                            vp_image.setCurrentItem(1);
-                        } else if (vp_image.getCurrentItem() == 1) {
-                            vp_image.setCurrentItem(2);
-                        } else {
-                            vp_image.setCurrentItem(0);
-                        }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (vp_image.getCurrentItem() == 0) {
+                        vp_image.setCurrentItem(1);
+                    } else if (vp_image.getCurrentItem() == 1) {
+                        vp_image.setCurrentItem(2);
+                    } else {
+                        vp_image.setCurrentItem(0);
                     }
-                });
+                }
+            });
 
         }
     }
-    private void setupAdapterTop(){
+
+    private void setupAdapterTop() {
         List<Course> course_tops = getTopCourse();
-        List<Course> course_tops2 = getTopCourse();
+        List<Course> course_news = getNewCourse();
         SnapAdapter snapAdapter = new SnapAdapter();
-        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "Top Course", course_tops));
-        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "New Course", course_tops2));
+        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "New Course ( "+course_news.size()+" )", course_news));
+        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "Top Course ( "+course_tops.size()+" ) ", course_tops));
+
         rv.setAdapter(snapAdapter);
     }
-//    private void setupAdapter(){
-//        List<Course> courses_cat1 = getCourse_cat1();
-//        List<Course> courses_cat2 = getCourse_cat2();
-//        List<Course> courses_cat3 = getCourse_cat3();
-//        List<Course> courses_cat4 = getCourse_cat4();
-//        SnapAdapter snapAdapter = new SnapAdapter();
-//        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "Category 1", courses_cat1));
-//        snapAdapter.addSnap(new Snap(Gravity.START, "Category 2", courses_cat2));
-//        snapAdapter.addSnap(new Snap(Gravity.END, "Category 3", courses_cat3));
-//        snapAdapter.addSnap(new Snap(Gravity.CENTER, "Category 4", courses_cat4));
-//
-//        putExtraName();
-//        rv.setAdapter(snapAdapter);
-//    }
-//    private void putExtraName(){
-//        String[] courseName = new String[course_all.length];
-//        Intent intent = new Intent(getContext(), MainActivity.class);
-//        for (int i = 0;i<course_all.length;i++){
-//            courseName[i] = course_all[i].getName();
-//        }
-//        intent.putExtra("key",courseName);
-//        Log.d("JSON","##"+courseName[20]);
-//        startActivity(intent);
-//
-//    }
-
-    private void getInfomation(){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getAllCourse, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-
-//                List<Course> courses = Arrays.asList(gson.fromJson(response,Course[].class));
-                java.lang.reflect.Type collectionType = new TypeToken<Collection<Course>>() {}.getType();
-                Collection<Course> enums = gson.fromJson(response,collectionType);
-                Course[] courseResult = enums.toArray(new Course[enums.size()]);
-
-                setAllCourse(courseResult);
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
-                    }
-                });
-        MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);
-        //----------------------------------------------------------------------
-        StringRequest SR_CourseByCat1 = new StringRequest(Request.Method.GET, URL_getByCat_1, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                CourseByCat courseByCat = gson.fromJson(response,CourseByCat.class);
 
 
-                setCourseByCat1(courseByCat);
-
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
-                    }
-                });
-        MySingleton.getInstance(getContext()).addToReauestQue(SR_CourseByCat1);
-        //----------------------------------------------------------------------
-        StringRequest SR_CourseByCat2 = new StringRequest(Request.Method.GET, URL_getByCat_2, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                CourseByCat courseByCat = gson.fromJson(response,CourseByCat.class);
-
-
-                setCourseByCat2(courseByCat);
-
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
-                    }
-                });
-        MySingleton.getInstance(getContext()).addToReauestQue(SR_CourseByCat2);
-        //----------------------------------------------------------------------
-        StringRequest SR_CourseByCat3 = new StringRequest(Request.Method.GET, URL_getByCat_3, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                CourseByCat courseByCat = gson.fromJson(response,CourseByCat.class);
-
-
-                setCourseByCat3(courseByCat);
-
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
-                    }
-                });
-        MySingleton.getInstance(getContext()).addToReauestQue(SR_CourseByCat3);
-        //----------------------------------------------------------------------
-        StringRequest SR_CourseByCat4 = new StringRequest(Request.Method.GET, URL_getByCat_4, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                CourseByCat courseByCat = gson.fromJson(response,CourseByCat.class);
-
-
-                setCourseByCat4(courseByCat);
-
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
-                    }
-                });
-        MySingleton.getInstance(getContext()).addToReauestQue(SR_CourseByCat4);
-
-    }
-    private void setTopCourse(CourseTop course){
-        courseTop = course;
+    private void setNewCourse(CourseNew course){
+        courseNew = course;
         setupAdapterTop();
     }
-
-    private void setAllCourse(Course[] courses){
-        course_all = courses;
-
-    }
-    private void setCourseByCat1(CourseByCat course){
-        course_by_cat_1 = course;
-    }
-    private void setCourseByCat2(CourseByCat course){
-        course_by_cat_2 = course;
-    }
-    private void setCourseByCat3(CourseByCat course){
-        course_by_cat_3 = course;
-    }
-    private void setCourseByCat4(CourseByCat course){
-        course_by_cat_4 = course;
-//        setupAdapter();
+    private void setTopCourse(CourseTop course) {
+        courseTop = course;
+        setURLPicture();
     }
 
-    private List<Course> getTopCourse(){
+    private void setListOfUrLPic(String url){
+        listOfURLPic.add(url);
+    }
+    private List<String> getListOfUrlPic(){
+        return listOfURLPic;
+    }
+
+    private void setURLPicture(){
         List<Course> courses = new ArrayList<>();
-        for(int i = 0; i<courseTop.getCourses().size();i++){
-            courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(),courseTop.getCourses().get(i).getId()));
+        String contentPicure;
+        List<SectionList> sectionList = new ArrayList<>();
+        for (int i = 0; i < courseTop.getCourses().size(); i++) {
+            sectionList = courseTop.getCourses().get(i).getSectionList();
+            if (sectionList.size() != 0 && sectionList.get(0)!=null) {
+                getURLFromContentPicture(sectionList.get(0).getContent());
+            }
+        }
+
+    }
+
+    private List<Course> getNewCourse() {
+        List<Course> courses = new ArrayList<>();
+        for (int i = 0; i < courseNew.getCourses().size(); i++) {
+            courses.add(new Course.CoursesBean(courseNew.getCourses().get(i).getName(), courseNew.getCourses().get(i).getId()
+                    ,courseNew.getCourses().get(i).getRating()));
         }
         return courses;
     }
 
-//    private List<Course> getCourse_cat1(){
-//        List<Course> courses = new ArrayList<>();
-//        Log.d("JSON","##"+course_by_cat_1.getCourseList().get(0)+"--"+course_by_cat_1.getCourseList().size());
-//        int j = 0;
-//        for(int i = 0 ;i<course_all.length ;i++){
-//            if(j<course_by_cat_1.getCourseList().size()) {
-//                if (course_by_cat_1.getCourseList().get(j) == course_all[i].getId()) {
-//                    courses.add(new Course(course_all[i].getName(),course_all[i].getId()));
-//                    j++;
-//                }
-//            }
-//        }
-//        courses.add(new Course("Course Home 2"));
-//        courses.add(new Course("Course Home 3"));
-//        courses.add(new Course("Course Home 4"));
-//        courses.add(new Course("Course Home 5"));
-//        courses.add(new Course("Course Home 6"));
-//        courses.add(new Course("Course Home 7"));
-//        courses.add(new Course("Course Home 8"));
-//        courses.add(new Course("Course Home 9"));
-//        courses.add(new Course("Course Home 10"));
-//        return courses;
-//    }
-//    private List<Course> getCourse_cat2(){
-//        List<Course> courses = new ArrayList<>();
-//        Log.d("JSON", "##" + course_by_cat_2.getCourseList().get(0) + "--" + course_by_cat_2.getCourseList().size());
-//        int j = 0;
-//        for (int i = 0; i < course_all.length; i++) {
-//            if (j < course_by_cat_2.getCourseList().size()) {
-//                if (course_by_cat_2.getCourseList().get(j) == course_all[i].getId()) {
-//                    courses.add(new Course(course_all[i].getName(),course_all[i].getId()));
-//                    j++;
-//                }
-//            }
-//        }
-//        return courses;
-//    }
-//    private List<Course> getCourse_cat3(){
-//        List<Course> courses = new ArrayList<>();
-//        Log.d("JSON", "##" + course_by_cat_3.getCourseList().get(0) + "--" + course_by_cat_3.getCourseList().size());
-//        int j = 0;
-//        for (int i = 0; i < course_all.length; i++) {
-//            if (j < course_by_cat_3.getCourseList().size()) {
-//                if (course_by_cat_3.getCourseList().get(j) == course_all[i].getId()) {
-//                    courses.add(new Course(course_all[i].getName(),course_all[i].getId()));
-//                    j++;
-//                }
-//            }
-//        }
-//        return courses;
-//    }
-//    private List<Course> getCourse_cat4(){
-//        List<Course> courses = new ArrayList<>();
-//        Log.d("JSON", "##" + course_by_cat_4.getCourseList().get(0) + "--" + course_by_cat_4.getCourseList().size());
-//        int j = 0;
-//        for (int i = 0; i < course_all.length; i++) {
-//            if (j < course_by_cat_4.getCourseList().size()) {
-//                if (course_by_cat_4.getCourseList().get(j) == course_all[i].getId()) {
-//                    courses.add(new Course(course_all[i].getName(),course_all[i].getId()));
-//                    j++;
-//                }
-//            }
-//        }
-//        return courses;
-//    }
+    private List<Course> getTopCourse() {
+        List<Course> courses = new ArrayList<>();
+        for (int i = 0; i < courseTop.getCourses().size(); i++) {
+            courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
+                    ,courseTop.getCourses().get(i).getRating()));
+        }
+        return courses;
+    }
+
+    private void getURLFromContentPicture(String content) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getURLPicture + content, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("JSON","url --> "+response);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("JSON", "Error JSON");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", "key999");
+                return params;
+            }
+        };
+        MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);
+    }
 
 }
