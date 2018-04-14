@@ -63,6 +63,8 @@ import java.util.TimerTask;
  */
 
 public class HomeFragment extends Fragment {
+    private List<Integer> idCourse_picTop,idCourse_picNew;
+    private List<String> content_picTop,content_picNew;
     private ImageView imageView;
     private boolean isCheckAfLogin = false;
     private LinearLayout sliderDotpanel;
@@ -241,11 +243,12 @@ public class HomeFragment extends Fragment {
 
     private void setNewCourse(CourseNew course){
         courseNew = course;
+        setURLPictureNewCourse();
         setupAdapterTop();
     }
     private void setTopCourse(CourseTop course) {
         courseTop = course;
-        setURLPicture();
+        setURLPictureTopCourse();
     }
 
     private void setListOfUrLPic(String url){
@@ -255,33 +258,83 @@ public class HomeFragment extends Fragment {
         return listOfURLPic;
     }
 
-    private void setURLPicture(){
-        List<Course> courses = new ArrayList<>();
-        String contentPicure;
+    private void setURLPictureNewCourse(){
+        content_picNew = new ArrayList<String>();
+        idCourse_picNew = new ArrayList<Integer>();
         List<SectionList> sectionList = new ArrayList<>();
-        for (int i = 0; i < courseTop.getCourses().size(); i++) {
-            sectionList = courseTop.getCourses().get(i).getSectionList();
-            if (sectionList.size() != 0 && sectionList.get(0)!=null) {
-                getURLFromContentPicture(sectionList.get(0).getContent());
+        for (int i = 0; i < courseNew.getCourses().size(); i++) {
+            sectionList = courseNew.getCourses().get(i).getSectionList();
+            if (sectionList.size() != 0 && sectionList.get(0)!=null && sectionList.get(0).getRank() == 0) {
+                Log.d("JSON","content --> "+sectionList.get(0).getContent()+" name course "+ courseNew.getCourses().get(i).getName());
+                content_picNew.add(sectionList.get(0).getContent());
+                idCourse_picNew.add(courseNew.getCourses().get(i).getId());
+//                getURLFromContentPicture(sectionList.get(0).getContent());
             }
         }
 
     }
 
+    private void setURLPictureTopCourse(){
+        content_picTop = new ArrayList<String>();
+        idCourse_picTop = new ArrayList<Integer>();
+        List<SectionList> sectionList = new ArrayList<>();
+        for (int i = 0; i < courseTop.getCourses().size(); i++) {
+            sectionList = courseTop.getCourses().get(i).getSectionList();
+            if (sectionList.size() != 0 && sectionList.get(0)!=null && sectionList.get(0).getRank() == 0) {
+                Log.d("JSON","content --> "+sectionList.get(0).getContent()+" name course "+ courseTop.getCourses().get(i).getName());
+                content_picTop.add(sectionList.get(0).getContent());
+                idCourse_picTop.add(courseTop.getCourses().get(i).getId());
+//                getURLFromContentPicture(sectionList.get(0).getContent());
+            }
+        }
+
+//        for(int i =0; i<content_pic.size();i++){
+//            Log.d("JSON","content pic -------> "+content_pic.get(i)+" FROM ID "+idCourse_pic.get(i));
+//        }
+
+    }
+
     private List<Course> getNewCourse() {
         List<Course> courses = new ArrayList<>();
-        for (int i = 0; i < courseNew.getCourses().size(); i++) {
-            courses.add(new Course.CoursesBean(courseNew.getCourses().get(i).getName(), courseNew.getCourses().get(i).getId()
-                    ,courseNew.getCourses().get(i).getRating()));
+        int j = 0;
+        for (int i = 0; i < courseNew.getCourses().size()&& j < idCourse_picNew.size(); i++) { //&& j < idCourse_picNew.size()
+
+//            courses.add(new Course.CoursesBean(courseNew.getCourses().get(i).getName(), courseNew.getCourses().get(i).getId()
+//                    ,courseNew.getCourses().get(i).getRating(),"",courseNew.getCourses().get(i).getVoter()));
+
+            if(idCourse_picNew.get(j) == courseNew.getCourses().get(i).getId()){
+                courses.add(new Course.CoursesBean(courseNew.getCourses().get(i).getName(), courseNew.getCourses().get(i).getId()
+                        ,courseNew.getCourses().get(i).getRating(),content_picNew.get(j),courseNew.getCourses().get(i).getVoter()));
+                Log.d("JSON","in loop NewCourse -------> "+content_picNew.get(j));
+                j++;
+
+            }
+            else {
+                courses.add(new Course.CoursesBean(courseNew.getCourses().get(i).getName(), courseNew.getCourses().get(i).getId()
+                        ,courseNew.getCourses().get(i).getRating(),"",courseNew.getCourses().get(i).getVoter()));
+            }
         }
         return courses;
     }
 
     private List<Course> getTopCourse() {
         List<Course> courses = new ArrayList<>();
+        int j = 0;
         for (int i = 0; i < courseTop.getCourses().size(); i++) {
-            courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
-                    ,courseTop.getCourses().get(i).getRating()));
+//            courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
+//                    ,courseTop.getCourses().get(i).getRating(),"",courseTop.getCourses().get(i).getVoter()));
+                if(idCourse_picTop.get(j) == courseTop.getCourses().get(i).getId()){
+                    courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
+                            ,courseTop.getCourses().get(i).getRating(),content_picTop.get(j),courseTop.getCourses().get(i).getVoter()));
+                    j++;
+                    if(j == idCourse_picTop.size()){
+                        break;
+                    }
+                }
+                else {
+                    courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
+                            ,courseTop.getCourses().get(i).getRating(),"",courseTop.getCourses().get(i).getVoter()));
+                }
         }
         return courses;
     }

@@ -84,7 +84,8 @@ public class CourseNew {
         private double voter;
         private boolean enabled;
         private boolean viewable;
-        private Object progress;
+        private Progress progress;
+        private double percent;
         private List<SectionList> sectionList;
 
         public int getId() {
@@ -167,11 +168,11 @@ public class CourseNew {
             this.viewable = viewable;
         }
 
-        public Object getProgress() {
+        public Progress getProgress() {
             return progress;
         }
 
-        public void setProgress(Object progress) {
+        public void setProgress(Progress progress) {
             this.progress = progress;
         }
 

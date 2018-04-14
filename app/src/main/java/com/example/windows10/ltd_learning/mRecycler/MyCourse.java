@@ -1,5 +1,6 @@
 package com.example.windows10.ltd_learning.mRecycler;
 
+import com.example.windows10.ltd_learning.Progress;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -8,9 +9,8 @@ import java.util.List;
 
 public class MyCourse {
 
-
     /**
-     * courses : [{"id":25,"categoryId":19,"name":"Engineering Material","detail":"covalent and metallic bond, crystal systems","sectionList":[{"id":28,"courseId":25,"parentSectionId":null,"content":"test_01","contentType":"TEXT","rank":1,"sub-section":[{"id":30,"courseId":25,"parentSectionId":28,"content":"Pxifbc_Wgz8MSQH0xbyaIg","contentType":"VIDEO","rank":2,"sub-section":[{"id":null,"courseId":33,"parentSectionId":30,"content":null,"contentType":null,"rank":null,"sub-section":[{"id":43,"courseId":25,"parentSectionId":37,"content":"Test Section","contentType":"TEXT","rank":0,"sub-section":[]}]}]},{"id":29,"courseId":25,"parentSectionId":28,"content":"New test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"parentSectionId":29,"content":"High","contentType":"TEXT","rank":1,"sub-section":[]}]}]}],"createdDate":1501779600000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":4,"enabled":true,"viewable":true},{"id":57,"categoryId":37,"name":"general theory of relativity","detail":"Albert Einstein","sectionList":[],"createdDate":1512147600000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":0,"enabled":true,"viewable":true},{"id":28,"categoryId":35,"name":"Data mining","detail":"easy","sectionList":[],"createdDate":1509469200000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":5,"enabled":true,"viewable":true},{"id":47,"categoryId":38,"name":"Golf2","detail":"Natsanai2","sectionList":[],"createdDate":1512147600000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":0,"enabled":true,"viewable":true},{"id":46,"categoryId":78,"name":"Mit2","detail":"Sumit2","sectionList":[],"createdDate":1512147600000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":0,"enabled":true,"viewable":true},{"id":149,"categoryId":35,"name":"soa","detail":"Hello L2D","sectionList":[{"id":109,"courseId":149,"parentSectionId":null,"content":"H8q4574C2sXmyXQpClwgkA","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":113,"courseId":149,"parentSectionId":null,"content":"Section","contentType":"TEXT","rank":2,"sub-section":[]},{"id":110,"courseId":149,"parentSectionId":null,"content":"Intro","contentType":"TEXT","rank":1,"sub-section":[{"id":112,"courseId":149,"parentSectionId":110,"content":"EPbTMWDE9x0c9micSahRyA","contentType":"VIDEO","rank":1,"sub-section":[]},{"id":111,"courseId":149,"parentSectionId":110,"content":"1 lesson","contentType":"TEXT","rank":1,"sub-section":[]}]}],"createdDate":1519299226000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":0,"enabled":true,"viewable":false},{"id":148,"categoryId":19,"name":"data 2","detail":"data2","sectionList":[{"id":106,"courseId":148,"parentSectionId":null,"content":"Lab","contentType":"TEXT","rank":2,"sub-section":[{"id":108,"courseId":148,"parentSectionId":106,"content":null,"contentType":"DOCUMENT","rank":2,"sub-section":[]},{"id":107,"courseId":148,"parentSectionId":106,"content":"lab1","contentType":"TEXT","rank":1,"sub-section":[]}]},{"id":103,"courseId":148,"parentSectionId":null,"content":"Intro Data","contentType":"TEXT","rank":1,"sub-section":[{"id":104,"courseId":148,"parentSectionId":103,"content":"hello java","contentType":"TEXT","rank":1,"sub-section":[]},{"id":105,"courseId":148,"parentSectionId":103,"content":null,"contentType":"VIDEO","rank":2,"sub-section":[]}]},{"id":102,"courseId":148,"parentSectionId":null,"content":"ioHeeG7D6dacRTDBbP-QmA","contentType":"PICTURE","rank":0,"sub-section":[]}],"createdDate":1519286527000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":0,"enabled":false,"viewable":false},{"id":45,"categoryId":35,"name":"Wax2","detail":"Suchao2","sectionList":[],"createdDate":1512147600000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":0,"enabled":false,"viewable":true}]
+     * courses : [{"id":148,"categoryId":19,"name":"data 2","detail":"data2","sectionList":[{"id":102,"courseId":148,"name":"Untitled","parentSectionId":null,"content":"ioHeeG7D6dacRTDBbP-QmA","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":103,"courseId":148,"name":"Untitled","parentSectionId":null,"content":"Intro Data","contentType":"TEXT","rank":1,"sub-section":[{"id":105,"courseId":148,"name":"Untitled","parentSectionId":103,"content":null,"contentType":"VIDEO","rank":1,"sub-section":[]}]},{"id":106,"courseId":148,"name":"Untitled","parentSectionId":null,"content":"Lab","contentType":"TEXT","rank":2,"sub-section":[{"id":108,"courseId":148,"name":"Untitled","parentSectionId":106,"content":null,"contentType":"DOCUMENT","rank":1,"sub-section":[]}]}],"createdDate":1519286527000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":5,"voter":1,"enabled":true,"viewable":true,"progress":null},{"id":168,"categoryId":35,"name":"upload ","detail":"Hello L2D","sectionList":[{"id":146,"courseId":168,"name":"Untitled","parentSectionId":null,"content":"YHshgWChWXhRT0oSE1J1WA","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":147,"courseId":168,"name":"Untitled","parentSectionId":null,"content":"Section","contentType":"TEXT","rank":1,"sub-section":[{"id":149,"courseId":168,"name":"Untitled","parentSectionId":147,"content":"wJ7A4ob2kJcDC73HP9vnlw","contentType":"VIDEO","rank":1,"sub-section":[]},{"id":151,"courseId":168,"name":"Untitled","parentSectionId":147,"content":"ut1qBiIBboDrR8wyA5XhdQ","contentType":"VIDEO","rank":2,"sub-section":[]},{"id":153,"courseId":168,"name":"Untitled","parentSectionId":147,"content":"nkCr6tCLN28sq1f9WYwsNw","contentType":"VIDEO","rank":3,"sub-section":[]},{"id":155,"courseId":168,"name":"Untitled","parentSectionId":147,"content":"gFywCVbBerbMPyOQpJYkXQ","contentType":"DOCUMENT","rank":4,"sub-section":[]},{"id":157,"courseId":168,"name":"Untitled","parentSectionId":147,"content":"kTg-_zGjauepkukFxqPZow","contentType":"VIDEO","rank":5,"sub-section":[]}]}],"createdDate":1520305240000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":3,"voter":1,"enabled":true,"viewable":true,"progress":null},{"id":171,"categoryId":36,"name":"Smart SME","detail":"Smart SME","sectionList":[{"id":172,"courseId":171,"name":"Untitled","parentSectionId":null,"content":"QcmUSK269EwbRuXR4CKeog","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":173,"courseId":171,"name":"po","parentSectionId":null,"content":"Intro ","contentType":"TEXT","rank":1,"sub-section":[{"id":175,"courseId":171,"name":"Untitled","parentSectionId":173,"content":"sUCEY1mAuI1cdHZ7_Ewd7A","contentType":"VIDEO","rank":1,"sub-section":[]},{"id":177,"courseId":171,"name":"Untitled","parentSectionId":173,"content":"xz6kn3ZY8bhnV5YcG4AgbQ","contentType":"VIDEO","rank":2,"sub-section":[]},{"id":179,"courseId":171,"name":"Untitled","parentSectionId":173,"content":"38VCYGZ_hOuBitlkckVKHg","contentType":"VIDEO","rank":3,"sub-section":[]}]},{"id":180,"courseId":171,"name":"Untitled","parentSectionId":null,"content":"Section 1 : What Is SME?","contentType":"TEXT","rank":2,"sub-section":[{"id":182,"courseId":171,"name":"Untitled","parentSectionId":180,"content":"qGKB4UB499KCwBCjAfjHJQ","contentType":"VIDEO","rank":1,"sub-section":[]},{"id":184,"courseId":171,"name":"Untitled","parentSectionId":180,"content":"vOxzubzeZj4Vq84fhhIjyA","contentType":"VIDEO","rank":2,"sub-section":[]},{"id":186,"courseId":171,"name":"Untitled","parentSectionId":180,"content":null,"contentType":"VIDEO","rank":3,"sub-section":[]}]}],"createdDate":1520321019000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":4,"voter":1,"enabled":true,"viewable":true,"progress":null},{"id":166,"categoryId":35,"name":"test video","detail":"Hello L2D","sectionList":[{"id":131,"courseId":166,"name":"Untitled","parentSectionId":null,"content":"XxgFU177Sw68loN55IIjxQ","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":132,"courseId":166,"name":"Untitled","parentSectionId":null,"content":"Section1","contentType":"TEXT","rank":1,"sub-section":[{"id":134,"courseId":166,"name":"Untitled","parentSectionId":132,"content":"NoiRVxrSOGXkZRe584y11g","contentType":"VIDEO","rank":1,"sub-section":[]}]},{"id":135,"courseId":166,"name":"Untitled","parentSectionId":null,"content":"Section","contentType":"TEXT","rank":2,"sub-section":[]}],"createdDate":1520302554000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":3,"voter":1,"enabled":true,"viewable":true,"progress":null},{"id":174,"categoryId":19,"name":"Programming Skills","detail":"<h1 style=\"color: rgb(41, 48, 59); display: inline-block; margin-right: 10px; font-family: &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 15px; margin-bottom: 0px; font-weight: 700; line-height: 18px;\"><font color=\"#686f7a\" style=\"\"><span style=\"background-color: rgb(255, 255, 255); display: inline-block; margin-right: 10px;\">Everyday Programming <\/span><span style=\"display: inline-block; margin-right: 10px; background-color: rgb(255, 156, 0);\">Skills<\/span><\/font><\/h1><div><br><\/div><div class=\"badge-with-context\" style=\"display: inline-block; position: relative; top: 3px; color: rgb(41, 48, 59); font-family: &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 15px;\"><span class=\"tooltip-container course-badge--course-badge--1AN7r course-badge--with-context--2v79N\" style=\"display: inline; position: static; float: left;\"><\/span><\/div>","sectionList":[{"id":187,"courseId":174,"name":"Untitled","parentSectionId":null,"content":"JBurAUAZxc97sErvA4Y84A","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":188,"courseId":174,"name":"Beginning of C","parentSectionId":null,"content":"Beginning of C","contentType":"TEXT","rank":1,"sub-section":[{"id":192,"courseId":174,"name":"Learn C Language Primitive Types","parentSectionId":188,"content":null,"contentType":"VIDEO","rank":1,"sub-section":[]}]},{"id":224,"courseId":174,"name":"section","parentSectionId":null,"content":null,"contentType":"TEXT","rank":2,"sub-section":[{"id":244,"courseId":174,"name":"new ","parentSectionId":224,"content":"u6A9mwCIge16Li-FylyH-A","contentType":"DOCUMENT","rank":1,"sub-section":[]}]},{"id":195,"courseId":174,"name":"Section2","parentSectionId":null,"content":"Arrays, Pointer and Conditional Expressions","contentType":"TEXT","rank":3,"sub-section":[{"id":190,"courseId":174,"name":"Introduction to C ","parentSectionId":195,"content":"XxSNoJLrjXxttLOkpPkQkQ","contentType":"DOCUMENT","rank":1,"sub-section":[]},{"id":194,"courseId":174,"name":"Arithmetic ","parentSectionId":195,"content":"CRI8FPopU_Ilw0LROKSiwQ","contentType":"VIDEO","rank":2,"sub-section":[]}]}],"createdDate":1520923282000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":5,"voter":1,"enabled":true,"viewable":true,"progress":{"idprogress":22,"percent":25,"sectionId":192}}]
      * response : {"status":true,"message":"request successfully"}
      */
 
@@ -61,16 +61,18 @@ public class MyCourse {
 
     public static class CoursesBean {
         /**
-         * id : 25
+         * id : 148
          * categoryId : 19
-         * name : Engineering Material
-         * detail : covalent and metallic bond, crystal systems
-         * sectionList : [{"id":28,"courseId":25,"parentSectionId":null,"content":"test_01","contentType":"TEXT","rank":1,"sub-section":[{"id":30,"courseId":25,"parentSectionId":28,"content":"Pxifbc_Wgz8MSQH0xbyaIg","contentType":"VIDEO","rank":2,"sub-section":[{"id":null,"courseId":33,"parentSectionId":30,"content":null,"contentType":null,"rank":null,"sub-section":[{"id":43,"courseId":25,"parentSectionId":37,"content":"Test Section","contentType":"TEXT","rank":0,"sub-section":[]}]}]},{"id":29,"courseId":25,"parentSectionId":28,"content":"New test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"parentSectionId":29,"content":"High","contentType":"TEXT","rank":1,"sub-section":[]}]}]}]
-         * createdDate : 1501779600000
+         * name : data 2
+         * detail : data2
+         * sectionList : [{"id":102,"courseId":148,"name":"Untitled","parentSectionId":null,"content":"ioHeeG7D6dacRTDBbP-QmA","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":103,"courseId":148,"name":"Untitled","parentSectionId":null,"content":"Intro Data","contentType":"TEXT","rank":1,"sub-section":[{"id":105,"courseId":148,"name":"Untitled","parentSectionId":103,"content":null,"contentType":"VIDEO","rank":1,"sub-section":[]}]},{"id":106,"courseId":148,"name":"Untitled","parentSectionId":null,"content":"Lab","contentType":"TEXT","rank":2,"sub-section":[{"id":108,"courseId":148,"name":"Untitled","parentSectionId":106,"content":null,"contentType":"DOCUMENT","rank":1,"sub-section":[]}]}]
+         * createdDate : 1519286527000
          * teacher : {"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}
-         * rating : 4.0
+         * rating : 5
+         * voter : 1
          * enabled : true
          * viewable : true
+         * progress : null
          */
 
         private int id;
@@ -80,14 +82,11 @@ public class MyCourse {
         private long createdDate;
         private TeacherBean teacher;
         private double rating;
+        private int voter;
         private boolean enabled;
         private boolean viewable;
+        private Progress progress;
         private List<SectionListBean> sectionList;
-
-        public CoursesBean(String courseName){
-            name = courseName;
-
-        }
 
         public int getId() {
             return id;
@@ -145,6 +144,14 @@ public class MyCourse {
             this.rating = rating;
         }
 
+        public int getVoter() {
+            return voter;
+        }
+
+        public void setVoter(int voter) {
+            this.voter = voter;
+        }
+
         public boolean isEnabled() {
             return enabled;
         }
@@ -159,6 +166,14 @@ public class MyCourse {
 
         public void setViewable(boolean viewable) {
             this.viewable = viewable;
+        }
+
+        public Progress getProgress() {
+            return progress;
+        }
+
+        public void setProgress(Progress progress) {
+            this.progress = progress;
         }
 
         public List<SectionListBean> getSectionList() {
@@ -287,23 +302,25 @@ public class MyCourse {
 
         public static class SectionListBean {
             /**
-             * id : 28
-             * courseId : 25
+             * id : 102
+             * courseId : 148
+             * name : Untitled
              * parentSectionId : null
-             * content : test_01
-             * contentType : TEXT
-             * rank : 1
-             * sub-section : [{"id":30,"courseId":25,"parentSectionId":28,"content":"Pxifbc_Wgz8MSQH0xbyaIg","contentType":"VIDEO","rank":2,"sub-section":[{"id":null,"courseId":33,"parentSectionId":30,"content":null,"contentType":null,"rank":null,"sub-section":[{"id":43,"courseId":25,"parentSectionId":37,"content":"Test Section","contentType":"TEXT","rank":0,"sub-section":[]}]}]},{"id":29,"courseId":25,"parentSectionId":28,"content":"New test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"parentSectionId":29,"content":"High","contentType":"TEXT","rank":1,"sub-section":[]}]}]
+             * content : ioHeeG7D6dacRTDBbP-QmA
+             * contentType : PICTURE
+             * rank : 0
+             * sub-section : []
              */
 
             private int id;
             private int courseId;
+            private String name;
             private Object parentSectionId;
             private String content;
             private String contentType;
             private int rank;
             @SerializedName("sub-section")
-            private List<SubsectionBeanXX> subsection;
+            private List<?> subsection;
 
             public int getId() {
                 return id;
@@ -319,6 +336,14 @@ public class MyCourse {
 
             public void setCourseId(int courseId) {
                 this.courseId = courseId;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
             }
 
             public Object getParentSectionId() {
@@ -353,243 +378,12 @@ public class MyCourse {
                 this.rank = rank;
             }
 
-            public List<SubsectionBeanXX> getSubsection() {
+            public List<?> getSubsection() {
                 return subsection;
             }
 
-            public void setSubsection(List<SubsectionBeanXX> subsection) {
+            public void setSubsection(List<?> subsection) {
                 this.subsection = subsection;
-            }
-
-            public static class SubsectionBeanXX {
-                /**
-                 * id : 30
-                 * courseId : 25
-                 * parentSectionId : 28
-                 * content : Pxifbc_Wgz8MSQH0xbyaIg
-                 * contentType : VIDEO
-                 * rank : 2
-                 * sub-section : [{"id":null,"courseId":33,"parentSectionId":30,"content":null,"contentType":null,"rank":null,"sub-section":[{"id":43,"courseId":25,"parentSectionId":37,"content":"Test Section","contentType":"TEXT","rank":0,"sub-section":[]}]}]
-                 */
-
-                private int id;
-                private int courseId;
-                private int parentSectionId;
-                private String content;
-                private String contentType;
-                private int rank;
-                @SerializedName("sub-section")
-                private List<SubsectionBeanX> subsection;
-
-                public int getId() {
-                    return id;
-                }
-
-                public void setId(int id) {
-                    this.id = id;
-                }
-
-                public int getCourseId() {
-                    return courseId;
-                }
-
-                public void setCourseId(int courseId) {
-                    this.courseId = courseId;
-                }
-
-                public int getParentSectionId() {
-                    return parentSectionId;
-                }
-
-                public void setParentSectionId(int parentSectionId) {
-                    this.parentSectionId = parentSectionId;
-                }
-
-                public String getContent() {
-                    return content;
-                }
-
-                public void setContent(String content) {
-                    this.content = content;
-                }
-
-                public String getContentType() {
-                    return contentType;
-                }
-
-                public void setContentType(String contentType) {
-                    this.contentType = contentType;
-                }
-
-                public int getRank() {
-                    return rank;
-                }
-
-                public void setRank(int rank) {
-                    this.rank = rank;
-                }
-
-                public List<SubsectionBeanX> getSubsection() {
-                    return subsection;
-                }
-
-                public void setSubsection(List<SubsectionBeanX> subsection) {
-                    this.subsection = subsection;
-                }
-
-                public static class SubsectionBeanX {
-                    /**
-                     * id : null
-                     * courseId : 33
-                     * parentSectionId : 30
-                     * content : null
-                     * contentType : null
-                     * rank : null
-                     * sub-section : [{"id":43,"courseId":25,"parentSectionId":37,"content":"Test Section","contentType":"TEXT","rank":0,"sub-section":[]}]
-                     */
-
-                    private Object id;
-                    private int courseId;
-                    private int parentSectionId;
-                    private Object content;
-                    private Object contentType;
-                    private Object rank;
-                    @SerializedName("sub-section")
-                    private List<SubsectionBean> subsection;
-
-                    public Object getId() {
-                        return id;
-                    }
-
-                    public void setId(Object id) {
-                        this.id = id;
-                    }
-
-                    public int getCourseId() {
-                        return courseId;
-                    }
-
-                    public void setCourseId(int courseId) {
-                        this.courseId = courseId;
-                    }
-
-                    public int getParentSectionId() {
-                        return parentSectionId;
-                    }
-
-                    public void setParentSectionId(int parentSectionId) {
-                        this.parentSectionId = parentSectionId;
-                    }
-
-                    public Object getContent() {
-                        return content;
-                    }
-
-                    public void setContent(Object content) {
-                        this.content = content;
-                    }
-
-                    public Object getContentType() {
-                        return contentType;
-                    }
-
-                    public void setContentType(Object contentType) {
-                        this.contentType = contentType;
-                    }
-
-                    public Object getRank() {
-                        return rank;
-                    }
-
-                    public void setRank(Object rank) {
-                        this.rank = rank;
-                    }
-
-                    public List<SubsectionBean> getSubsection() {
-                        return subsection;
-                    }
-
-                    public void setSubsection(List<SubsectionBean> subsection) {
-                        this.subsection = subsection;
-                    }
-
-                    public static class SubsectionBean {
-                        /**
-                         * id : 43
-                         * courseId : 25
-                         * parentSectionId : 37
-                         * content : Test Section
-                         * contentType : TEXT
-                         * rank : 0
-                         * sub-section : []
-                         */
-
-                        private int id;
-                        private int courseId;
-                        private int parentSectionId;
-                        private String content;
-                        private String contentType;
-                        private int rank;
-                        @SerializedName("sub-section")
-                        private List<?> subsection;
-
-                        public int getId() {
-                            return id;
-                        }
-
-                        public void setId(int id) {
-                            this.id = id;
-                        }
-
-                        public int getCourseId() {
-                            return courseId;
-                        }
-
-                        public void setCourseId(int courseId) {
-                            this.courseId = courseId;
-                        }
-
-                        public int getParentSectionId() {
-                            return parentSectionId;
-                        }
-
-                        public void setParentSectionId(int parentSectionId) {
-                            this.parentSectionId = parentSectionId;
-                        }
-
-                        public String getContent() {
-                            return content;
-                        }
-
-                        public void setContent(String content) {
-                            this.content = content;
-                        }
-
-                        public String getContentType() {
-                            return contentType;
-                        }
-
-                        public void setContentType(String contentType) {
-                            this.contentType = contentType;
-                        }
-
-                        public int getRank() {
-                            return rank;
-                        }
-
-                        public void setRank(int rank) {
-                            this.rank = rank;
-                        }
-
-                        public List<?> getSubsection() {
-                            return subsection;
-                        }
-
-                        public void setSubsection(List<?> subsection) {
-                            this.subsection = subsection;
-                        }
-                    }
-                }
             }
         }
     }

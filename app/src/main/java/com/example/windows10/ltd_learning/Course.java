@@ -73,7 +73,7 @@ public class Course {
          * teacher : {"idteacher":2,"member":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":"xxx"}}
          * rating : 0.0
          */
-
+        private String content_pic;
         private int id;
         private int categoryId;
         private String name;
@@ -82,9 +82,9 @@ public class Course {
         private String key;
         private TeacherBean teacher;
         private double rating;
-        private Object progress;
-        private double voter;
-        private List<?> sectionList;
+        private Progress progress;
+        private double voter=9;
+        private List<SectionList> sectionList;
 
         public CoursesBean(){
         }
@@ -97,6 +97,27 @@ public class Course {
             this.id = id;
             name = courseName;
             rating = rate;
+        }
+        public CoursesBean(String courseName,int id,double rate,String content){
+            this.id = id;
+            name = courseName;
+            rating = rate;
+            content_pic = content;
+        }
+        public CoursesBean(String courseName,int id,double rate,String content,double v){
+            this.id = id;
+            name = courseName;
+            rating = rate;
+            content_pic = content;
+            this.voter = v;
+        }
+        public CoursesBean(String courseName,int id,double rate,String content,double v,Progress p){
+            progress = p;
+            this.id = id;
+            name = courseName;
+            rating = rate;
+            content_pic = content;
+            this.voter = v;
         }
 
         public int getId() {
@@ -155,15 +176,15 @@ public class Course {
             return voter;
         }
 
-        public void setVoter(double voter) {
-            this.voter = voter;
+        public void setVoter(double v){
+            this.voter = v;
         }
 
-        public Object getProgress() {
+        public Progress getProgress() {
             return progress;
         }
 
-        public void setProgress(Object progress) {
+        public void setProgress(Progress progress) {
             this.progress = progress;
         }
 
@@ -175,6 +196,21 @@ public class Course {
             return rating;
         }
 
+        public void setContentPic(String content){
+            content_pic = content;
+        }
+
+        public List<SectionList> getSectionList() {
+            return sectionList;
+        }
+
+        public void setSectionList(List<SectionList> sectionList) {
+            this.sectionList = sectionList;
+        }
+
+        public String getContent_pic(){
+            return content_pic;
+        }
         public void setRating(double rating) {
             this.rating = rating;
         }

@@ -59,20 +59,6 @@ public class CourseTop {
     }
 
     public static class CoursesBean {
-        /**
-         * id : 175
-         * categoryId : null
-         * name : Tosukoi2
-         * detail : c
-         * sectionList : []
-         * createdDate : 1520939901000
-         * teacher : {"idmember":207,"name":"waxsa","surname":"waxsa","username":"waxsa","passwd":"$2a$10$WHaPjoOSYc7HAOBrZGcCpO8d7ma6ItBiZ1bs3WebU/mCH529PZ8JO","email":"waxsa","socialId":null,"socialType":null,"photoUrl":null,"type":"student","profile":"waxsa"}
-         * rating : 5.0
-         * voter : 1.0
-         * enabled : false
-         * viewable : false
-         * progress : null
-         */
 
         private int id;
         private Object categoryId;

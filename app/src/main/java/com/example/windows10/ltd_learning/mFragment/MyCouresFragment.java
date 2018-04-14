@@ -31,6 +31,7 @@ import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.mRecycler.Adapter;
 import com.example.windows10.ltd_learning.mRecycler.CustomAdapter;
+import com.example.windows10.ltd_learning.mRecycler.CustomMyCourse;
 import com.example.windows10.ltd_learning.mRecycler.MyCourse;
 import com.example.windows10.ltd_learning.mRecycler.Snap;
 import com.example.windows10.ltd_learning.mRecycler.SnapAdapter;
@@ -57,6 +58,7 @@ import java.util.List;
  */
 
 public class MyCouresFragment extends Fragment {
+    private MyCourse myCourse;
     private List<String> course_name;
     private ArrayAdapter adapter;
     private ListView listView;
@@ -141,16 +143,16 @@ public class MyCouresFragment extends Fragment {
         if (!jsonString.equals(""))
         {
             Gson gson = new Gson();
-            Course data = gson.fromJson(jsonString,Course.class);
-
-            Course.StatusBean response = data.getStatus();
+            MyCourse data = gson.fromJson(jsonString,MyCourse.class);
+            MyCourse.ResponseBean response = data.getResponse();
 
             if (response.isStatus())
             {
-                List<Course.CoursesBean> courses = data.getCourses();
+                List<MyCourse.CoursesBean> courses = data.getCourses();
+//                List<MyCourse.CoursesBean> courses = getMyCourseFull();
                 RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_mycourse);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new CustomAdapter(getContext(), courses));
+                recyclerView.setAdapter(new CustomMyCourse(getContext(), courses));
                 recyclerView.setHasFixedSize(true);
 
             }
@@ -168,7 +170,6 @@ public class MyCouresFragment extends Fragment {
             recyclerView.setAdapter(null);
         }
     }
-
 //    public void getInfomation(int id){
 //        Log.d("JSON","####TestURL"+URL_getMyCourse+String.valueOf(USER_ID));
 //        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getMyCourse+id, new Response.Listener<String>() {

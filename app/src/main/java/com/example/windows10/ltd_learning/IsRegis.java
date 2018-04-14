@@ -1,5 +1,7 @@
 package com.example.windows10.ltd_learning;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Windows10 on 2/13/2018.
  */
@@ -30,7 +32,16 @@ public class IsRegis {
     public void setIsRegis(boolean isRegis) {
         this.isRegis = isRegis;
     }
+    public double getRating() {
+        return rating;
+    }
 
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    @SerializedName("userRating")
+    private double rating;
     public static class CourseBean {
         /**
          * idcourse : 1

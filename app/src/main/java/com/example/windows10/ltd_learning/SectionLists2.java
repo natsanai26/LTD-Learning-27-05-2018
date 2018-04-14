@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Windows10 on 3/12/2018.
  */
 
-public class SectionList  {
+public class SectionLists2  {
 
     /**
      * id : 173

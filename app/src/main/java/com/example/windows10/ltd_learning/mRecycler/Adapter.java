@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.view.inputmethod.CorrectionInfo;
 import android.widget.ImageView;
@@ -20,18 +22,24 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.windows10.ltd_learning.Course;
 import com.example.windows10.ltd_learning.CourseDetail;
 import com.example.windows10.ltd_learning.CourseDetailForMyCourse;
 import com.example.windows10.ltd_learning.ItemClickListener;
 import com.example.windows10.ltd_learning.MainActivity;
+import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.SearchActivity;
 import com.squareup.picasso.Picasso;
 
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private ImageView imageView;
+    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
     private List<Course> mCourse = new ArrayList<>();
     private boolean mHorizontal;
     private boolean mPager;
@@ -51,24 +59,59 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.model,parent,false);
         ViewHolder mViewHolder = new ViewHolder(v,mContext,mCourse);
-        imageView = (ImageView) v.findViewById(R.id.imageView_home);
+//        imageView = (ImageView) v.findViewById(R.id.imageView_home);
+//        getURLPic("");
 //        getImageCourse();
         return  mViewHolder;
 //        return new ViewHolder(LayoutInflater.from(parent.getContext())
 //               .inflate(R.layout.model, parent, false));
     }
 
-    public void getImageCourse(){
-        Picasso.with(mContext).load("http://158.108.207.7:8080/api/docImg/key999/48/46").into(imageView);
+    public void getURLPic(String content, final ViewHolder holder){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getURLPicture + content, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("JSON","url --> "+response);
+                getImageCourse(response, holder);
+            }
+
+            private void getImageCourse(String response, ViewHolder holder) {
+                String url = "http://158.108.207.7:8080/";
+                Picasso.with(mContext).load(url+response).into(holder.imageView);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("JSON", "Error JSON");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", "key999");
+                return params;
+            }
+        };
+        MySingleton.getInstance(mContext).addToReauestQue(stringRequest);
     }
+
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Course.CoursesBean course = (Course.CoursesBean) mCourse.get(position);
+        String content_get_pic;
         holder.ratingBar.setRating((float) course.getRating());
         holder.nameTextView.setText(course.getName());
+        content_get_pic = course.getContent_pic();
+        Log.d("JSON", "In Adapter "+content_get_pic);
+        if(content_get_pic != null){
+            getURLPic(content_get_pic,holder);
+        }
+//        getImageCourse(holder);
 
 //        holder.nameTextView.setText(Integer.toString(mCourse.get(position).getId()));
-
+//
 //        holder.setItemClickListener(new ItemClickListener() {
 //            @Override
 //            public void onItemClick(View view, int position) {
@@ -78,6 +121,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     }
 
+
+//    public void getImageCourse(ViewHolder holder){
+//        String url = "http://158.108.207.7:8080/";
+//
+//        Picasso.with(mContext).load(url+"api/docImg/key999/48/46").into(holder.imageView);
+//    }
     @Override
     public int getItemCount() {
         return mCourse.size();
@@ -86,6 +135,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public ImageView imageView;
         public RatingBar ratingBar;
         private SharedPreferences sharedPreferences;
         private int idUser;
@@ -103,17 +153,23 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             sharedPreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
             nameTextView = (TextView) itemView.findViewById(R.id.nameTxt);
             ratingBar = itemView.findViewById(R.id.ratingBar);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView_home);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("destroyInCourseDetail",false);
+            editor.commit();
             idUser = sharedPreferences.getInt("idMember",-1);
             isEnroll = sharedPreferences.getBoolean("checkEnroll",false);
             Course.CoursesBean course_onclick = (Course.CoursesBean) this.courses.get(position);
             Intent intent = new Intent(this.ctx,CourseDetail.class);
             Intent intent2 = new Intent(this.ctx, CourseDetailForMyCourse.class);
+            intent.putExtra("course_rating",course_onclick.getRating());
+            intent.putExtra("course_voter",course_onclick.getVoter());
             intent.putExtra("course_id",course_onclick.getId());
             intent.putExtra("course_name",course_onclick.getName());
             intent2.putExtra("course_id",course_onclick.getId());

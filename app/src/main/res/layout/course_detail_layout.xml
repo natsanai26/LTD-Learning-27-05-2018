@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/container_detail"
     android:orientation="vertical"
     android:background="#e4e4e4"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
     <RelativeLayout
+        android:verticalScrollbarPosition="defaultPosition"
+        android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="200dp">
 
@@ -21,112 +18,172 @@
             app:useDefaultControls="true"/>
 
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:id="@+id/ln_courseName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/course_name"
-        android:text="Course Name"
-        android:textColor="#000000"
-        android:textSize="20dp" />
 
-    </LinearLayout>
-        <LinearLayout
-            android:padding="10dp"
-            android:layout_below="@+id/ln_courseName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/rateButton"
+<ScrollView
+    android:id="@+id/container_detail"
+    android:orientation="vertical"
+    android:background="#e4e4e4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:id="@+id/ln_courseName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/course_name"
+                    android:text="Course Name"
+                    android:textColor="#000000"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:padding="10dp"
+                android:layout_below="@+id/ln_courseName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Rate now" />
-        </LinearLayout>
-    <!--<TextView-->
-        <!--android:id="@+id/detail"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="This is detail"-->
-        <!--android:textSize="25dp"-->
-        <!--android:textStyle="italic" />-->
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/rateButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Rate now" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/testIdUser"-->
-        <!--android:text="TestIDUser"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-    <!--<TextView-->
-        <!--android:id="@+id/testIdCourse"-->
-        <!--android:text="TestIDCourse"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-    <LinearLayout
-        android:gravity="end"
-        android:paddingRight="10dp"
-        android:layout_alignParentRight="true"
-        android:id="@+id/ln_enroll_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    <Button
-        android:id="@+id/button_enroll"
-        android:text="enroll"
-        android:layout_width="110dp"
-        android:layout_height="60dp" />
-    </LinearLayout>
-    </RelativeLayout>
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="?android:attr/ratingBarStyleIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:progressTint="@android:color/holo_orange_dark"
+                    android:rating="2.5"
+                    android:stepSize="0.5"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    android:paddingTop="5dp"/>
 
-    <LinearLayout
-        android:id="@+id/transition"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="20dp">
+                <TextView
+                    android:id="@+id/voter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1 people"
+                    android:textColor="#000000"
+                    android:textSize="15dp"/>
+            </LinearLayout>
+            <!--<TextView-->
+            <!--android:id="@+id/detail"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="This is detail"-->
+            <!--android:textSize="25dp"-->
+            <!--android:textStyle="italic" />-->
 
-        <TextView
+            <!--<TextView-->
+            <!--android:id="@+id/testIdUser"-->
+            <!--android:text="TestIDUser"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/testIdCourse"-->
+            <!--android:text="TestIDCourse"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+            <LinearLayout
+                android:gravity="end"
+                android:paddingRight="10dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/ln_enroll_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/button_enroll"
+                    android:text="enroll"
+                    android:layout_width="110dp"
+                    android:layout_height="60dp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/transition"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:text="Contents"
-            android:textColor="#000000"
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/e1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="element1"
-            android:textSize="20dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/e2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="element2"
-            android:textSize="20dp"
-            android:visibility="gone" />
+            android:layout_height="500dp"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
 
-        <TextView
-            android:id="@+id/e3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="element3"
-            android:textSize="20dp"
-            android:visibility="gone" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Contents"
+                android:textColor="#000000"
+                android:textSize="18dp" />
+            <TextView
+                android:id="@+id/click"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="TestPDF"
+                android:textColor="#000000"
+                android:textSize="18dp" />
 
-        <!--<Button-->
+            <!--<ExpandableListView-->
+                <!--android:id="@+id/lvExp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--&gt;</ExpandableListView>-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                />
+
+
+
+            <!--<TextView
+                android:id="@+id/e1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="element1"
+                android:textSize="20dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/e2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="element2"
+                android:textSize="20dp"
+                android:visibility="gone" />
+
+
+            <TextView
+                android:id="@+id/e3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="element3"
+                android:textSize="20dp"
+                android:visibility="gone" />-->
+
+            <!--<Button-->
             <!--android:id="@+id/btn2"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
@@ -134,7 +191,7 @@
             <!--android:text="Section2"-->
             <!--android:textSize="20dp" />-->
 
-        <!--<Button-->
+            <!--<Button-->
             <!--android:id="@+id/btn"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
@@ -142,39 +199,42 @@
             <!--android:text="Section1"-->
             <!--android:textSize="20dp" />-->
 
-        <TextView
-            android:id="@+id/e4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="element4"
-            android:textSize="20dp"
-            android:visibility="gone" />
+            <!--<TextView
+                android:id="@+id/e4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="element4"
+                android:textSize="20dp"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/e5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="element3"
-            android:textSize="20dp"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/e5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="element3"
+                android:textSize="20dp"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/e6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="element3"
-            android:textSize="20dp"
-            android:visibility="gone" />
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/dynamic_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            <TextView
+                android:id="@+id/e6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="element3"
+                android:textSize="20dp"
+                android:visibility="gone" />-->
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/dynamic_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:background="#343434"
+                android:orientation="vertical"></LinearLayout>
+
         </LinearLayout>
 
+
     </LinearLayout>
-</LinearLayout>
 </ScrollView>
+    </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.windows10.ltd_learning;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,14 +13,23 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +43,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
+import com.example.windows10.ltd_learning.mFragment.TopOnCourseDetailFragment;
+import com.example.windows10.ltd_learning.mRecycler.Adapter;
 import com.example.windows10.ltd_learning.mRecycler.MyCourse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,6 +57,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,6 +73,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,15 +84,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Windows10 on 12/5/2017.
  */
 
-public class CourseDetail extends AppCompatActivity implements OnPreparedListener,View.OnClickListener {
+public class CourseDetail extends AppCompatActivity implements OnPreparedListener {
+    private boolean checkPreviewed = true;
+    private SharedPreferences sharedPreferences;
+    private String previewURLVideo;
     private List<String> btn_name;
     private List<String> sub_section_name;
     boolean visible;
-    List<List<String>> table_section ;
+    List<List<SectionList.SubsectionBean>> table_section ;
     LinearLayout dynamic_lay;
     LinearLayout parent;
     Button[] b1;
     TextView[] t1;
+    private double ratingCourse;
     private VideoView videoView;
     private Button btn,btn2;
     private TextView txt1,txt2,txt3,txt4,txt5,txt6;
@@ -92,9 +110,20 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     private Button enroll;
     private TextView tx_name,tx_detail,testIdUser,testIdCourse;
     private int idUser,idCourse;
+    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
+    private static String URL_unEnroll = "http://158.108.207.7:8090/elearning/course/unenroll";
     private static String URL_courseID = "http://158.108.207.7:8090/elearning/course?courseId=";
     private static String URL_isRegis = "http://158.108.207.7:8090/elearning/course/isRegis";
     private static String URL_addRegis ="http://158.108.207.7:8090/elearning/course/addRegis";
+    private double ratingCurrent;
+    private double courseVoter;
+    private int progress_section_id;
+    private TextView voter;
+    private RatingBar ratingBar;
+    private ExpandableListView listView;
+    private MyExpandableListAdapter listAdapter;
+    private List<String> listDataHeader;
+    private HashMap<String,List<SectionList.SubsectionBean>> listHash;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,8 +132,18 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+        sharedPreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+//        setUpTopFragment();
         setupVideoView();
-
+        //----------------- PDF TEST-----------------------
+        TextView textView = (TextView)findViewById(R.id.click);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.oecd.org/cfe/leed/1918307.pdf"));
+                startActivity(browserIntent);
+            }
+        });
         enroll = (Button) findViewById(R.id.button_enroll);
 //        testIdUser = (TextView) findViewById(R.id.testIdUser);
 //        testIdCourse = (TextView) findViewById(R.id.testIdCourse);
@@ -114,12 +153,21 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         idUser = sp.getInt("idMember",-1);
         Intent intent  = getIntent();
         idCourse = intent.getIntExtra("course_id",-2);
+        ratingCourse = intent.getDoubleExtra("course_rating",-1);
+        courseVoter = intent.getDoubleExtra("course_voter",-1);
+        progress_section_id = intent.getIntExtra("progress_section_id",-1);
+        Log.d("Section","check section progress "+progress_section_id);
 //        testIdUser.setText("UserID : "+idUser);
 //        testIdCourse.setText("CourseID :"+idCourse);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        voter = (TextView) findViewById(R.id.voter);
+        voter.setText( (int)courseVoter+" people");
+        //ratingBar.setRating((float) ratingCourse);
         courseName = getIntent().getStringExtra("course_name");
         tx_name.setText(getIntent().getStringExtra("course_name"));
         ratingButton = (Button)findViewById(R.id.rateButton) ;
         ratingButton.setEnabled(false);
+
         ratingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,42 +185,133 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     editor.putBoolean("check_for_enroll",true);
                     Toast.makeText(CourseDetail.this,"Please Register or Login First", Toast.LENGTH_LONG).show();
                     finish();
-                }else {
+                }else if(!enrolled){
                     Toast.makeText(CourseDetail.this,"Enroll Doing!!", Toast.LENGTH_LONG).show();
                     String dataJson = getRegister();
                     Intent intent = new Intent(CourseDetail.this,CourseDetailForMyCourse.class);
                     intent.putExtra("course_id",idCourse);
                     intent.putExtra("course_name",courseName);
-                    enroll.setText("Enrolled");
-                    enroll.setAlpha(.5f);
                     ratingButton.setEnabled(true);
-                    enroll.setClickable(false);
+                    finish();
+                    startActivity(getIntent());
+                    enroll.setText("Unenroll");
+                    enroll.setTextColor(Color.parseColor("#DD0F0F"));
 //                    showSectionCourse();
+                }else if(enrolled){
+                    Toast.makeText(CourseDetail.this,"UnEnroll Doing!!", Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CourseDetail.this);
+
+                    builder.setMessage("Are you sure for uneneoll").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            enroll.setText("enroll");
+                            enroll.setTextColor(Color.parseColor("#000000"));
+                            ratingButton.setEnabled(false);
+                            unEnrolled();
+                            finish();
+                            startActivity(getIntent());
+                        }
+                    }).setNegativeButton("Cancel",null);
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
+
 
             }
         });
-        if(idUser != -1){
-            getStatusEnroll();
-        }
         getDetailCourseById(idCourse);
     }
 
+    @Override
+    protected void onPause() {
+        Log.d("JSON","this pause");
+        super.onPause();
+    }
 
+    @Override
+    protected void onResume() {
+        if(idUser != -1){
+            getStatusEnroll();
+
+
+
+        }
+
+
+
+        final ElearningAPI elearningAPI = MyAPI.getAPI();
+        try {
+            JSONObject jsonObject = new JSONObject(String.format("{\"memberId\":%d,\"courseId\":%d}",idUser,idCourse));
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),(jsonObject).toString());
+            Call<ResponseBody> response = elearningAPI.isRegis(body);
+            response.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> rawResponse) {
+                    try {
+                        String json = rawResponse.body().string();
+                        Gson gson = new Gson();
+                        IsRegis2 isRegis2 = gson.fromJson(json,IsRegis2.class);
+                        double rating = isRegis2.getCourse().getRating();
+                        Log.d("rating",""+rating);
+                        ratingBar.setRating((float) rating);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        Log.d("JSON","this resume");
+        super.onResume();
+    }
+
+    private void setUpTopFragment(){
+        TopOnCourseDetailFragment topFragment = new TopOnCourseDetailFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.top_layout,topFragment,topFragment.getTag()).commit();
+    }
 
     private void setupVideoView() {
         // Make sure to use the correct VideoView import
         videoView = (VideoView)findViewById(R.id.video_view);
         videoView.setOnPreparedListener(this);
-
+        String path = sharedPreferences.getString("myVideo","");
+        String type = sharedPreferences.getString("type","");
+//        checkPreviewed = sharedPreferences.getBoolean("checkVideo",true);
+        Log.d("JSON","On set Up video View ===> "+path+" bool "+checkPreviewed+" Type "+type);
         //For now we just picked an arbitrary item to play
-        videoView.setVideoURI(Uri.parse("http://158.108.207.7:8080/api/ts/key999/25/30/index.m3u8"));
+        if(type.equals("VIDEO")){
+            videoView.setVideoURI(Uri.parse("http://158.108.207.7:8080/"+path));
+        }else if(type.equals("DOCUMENT")){
+            Log.d("JSON","This is doc");
+            setPdfView("http://158.108.207.7:8080/"+path);
+        }
     }
 
+    private  void setPdfView(String url){
+        Intent intent = new Intent(this,PdfActivityActivity.class);
+        intent.putExtra("url",url);
+        startActivity(intent);
+    }
     @Override
     public void onPrepared() {
         //Starts the video playback as soon as it is ready
-        videoView.pause();
+        checkPreviewed = sharedPreferences.getBoolean("checkVideo",true);
+        Log.d("JSON","fromOnPrepared +-+-> "+checkPreviewed);
+        if(checkPreviewed){
+            videoView.pause();
+        }else{
+            videoView.start();
+        }
     }
 
     public void getDetailCourseById(int course_id){
@@ -198,9 +337,35 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
     }
 
+    @Override
+    protected void onDestroy() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        boolean checkBool ;
+        checkBool = sharedPreferences.getBoolean("destroyInCourseDetail",true);
+        editor.putBoolean("checkVideo",true);
+        if(!checkBool){
+            editor.putBoolean("destroyInCourseDetail",true);
+        }
+        editor.commit();
+
+        Log.d("JSON","Check Bool "+checkBool);
+        if(checkBool){
+            MainActivity.onTabSelectedListener2.onTabSelected(2,true);
+        }
+        super.onDestroy();
+    }
+
     private void setCourseFromID(CourseIdOnce course){
-         courseInCourseDetail = course;
-        Log.d("JSON","Check CourseDetail === "+courseInCourseDetail);
+        courseInCourseDetail = course;
+        List<SectionList> sectionLists = getSectionListFromID();
+        checkPreviewed = sharedPreferences.getBoolean("checkVideo",true);
+        if(checkPreviewed){
+            previewURLVideo = sectionLists.get(1).getSubsection().get(0).getContent();
+            Log.d("##Video","IN Course From ID === "+courseInCourseDetail+" AND +++>"+previewURLVideo);
+            getURLVideo(previewURLVideo);
+        }else{
+            getURLVideo(sharedPreferences.getString("myVideo",null));
+        }
         if(getSectionListFromID().size() != 0){
 //            showLesson();
             setUpSectionLayout();
@@ -215,127 +380,345 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
         sub_section_name = new ArrayList<String>();
         btn_name = new ArrayList<String>();
-        table_section = new ArrayList<List<String>>();
+        table_section = new ArrayList<List<SectionList.SubsectionBean>>();
 
-//        Log.d("JSON","Check Size Section ===> "+sectionLists.size());
-//        for(int i = 0; i<sectionLists.size();i++){
-//            btn_name.add(sectionLists.get(i).getContent());
-//            for (int j = 0; j<sectionLists.get(i).getSubsection().size();j++){
-//                Log.d("JSON","Check index Button "+i+"   "+sectionLists.get(i).getSubsection().get(j).getContent());
-//                sub_section_name.add(sectionLists.get(i).getSubsection().get(j).getContent());
-//            }
-//        }
+        Log.d("JSON","Check Size Section ===> "+sectionLists.size());
+        for(int i = 1; i<sectionLists.size();i++){
+            btn_name.add(sectionLists.get(i).getContent());
+            table_section.add(new ArrayList<SectionList.SubsectionBean>());
+        }
+        Log.d("table_sec",table_section.size()+"");
+        Log.d("JSON","Check Size Sub ===> "+sectionLists.get(1).getSubsection().size());
+        for (int j=1;j<sectionLists.size();j++) {
+            //sub_section_name = new ArrayList<String>();
+            for (int i = 0; i < sectionLists.get(j).getSubsection().size(); i++) {
+                //Log.d("JSON", "Check CourseDetail ===> " + sectionLists.get(j-1).getSubsection().get(i).getContent());
+                //sub_section_name.add(sectionLists.get(j).getSubsection().get(i).getContent());
+                //table_section.get(j)
+                //if(sectionLists.get(j).getSubsection().get(i).getContentType().equals("TEXT"))
+                    table_section.get(j-1).add(sectionLists.get(j).getSubsection().get(i));
 
-//        Log.d("JSON","Check Size Sub ===> "+sectionLists.get(1).getSubsection().size());
-//        for (int i = 0; i<sectionLists.get(1).getSubsection().size();i++){
-//            Log.d("JSON","Check CourseDetail ===> "+sectionLists.get(2).getSubsection().get(i).getContent());
-//            sub_section_name.add(sectionLists.get(1).getSubsection().get(i).getContent());
-//        }
+            }
 
 
-//        b1 = new Button[btn_name.size()];
-//        t1 = new TextView[sub_section_name.size()];
-//        parent = (LinearLayout) findViewById(R.id.dynamic_layout);
-//        for (int i = 1; i < btn_name.size(); i++){
-//            for (int k = 0; k < sub_section_name.size(); k++){
-//                t1[k] = new TextView(CourseDetail.this);
-//                t1[k].setId(k+1);
-//                t1[k].setText(sub_section_name.get(k));
-//                t1[k].setTag("text"+k);
-//                t1[k].setTextSize(20);
-//                t1[k].setVisibility(View.GONE);
-//                t1[k].setTextColor(Color.parseColor("#000000"));
-//                t1[k].setOnClickListener(CourseDetail.this);
+        }
+//        JSONArray jsonArray = new JSONArray(table_section);
+//        Gson gson = new Gson();
+//        Log.d("table sec:",gson.toJson(jsonArray));
 //
 //
-//                parent.addView(t1[k]);
-//            }
-//            b1[i] = new Button(CourseDetail.this);
-//            b1[i].setId(i+1);
-//            b1[i].setText(btn_name.get(i));
-//            b1[i].setTag(i);
-//            parent.addView(b1[i]);
-//            b1[i].setOnClickListener(CourseDetail.this);
+//        listView = (ExpandableListView)findViewById(R.id.lvExp);
+//
+//
+//        listDataHeader = new ArrayList<>();
+//        listHash = new HashMap<>();
+//        for (String s:btn_name)
+//            listDataHeader.add(s);
+//
+//
+//        for (int i=0;i<listDataHeader.size();i++)
+//        {
+//            listHash.put(listDataHeader.get(i),table_section.get(i));
 //        }
+//        listAdapter = new MyExpandableListAdapter(this,listDataHeader,listHash);
+//        listAdapter.setOnChildClickListener(new MyExpandableListAdapter.OnChildClickListener() {
+//            @Override
+//            public void click(int parent, int child) {
+//                //Toast.makeText(CourseDetail.this," "+listAdapter.getListHashMap(),Toast.LENGTH_SHORT).show();
+//                Log.d("JSON","OnClick Subsection"+listHash.get(listDataHeader.get(parent)).get(child).getContent()+"");
+//                String contentSection = listHash.get(listDataHeader.get(parent)).get(child).getContent();
+//                String type = listHash.get(listDataHeader.get(parent)).get(child).getContentType();
+//                Log.d("JSON","OnClick Subsection"+type);
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putString("type",type);
+//                editor.putBoolean("checkVideo",false);
+//                editor.commit();
+//                getURLVideo(contentSection);
+//            }
+//
+//        });
+//
+//        listView.setAdapter(listAdapter);
+//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_expand);
+//
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//
+//        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
+//        if (animator instanceof DefaultItemAnimator) {
+//            ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
+//        }
+//        listDataHeader = new ArrayList<>();
+//        for (String s:btn_name)
+//            listDataHeader.add(s);
+//        ArrayList<Genre> genres = new ArrayList<Genre>();
+//        for (int i=0;i<listDataHeader.size();i++)
+//        {
+//            genres.add(new Genre(listDataHeader.get(i),table_section.get(i)));
+//        }
+//
+//        GenreAdapter genreAdapter = new GenreAdapter(genres);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(genreAdapter);
+//        genreAdapter.setOnItemClickListener(new GenreAdapter.OnItemClickListener() {
+//            @Override
+//            public void OnItemClick(View view) {
+//                Log.d("JSON","Hello "+view);
+//            }
+//        });
+
+        listHash = new HashMap<>();
+        for (int i=0;i<btn_name.size();i++)
+        {
+            listHash.put(btn_name.get(i),table_section.get(i));
+        }
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        CourseDetail.RecyclerDataAdapter recyclerDataAdapter = new CourseDetail.RecyclerDataAdapter(getDummyDataToPass(listHash));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(recyclerDataAdapter);
+        mRecyclerView.setHasFixedSize(true);
+
     }
-    //----------------------------Section Click-----------------------------------------------------
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onClick(View view) {
-        final ViewGroup transition =(ViewGroup)findViewById(R.id.dynamic_layout);
-        TransitionManager.beginDelayedTransition(transition);
-        visible = !visible;
-        String str = view.getTag().toString();
-        if(str.equals("1")){
-            for(int i = 0; i<sub_section_name.size();i++){
-               t1[i].setVisibility(visible? View.VISIBLE:View.GONE);
-            }
-        }else if (str.equals("2")){
-            for(int i = 0; i<sub_section_name.size();i++){
-                t1[i].setVisibility(visible? View.VISIBLE:View.GONE);
+    private ArrayList<DummyParentDataItem> getDummyDataToPass(HashMap<String,List<SectionList.SubsectionBean>> listHash) {
+        ArrayList<DummyParentDataItem> dummyDataItems = new ArrayList<>();
+        ArrayList<DummyChildDataItem> dummyChildDataItems;
+        DummyParentDataItem dummyParentDataItem;
+        DummyChildDataItem dummyChildDataItem;
+        /////////
+        /*dummyParentDataItem = new DummyParentDataItem();
+        dummyParentDataItem.setParentName("Parent 1");
+        dummyChildDataItems = new ArrayList<>();
+        //
+        dummyChildDataItem = new DummyChildDataItem();
+        dummyChildDataItem.setChildName("Child Item 1");
+        dummyChildDataItems.add(dummyChildDataItem);
+        //
+        dummyParentDataItem.setChildDataItems(dummyChildDataItems);
+        dummyDataItems.add(dummyParentDataItem);
+        ////////
+        dummyParentDataItem = new DummyParentDataItem();
+        dummyParentDataItem.setParentName("Parent 2");
+        dummyChildDataItems = new ArrayList<>();
+        //
+        dummyChildDataItem = new DummyChildDataItem();
+        dummyChildDataItem.setChildName("Child Item 1");
+        dummyChildDataItems.add(dummyChildDataItem);
+        //
+        dummyChildDataItem = new DummyChildDataItem();
+        dummyChildDataItem.setChildName("Child Item 2");
+        dummyChildDataItems.add(dummyChildDataItem);
+        //
+        dummyParentDataItem.setChildDataItems(dummyChildDataItems);
+        dummyDataItems.add(dummyParentDataItem);
+        ////////
+        dummyParentDataItem = new DummyParentDataItem();
+        dummyParentDataItem.setParentName("Parent 3");
+        dummyChildDataItems = new ArrayList<>();
+        //
+        dummyChildDataItem = new DummyChildDataItem();
+        dummyChildDataItem.setChildName("Child Item 1");
+        dummyChildDataItems.add(dummyChildDataItem);
+        //
+        dummyChildDataItem = new DummyChildDataItem();
+        dummyChildDataItem.setChildName("Child Item 2");
+        dummyChildDataItems.add(dummyChildDataItem);
+        //
+        dummyChildDataItem = new DummyChildDataItem();
+        dummyChildDataItem.setChildName("Child Item 3");
+        dummyChildDataItems.add(dummyChildDataItem);
+        //
+        dummyChildDataItem = new DummyChildDataItem();
+        dummyChildDataItem.setChildName("Child Item 4");
+        dummyChildDataItems.add(dummyChildDataItem);
+        //
+        dummyChildDataItem = new DummyChildDataItem();
+        dummyChildDataItem.setChildName("Child Item 5");
+        dummyChildDataItems.add(dummyChildDataItem);
+        //
+        dummyParentDataItem.setChildDataItems(dummyChildDataItems);
+        dummyDataItems.add(dummyParentDataItem);*/
+        ////////
+        for (String header:btn_name)
+        {
+            dummyParentDataItem = new DummyParentDataItem();
+            dummyParentDataItem.setParentName(header);
+
+            dummyChildDataItems = new ArrayList<>();
+
+            for (SectionList.SubsectionBean child:listHash.get(header))
+            {
+                dummyChildDataItem = new DummyChildDataItem();
+                dummyChildDataItem.setChildName(child.getName());
+                dummyChildDataItem.setChildContent(child.getContentType()+" "+ child.getContent()+" "+child.getId());
+                dummyChildDataItem.setChildId(child.getId());
+                dummyChildDataItems.add(dummyChildDataItem);
             }
 
-        }else if (str.equals("text0")){
-            Toast.makeText(getApplicationContext(),"Click Text",Toast.LENGTH_SHORT).show();
+            dummyParentDataItem.setChildDataItems(dummyChildDataItems);
+            dummyDataItems.add(dummyParentDataItem);
+
+        }
+        return dummyDataItems;
+    }
+
+    public class RecyclerDataAdapter extends RecyclerView.Adapter<CourseDetail.RecyclerDataAdapter.MyViewHolder> {
+        private ArrayList<DummyParentDataItem> dummyParentDataItems;
+
+        RecyclerDataAdapter(ArrayList<DummyParentDataItem> dummyParentDataItems) {
+            this.dummyParentDataItems = dummyParentDataItems;
         }
 
-    }
+        @Override
+        public CourseDetail.RecyclerDataAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_parent_child_listing, parent, false);
+            return new CourseDetail.RecyclerDataAdapter.MyViewHolder(itemView);
+        }
 
-    private void showLesson(){
-        List<SectionList> lesson = getSectionListFromID();
-        Log.d("JSON","check text "+lesson.get(0).getContent()+"  "+lesson.get(0).getRank());
-        for(int i = 0; i< lesson.size();i++){
-                if(lesson.get(i).getRank() == 1){
-                    btn2.setText(lesson.get(i).getContent());
+        @Override
+        public void onBindViewHolder(CourseDetail.RecyclerDataAdapter.MyViewHolder holder, int position) {
+            DummyParentDataItem dummyParentDataItem = dummyParentDataItems.get(position);
+            holder.textView_parentName.setText(dummyParentDataItem.getParentName());
+            int checkId2 = sharedPreferences.getInt("id_section_progress",-1);
+            //
+            int noOfChildTextViews = holder.linearLayout_childItems.getChildCount();
+            int noOfChild = dummyParentDataItem.getChildDataItems().size();
+            if (noOfChild < noOfChildTextViews) {
+                for (int index = noOfChild; index < noOfChildTextViews; index++) {
+                    TextView currentTextView = (TextView) holder.linearLayout_childItems.getChildAt(index);
+                    currentTextView.setVisibility(View.GONE);
                 }
+            }
+            for (int textViewIndex = 0; textViewIndex < noOfChild; textViewIndex++) {
+                TextView currentTextView = (TextView) holder.linearLayout_childItems.getChildAt(textViewIndex);
+                currentTextView.setText(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildName());
+                currentTextView.setHint(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContent());
+                if (dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildId()<=checkId2)
+                currentTextView.setBackgroundColor(Color.parseColor("#918c8c"));
+                /*currentTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(mContext, "" + ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return dummyParentDataItems.size();
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            private int checkId;
+            private Context context;
+            private TextView textView_parentName;
+            private LinearLayout linearLayout_childItems;
+
+            MyViewHolder(View itemView) {
+                super(itemView);
+                context = itemView.getContext();
+                textView_parentName = itemView.findViewById(R.id.tv_parentName);
+                linearLayout_childItems = itemView.findViewById(R.id.ll_child_items);
+                linearLayout_childItems.setVisibility(View.GONE);
+                sharedPreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                checkId = sharedPreferences.getInt("id_section_progress",-1);
+                Log.d("JSON","OnViewHold----->"+checkId);
+                int intMaxNoOfChild = 0;
+                for (int index = 0; index < dummyParentDataItems.size(); index++) {
+                    int intMaxSizeTemp = dummyParentDataItems.get(index).getChildDataItems().size();
+                    if (intMaxSizeTemp > intMaxNoOfChild) intMaxNoOfChild = intMaxSizeTemp;
+                }
+                for (int indexView = 0; indexView < intMaxNoOfChild; indexView++) {
+                    TextView textView = new TextView(context);
+                    textView.setId(indexView);
+                    textView.setPadding(0, 20, 0, 20);
+                    textView.setGravity(Gravity.CENTER);
+                    //textView.setBackground(ContextCompat.getDrawable(context, R.drawable.background_sub_module_text));
+                    Log.d("JSON","OnViewHold----->"+textView.getHint());
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    textView.setOnClickListener(this);
+                    linearLayout_childItems.addView(textView, layoutParams);
+                }
+                textView_parentName.setOnClickListener(this);
+            }
+
+
+            @Override
+            public void onClick(View view) {
+                if (view.getId() == R.id.tv_parentName) {
+                    if (linearLayout_childItems.getVisibility() == View.VISIBLE) {
+                        linearLayout_childItems.setVisibility(View.GONE);
+                    } else {
+                        linearLayout_childItems.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    TextView textViewClicked = (TextView) view;
+                    textViewClicked.setBackgroundColor(Color.parseColor("#918c8c"));
+                    Toast.makeText(context, "This is "+textViewClicked.getHint(), Toast.LENGTH_SHORT).show();
+
+                    String contentSection = (String) textViewClicked.getHint();
+                    Log.d("JSON","Check content "+contentSection);
+                    String[] parts = contentSection.split(" ");
+                    String type = parts[0];
+                    String content = parts[1];
+                    String id = parts[2];
+                    String MyPREFERENCES = "MyPrefs" ;
+                    int idInt;
+                    idInt = Integer.parseInt(id);
+//                    String type = listHash.get(listDataHeader.get(parent)).get(child).getContentType();
+                    Log.d("JSON","OnClick Subsection "+type+"---"+content+"----"+idInt+"----->"+checkId);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("nowID",idInt);
+                    editor.putString("type",type);
+                    editor.putBoolean("checkVideo",false);
+                    editor.commit();
+                    getURLVideo(content);
+
+                }
+            }
         }
     }
 
+
+    //---------------------------------- Get Video View-----------------------------------
+
+    public void getURLVideo(final String content){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getURLPicture + content, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("JSON","url --> "+content+" response "+response);
+                setURLOnPreferences(response);
+            }
+
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("JSON", "Error JSON");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", "key999");
+                return params;
+            }
+        };
+        MySingleton.getInstance(this).addToReauestQue(stringRequest);
+    }
 
     private List<SectionList> getSectionListFromID(){
         sectionLists = courseInCourseDetail.getCourse().getSectionList();
         return sectionLists;
     }
 
-    private void showSectionCourse(){
-//        btn2 =(Button)findViewById(R.id.btn2);
-//
-//        btn = (Button)findViewById(R.id.btn);
-        txt1 =(TextView)findViewById(R.id.e1);
-        txt2 = (TextView)findViewById(R.id.e2);
-        txt3 = (TextView)findViewById(R.id.e3);
-        txt4 = (TextView)findViewById(R.id.e4);
-        txt5 = (TextView)findViewById(R.id.e5);
-        txt6 = (TextView)findViewById(R.id.e6);
-
-        final ViewGroup transition =(ViewGroup)findViewById(R.id.transition);
-        btn.setOnClickListener(new View.OnClickListener() {
-            boolean visible;
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View view) {
-                TransitionManager.beginDelayedTransition(transition);
-                visible = !visible;
-                txt1.setVisibility(visible? View.VISIBLE:View.GONE);
-                txt2.setVisibility(visible? View.VISIBLE:View.GONE);
-                txt3.setVisibility(visible? View.VISIBLE:View.GONE);
-                txt4.setVisibility(View.GONE);
-            }
-        });
-        btn2.setOnClickListener(new View.OnClickListener() {
-            boolean visible;
-            @RequiresApi (api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View view) {
-                TransitionManager.beginDelayedTransition(transition);
-                visible = !visible;
-                txt5.setVisibility(visible? View.VISIBLE:View.GONE);
-                txt6.setVisibility(visible? View.VISIBLE:View.GONE);
-                txt4.setVisibility(View.GONE);
-            }
-        });
-
+    public void setURLOnPreferences(String url){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("myVideo",url);
+        editor.commit();
+        setupVideoView();
     }
+
+
 
     private void getStatusEnroll(){
         String json = POST2(URL_isRegis,idUser,idCourse);
@@ -353,100 +736,25 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
     private void changButtonEnroll(){
         if(enrolled){
-            enroll.setText("Enrolled");
-            enroll.setAlpha(.5f);
-            enroll.setClickable(false);
+            enroll.setText("Unenroll");
+            enroll.setTextColor(Color.parseColor("#DD0F0F"));
             ratingButton.setEnabled(true);
 //            showSectionCourse();
         }
     }
 
+    private void unEnrolled(){
+        String json = POST(URL_unEnroll,idCourse,idUser);
+        Log.d("JSON", "####From unEnrolled");
+
+    }
     private String getRegister(){
         String json = POST(URL_addRegis,idCourse,idUser);
         Log.d("JSON", "####From getRegister");
         return json;
 
     }
-    private void getInformation() {
-        Log.d("JSON", "####TestURL_FromCoursDetail" + URL_addRegis);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL_addRegis)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        AddRegisAPI addRegisAPI = retrofit.create(AddRegisAPI.class);
 
-        HashMap<String,String> headerMap = new HashMap<String, String>();
-        headerMap.put("Content-Type", "application/json");
-
-        Call<ResponseBody> call = addRegisAPI.addRegis(headerMap,"addRegis",String.valueOf(idCourse),String.valueOf(idUser));
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                Log.d("JSON", "onResponse: Server Response: " + response.toString());
-                try{
-                    String json = response.body().string();
-                    Log.d("JSON", "onResponse: json: " + json);
-                    JSONObject data = null;
-                    data = new JSONObject(json);
-//                            Log.d(TAG, "onResponse: data: " + data.optString("json"));
-
-                }catch (JSONException e){
-                    Log.e("JSON", "onResponse: JSONException: " + e.getMessage() );
-                }catch (IOException e){
-                    Log.e("JSON", "onResponse: JSONException: " + e.getMessage() );
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("JSON", "onFailure: Something went wrong: " + t.getMessage() );
-                Toast.makeText(CourseDetail.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-
-
-//        Uri.Builder builder = new Uri.Builder();
-//        String host = "158.108.207.7:8090";
-//        builder.scheme("https")
-//                .encodedAuthority(host)
-//                .appendPath("elearning")
-//                .appendPath("course")
-//                .appendPath("addRegis");
-//        String myUrl = builder.build().toString();
-//        Log.d("JSON", "####TestURL_++" + myUrl);
-
-
-
-    }
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST,myUrl, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                    Toast.makeText(getApplication(),response,Toast.LENGTH_SHORT).show();
-//                Log.d("JSON", "####Success!!");
-//            }
-//        },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(CourseDetail.this,error+"",Toast.LENGTH_SHORT).show();
-//                        Log.d("JSON", "####Error...");
-//                    }
-////                }){
-////            @Override
-////            protected Map<String, String> getParams() throws AuthFailureError {
-////                Map<String ,String> params = new HashMap<String, String>();
-////                String course_id = String.valueOf(idCourse);
-////                String user_id = String.valueOf(idUser);
-////                params.put("courseId",course_id);
-////                params.put("memberId",user_id);
-////                return params;
-////            }
-//        };
-//        MySingleton.getInstance(this).addToReauestQue(stringRequest);
-//
-//    }
 public static String POST(String url,int courseId,int memberId){
     InputStream inputStream = null;
     String result = "";
@@ -578,75 +886,6 @@ public static String POST(String url,int courseId,int memberId){
 
 
 }
-//        Map<String, String> params = new HashMap<String, String>();
-//        params.put("courseId", String.valueOf(idCourse));
-//        params.put("memberId", String.valueOf(idUser));
-//
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        CustomRequest jsObjRequest = new CustomRequest(Request.Method.POST, URL_addRegis, params,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//
-//                        Log.d("JSON", "### Success!!");
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                        Log.d("JSON", "###JSON Error");
-//            }
-//        }
-//        );
-//        requestQueue.add(jsObjRequest);
-//    }
-
-
-//        RequestQueue queue = Volley.newRequestQueue(this);
-//        StringRequest strRequest = new StringRequest(Request.Method.POST, URL_addRegis,
-//                new Response.Listener<String>()
-//                {
-//                    @Override
-//                    public void onResponse(String response)
-//                    {
-//                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-//                        Log.d("JSON", "### Success!!");
-//                    }
-//                },
-//                new Response.ErrorListener()
-//                {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error)
-//                    {
-//                        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-//                        Log.d("JSON", "###JSON Error");
-//                    }
-//                })
-//        {
-//            @Override
-//            protected Map<String, String> getParams()
-//            {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("courseId",String.valueOf(idCourse));
-//                params.put("memberId",String.valueOf(idUser));
-//                return params;
-//            }
-//        };
-//
-//        queue.add(strRequest);
-//
-
-//        String json = POST(URL_addRegis,String.valueOf(idCourse).toString(),String.valueOf(idUser).toString());
-//        if(!json.equals("")){
-//
-//            Log.d("JSON","Success!!");
-//        }
-//        else {
-//            Log.d("JSON","Error JSON");
-//        }
-//
-//        Log.d("JSON", "####TestURL_FromCoursDetail");
-
 
 
 

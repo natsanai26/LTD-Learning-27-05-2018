@@ -23,6 +23,7 @@
         <activity android:name=".Register"></activity>
         <activity android:name=".AddRatingActivity"></activity>
         <activity android:name=".CourseDetailForMyCourse"></activity>
+        <activity android:name=".PdfActivityActivity"></activity>
     </application>
 
 </manifest>

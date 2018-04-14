@@ -7,15 +7,12 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -28,7 +25,6 @@ import com.example.windows10.ltd_learning.Course;
 import com.example.windows10.ltd_learning.CourseDetail;
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
-import com.example.windows10.ltd_learning.mFragment.CoursDetailFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -36,44 +32,43 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Windows10 on 2/6/2018.
+ * Created by Windows10 on 4/2/2018.
  */
 
-
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>{
+public class CustomMyCourse extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
     private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
     private SharedPreferences sharedPreferences;
     private Context mContext;
-    private List<Course.CoursesBean> mData;
+    private List<MyCourse.CoursesBean> mData;
 
     public interface OnItemClickListener {
-        public void onItemClick(View view , int position);
+        public void onItemClick(View view, int position);
     }
 
-    public CustomAdapter(Context context, List<Course.CoursesBean> data)
-    {
+    public CustomMyCourse(Context context, List<MyCourse.CoursesBean> data) {
         mContext = context;
         mData = data;
 
     }
+
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item,parent,false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
+    public CustomAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item, parent, false);
+        CustomAdapter.MyViewHolder myViewHolder = new CustomAdapter.MyViewHolder(view);
         return myViewHolder;
     }
 
-    public void getURLPic(String content, final MyViewHolder holder){
+    public void getURLPic(String content, final CustomAdapter.MyViewHolder holder) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getURLPicture + content, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("JSON","url --> "+response);
+                Log.d("JSON", "url --> " + response);
                 getImageCourse(response, holder);
             }
 
-            private void getImageCourse(String response, MyViewHolder holder) {
+            private void getImageCourse(String response, CustomAdapter.MyViewHolder holder) {
                 String url = "http://158.108.207.7:8080/";
-                Picasso.with(mContext).load(url+response).into(holder.imageView);
+                Picasso.with(mContext).load(url + response).into(holder.imageView);
             }
         },
                 new Response.ErrorListener() {
@@ -93,20 +88,31 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final CustomAdapter.MyViewHolder holder, final int position) {
         holder.courseName.setText(mData.get(position).getName());
         holder.ratingBar.setRating((float) mData.get(position).getRating());
-        holder.teacherName.setText(mData.get(position).getTeacher().getName()+" "+mData.get(position).getTeacher().getSurname());
-        holder.numberText.setText(mData.get(position).getRating()+" from "+mData.get(position).getVoter()+" votes");
-        holder.progressBar.setVisibility(View.INVISIBLE);
-//        Log.d("JSON","Check Percent "+mData.get(position).getProgress().getSectionId());
-        String content_get_pic = null;
-        if(mData.get(position).getSectionList().size() != 0){
-            content_get_pic = mData.get(position).getSectionList().get(0).getContent();
-            Log.d("JSON", "In CustomAdapter "+content_get_pic);
+        holder.teacherName.setText(mData.get(position).getTeacher().getName() + " " + mData.get(position).getTeacher().getSurname());
+        holder.numberText.setText(mData.get(position).getRating() + " from " + mData.get(position).getVoter() + " votes");
+        Log.d("PercentJ","Hello Percent ");
+        if(mData.get(position).getProgress()!= null){
+            Log.d("PercentJ","Check Percent "+mData.get(position).getProgress().getSectionId());
+            double percent = mData.get(position).getProgress().getPercent();
+            holder.progressBar.setProgress((int) percent);
+            holder.progressBar.getProgressDrawable().setColorFilter(Color.parseColor("#F86b00"), PorterDuff.Mode.SRC_IN);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
+            }
         }
-        if(content_get_pic != null){
-            getURLPic(content_get_pic,holder);
+        else {
+            holder.progressBar.setProgress(0);
+        }
+        String content_get_pic = null;
+        if (mData.get(position).getSectionList().size() != 0) {
+            content_get_pic = mData.get(position).getSectionList().get(0).getContent();
+            Log.d("JSON", "In CustomAdapter " + content_get_pic);
+        }
+        if (content_get_pic != null) {
+            getURLPic(content_get_pic, holder);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,26 +121,26 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String MyPREFERENCES = "MyPrefs" ;
+                        String MyPREFERENCES = "MyPrefs";
                         sharedPreferences = mContext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                        Course.CoursesBean course_onclick = mData.get(position);
+                        MyCourse.CoursesBean course_onclick = mData.get(position);
 
                         //List<?> sectionList = course_onclick.getSectionList();
-                        Intent intent = new Intent(mContext,CourseDetail.class);
+                        Intent intent = new Intent(mContext, CourseDetail.class);
                         //Log.d("JSON","##>>From onClickCourse"+sectionList);
-                        intent.putExtra("course_id",course_onclick.getId());
-                        Log.d("JSON","##>>From onClickCourse"+course_onclick.getId());
-                        if(course_onclick.getProgress() != null){
-                            Log.d("JSON","##>>From onClickCourse"+course_onclick.getProgress().getSectionId());
-                            intent.putExtra("progress_section_id",course_onclick.getProgress().getSectionId());
-                            editor.putInt("id_section_progress",course_onclick.getProgress().getSectionId());
+                        intent.putExtra("course_id", course_onclick.getId());
+                        Log.d("JSON", "##>>From onClickCourse" + course_onclick.getId());
+                        if (course_onclick.getProgress() != null) {
+                            Log.d("JSON", "##>>From onClickCourse" + course_onclick.getProgress().getSectionId());
+                            intent.putExtra("progress_section_id", course_onclick.getProgress().getSectionId());
+                            editor.putInt("id_section_progress", course_onclick.getProgress().getSectionId());
                             editor.commit();
                         }
-                        intent.putExtra("course_name",course_onclick.getName());
-                        intent.putExtra("course_rating",course_onclick.getRating());
-                        intent.putExtra("course_voter",course_onclick.getVoter());
+                        intent.putExtra("course_name", course_onclick.getName());
+                        intent.putExtra("course_rating", course_onclick.getRating());
+                        intent.putExtra("course_voter", course_onclick.getVoter());
                         mContext.startActivity(intent);
 
 //                CoursDetailFragment courseDetailFragment = new CoursDetailFragment();
@@ -150,22 +156,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
 
-
     @Override
     public int getItemCount() {
         return mData.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
-        public ProgressBar progressBar;
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView numberText;
         public TextView courseName;
         public RatingBar ratingBar;
         public TextView teacherName;
         public ImageView imageView;
+
         public MyViewHolder(View itemView) {
             super(itemView);
-            progressBar = itemView.findViewById(R.id.progressBar);
             numberText = itemView.findViewById(R.id.number_vote);
             imageView = itemView.findViewById(R.id.rv_image);
             courseName = itemView.findViewById(R.id.name);

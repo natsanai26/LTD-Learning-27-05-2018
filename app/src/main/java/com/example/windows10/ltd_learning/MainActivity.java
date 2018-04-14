@@ -45,6 +45,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static AHBottomNavigation.OnTabSelectedListener onTabSelectedListener2;
     private SharedPreferences sharedPreferences;
     private ActionBar ab;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         bottomNavigationItem.setOnTabSelectedListener(onTabSelectedListener1);
-
+        onTabSelectedListener2 = onTabSelectedListener1;
 
 
 
