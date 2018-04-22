@@ -95,9 +95,14 @@ public class CustomMyCourse extends RecyclerView.Adapter<CustomAdapter.MyViewHol
         holder.numberText.setText(mData.get(position).getRating() + " from " + mData.get(position).getVoter() + " votes");
         Log.d("PercentJ","Hello Percent ");
         if(mData.get(position).getProgress()!= null){
+            String MyPREFERENCES = "MyPrefs";
+            sharedPreferences = mContext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
             Log.d("PercentJ","Check Percent "+mData.get(position).getProgress().getSectionId());
             double percent = mData.get(position).getProgress().getPercent();
             holder.progressBar.setProgress((int) percent);
+//            editor.putInt("progressNow", (int) percent);
+//            editor.commit();
             holder.progressBar.getProgressDrawable().setColorFilter(Color.parseColor("#F86b00"), PorterDuff.Mode.SRC_IN);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
@@ -136,6 +141,10 @@ public class CustomMyCourse extends RecyclerView.Adapter<CustomAdapter.MyViewHol
                             Log.d("JSON", "##>>From onClickCourse" + course_onclick.getProgress().getSectionId());
                             intent.putExtra("progress_section_id", course_onclick.getProgress().getSectionId());
                             editor.putInt("id_section_progress", course_onclick.getProgress().getSectionId());
+                            editor.putInt("progressNow", (int) course_onclick.getProgress().getPercent());
+                            editor.commit();
+                        }else {
+                            editor.putInt("id_section_progress",-1);
                             editor.commit();
                         }
                         intent.putExtra("course_name", course_onclick.getName());

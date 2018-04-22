@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.lit_item_category, mDrawerTitle);
         mListView.setAdapter(adapter);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -241,10 +242,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void addCategory(){
         category_name = new ArrayList<String>();
-        Log.d("JSON","Data Cat ALL"+cat_all[0].getCategoryName()+" "+cat_all[0].getId());
+        Log.d("JSON","Data Cat ALL"+cat_all[0].getCategoryName()+" "+cat_all[1].getId()+" "+cat_all[0].getCourseList().size());
         if(cat_all != null){
             for (int i = 0; i < cat_all.length; i++) {
-                category_name.add(cat_all[i].getCategoryName());
+                if(cat_all[i].getCourseList() != null)
+                    category_name.add(cat_all[i].getCategoryName()+" ("+cat_all[i].getCourseList().size()+")");
+                else
+                    category_name.add(cat_all[i].getCategoryName()+" (0)");
             }
         }else {
             category_name.add("Test my CAT 1");
@@ -257,35 +261,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    private void configureNavigationDrawer(){
-        myDrawer = (DrawerLayout) findViewById(R.id.drawer_id);
-//        NavigationView navView = (NavigationView)findViewById(R.id.nav_view_id);
-//        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                android.support.v4.app.Fragment f = null;
-//                int itemId = item.getItemId();
-//
-//                if (itemId == R.id.refresh) {
-//                    f = new RefreshFragment();
-//                } else if (itemId == R.id.stop) {
-//                    f = new StopFragment();
-//                }
-//
-//                if (f != null) {
-//                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.toolbar_container, f);
-//                    transaction.commit();
-//                    myDrawer.closeDrawers();
-//                    return true;
-//                }
-//
-//                return false;
-//            }
-//        });
-
-    }
 
     private void getInfomation(){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {

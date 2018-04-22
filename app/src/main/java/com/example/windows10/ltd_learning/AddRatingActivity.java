@@ -47,6 +47,12 @@ public class AddRatingActivity extends AppCompatActivity {
         final RatingBar ratingBar = (RatingBar)findViewById(R.id.ratingBar);
         rate_now = (TextView)findViewById(R.id.text_now);
         rate_old = (TextView)findViewById(R.id.text_old);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                rate_now.setText("Rate this course for "+v);
+            }
+        });
         final ElearningAPI elearningAPI = MyAPI.getAPI();
 
         try {

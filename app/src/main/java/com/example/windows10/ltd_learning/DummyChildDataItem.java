@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class DummyChildDataItem implements Serializable {
     private String childName;
     private String childContent;
+    private String childContentType;
     private int childId;
     public String getChildName() {
         return childName;
@@ -21,6 +22,14 @@ public class DummyChildDataItem implements Serializable {
 
     public String getChildContent() {
         return childContent;
+    }
+
+    public String getChildContentType() {
+        return childContentType;
+    }
+
+    public void setChildContentType(String childContentType) {
+        this.childContentType = childContentType;
     }
 
     public void setChildContent(String childContent) {

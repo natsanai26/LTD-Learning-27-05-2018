@@ -82,7 +82,7 @@ public class MyCourse {
         private long createdDate;
         private TeacherBean teacher;
         private double rating;
-        private int voter;
+        private double voter;
         private boolean enabled;
         private boolean viewable;
         private Progress progress;
@@ -144,11 +144,11 @@ public class MyCourse {
             this.rating = rating;
         }
 
-        public int getVoter() {
+        public double getVoter() {
             return voter;
         }
 
-        public void setVoter(int voter) {
+        public void setVoter(double voter) {
             this.voter = voter;
         }
 

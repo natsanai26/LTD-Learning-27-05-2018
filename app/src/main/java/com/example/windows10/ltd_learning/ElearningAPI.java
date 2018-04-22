@@ -20,6 +20,12 @@ import retrofit2.http.Query;
  */
 
 public interface ElearningAPI {
+
+    @POST("/elearning/course/progress/add")
+    Call<ResponseBody> addProgress(
+            @Body RequestBody params
+    );
+
     @POST("/elearning/course/addRegis}")
     Call<ResponseBody> addRegis(
             @Query("courseId") int courseId,
@@ -44,6 +50,11 @@ public interface ElearningAPI {
     @POST("/elearning/member/login")
     Call<ResponseBody> login(
             @Body ResponseBody params
+    );
+
+    @PUT("/elearning/course/progress/update")
+    Call<ResponseBody> updateProgress(
+            @Body RequestBody params
     );
 
     @PUT("/elearning/member/update")

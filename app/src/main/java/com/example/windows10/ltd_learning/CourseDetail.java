@@ -27,8 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,6 +112,8 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     private Button enroll;
     private TextView tx_name,tx_detail,testIdUser,testIdCourse;
     private int idUser,idCourse;
+    private static String URL_addProgress = "http://localhost:8090/elearning/course/progress/add";
+    private static String URL_updateProgress = "http://localhost:8090/elearning/course/progress/update";
     private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
     private static String URL_unEnroll = "http://158.108.207.7:8090/elearning/course/unenroll";
     private static String URL_courseID = "http://158.108.207.7:8090/elearning/course?courseId=";
@@ -124,6 +128,8 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     private MyExpandableListAdapter listAdapter;
     private List<String> listDataHeader;
     private HashMap<String,List<SectionList.SubsectionBean>> listHash;
+    private ProgressBar progressBar;
+    private int progressValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,14 +142,6 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 //        setUpTopFragment();
         setupVideoView();
         //----------------- PDF TEST-----------------------
-        TextView textView = (TextView)findViewById(R.id.click);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.oecd.org/cfe/leed/1918307.pdf"));
-                startActivity(browserIntent);
-            }
-        });
         enroll = (Button) findViewById(R.id.button_enroll);
 //        testIdUser = (TextView) findViewById(R.id.testIdUser);
 //        testIdCourse = (TextView) findViewById(R.id.testIdCourse);
@@ -151,6 +149,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 //        tx_detail = (TextView)findViewById(R.id.detail);
         sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         idUser = sp.getInt("idMember",-1);
+        progressValue = sp.getInt("progressNow",100);
         Intent intent  = getIntent();
         idCourse = intent.getIntExtra("course_id",-2);
         ratingCourse = intent.getDoubleExtra("course_rating",-1);
@@ -159,6 +158,8 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         Log.d("Section","check section progress "+progress_section_id);
 //        testIdUser.setText("UserID : "+idUser);
 //        testIdCourse.setText("CourseID :"+idCourse);
+        progressBar = (ProgressBar) findViewById(R.id.progressInDetail);
+        progressBar.setProgress(progressValue);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         voter = (TextView) findViewById(R.id.voter);
         voter.setText( (int)courseVoter+" people");
@@ -232,12 +233,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     protected void onResume() {
         if(idUser != -1){
             getStatusEnroll();
-
-
-
         }
-
-
 
         final ElearningAPI elearningAPI = MyAPI.getAPI();
         try {
@@ -360,9 +356,11 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         List<SectionList> sectionLists = getSectionListFromID();
         checkPreviewed = sharedPreferences.getBoolean("checkVideo",true);
         if(checkPreviewed){
+            if(sectionLists.size() != 0){
             previewURLVideo = sectionLists.get(1).getSubsection().get(0).getContent();
             Log.d("##Video","IN Course From ID === "+courseInCourseDetail+" AND +++>"+previewURLVideo);
             getURLVideo(previewURLVideo);
+            }
         }else{
             getURLVideo(sharedPreferences.getString("myVideo",null));
         }
@@ -402,69 +400,6 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
 
         }
-//        JSONArray jsonArray = new JSONArray(table_section);
-//        Gson gson = new Gson();
-//        Log.d("table sec:",gson.toJson(jsonArray));
-//
-//
-//        listView = (ExpandableListView)findViewById(R.id.lvExp);
-//
-//
-//        listDataHeader = new ArrayList<>();
-//        listHash = new HashMap<>();
-//        for (String s:btn_name)
-//            listDataHeader.add(s);
-//
-//
-//        for (int i=0;i<listDataHeader.size();i++)
-//        {
-//            listHash.put(listDataHeader.get(i),table_section.get(i));
-//        }
-//        listAdapter = new MyExpandableListAdapter(this,listDataHeader,listHash);
-//        listAdapter.setOnChildClickListener(new MyExpandableListAdapter.OnChildClickListener() {
-//            @Override
-//            public void click(int parent, int child) {
-//                //Toast.makeText(CourseDetail.this," "+listAdapter.getListHashMap(),Toast.LENGTH_SHORT).show();
-//                Log.d("JSON","OnClick Subsection"+listHash.get(listDataHeader.get(parent)).get(child).getContent()+"");
-//                String contentSection = listHash.get(listDataHeader.get(parent)).get(child).getContent();
-//                String type = listHash.get(listDataHeader.get(parent)).get(child).getContentType();
-//                Log.d("JSON","OnClick Subsection"+type);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.putString("type",type);
-//                editor.putBoolean("checkVideo",false);
-//                editor.commit();
-//                getURLVideo(contentSection);
-//            }
-//
-//        });
-//
-//        listView.setAdapter(listAdapter);
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_expand);
-//
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//
-//        RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
-//        if (animator instanceof DefaultItemAnimator) {
-//            ((DefaultItemAnimator) animator).setSupportsChangeAnimations(false);
-//        }
-//        listDataHeader = new ArrayList<>();
-//        for (String s:btn_name)
-//            listDataHeader.add(s);
-//        ArrayList<Genre> genres = new ArrayList<Genre>();
-//        for (int i=0;i<listDataHeader.size();i++)
-//        {
-//            genres.add(new Genre(listDataHeader.get(i),table_section.get(i)));
-//        }
-//
-//        GenreAdapter genreAdapter = new GenreAdapter(genres);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(genreAdapter);
-//        genreAdapter.setOnItemClickListener(new GenreAdapter.OnItemClickListener() {
-//            @Override
-//            public void OnItemClick(View view) {
-//                Log.d("JSON","Hello "+view);
-//            }
-//        });
 
         listHash = new HashMap<>();
         for (int i=0;i<btn_name.size();i++)
@@ -483,60 +418,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         ArrayList<DummyChildDataItem> dummyChildDataItems;
         DummyParentDataItem dummyParentDataItem;
         DummyChildDataItem dummyChildDataItem;
-        /////////
-        /*dummyParentDataItem = new DummyParentDataItem();
-        dummyParentDataItem.setParentName("Parent 1");
-        dummyChildDataItems = new ArrayList<>();
-        //
-        dummyChildDataItem = new DummyChildDataItem();
-        dummyChildDataItem.setChildName("Child Item 1");
-        dummyChildDataItems.add(dummyChildDataItem);
-        //
-        dummyParentDataItem.setChildDataItems(dummyChildDataItems);
-        dummyDataItems.add(dummyParentDataItem);
-        ////////
-        dummyParentDataItem = new DummyParentDataItem();
-        dummyParentDataItem.setParentName("Parent 2");
-        dummyChildDataItems = new ArrayList<>();
-        //
-        dummyChildDataItem = new DummyChildDataItem();
-        dummyChildDataItem.setChildName("Child Item 1");
-        dummyChildDataItems.add(dummyChildDataItem);
-        //
-        dummyChildDataItem = new DummyChildDataItem();
-        dummyChildDataItem.setChildName("Child Item 2");
-        dummyChildDataItems.add(dummyChildDataItem);
-        //
-        dummyParentDataItem.setChildDataItems(dummyChildDataItems);
-        dummyDataItems.add(dummyParentDataItem);
-        ////////
-        dummyParentDataItem = new DummyParentDataItem();
-        dummyParentDataItem.setParentName("Parent 3");
-        dummyChildDataItems = new ArrayList<>();
-        //
-        dummyChildDataItem = new DummyChildDataItem();
-        dummyChildDataItem.setChildName("Child Item 1");
-        dummyChildDataItems.add(dummyChildDataItem);
-        //
-        dummyChildDataItem = new DummyChildDataItem();
-        dummyChildDataItem.setChildName("Child Item 2");
-        dummyChildDataItems.add(dummyChildDataItem);
-        //
-        dummyChildDataItem = new DummyChildDataItem();
-        dummyChildDataItem.setChildName("Child Item 3");
-        dummyChildDataItems.add(dummyChildDataItem);
-        //
-        dummyChildDataItem = new DummyChildDataItem();
-        dummyChildDataItem.setChildName("Child Item 4");
-        dummyChildDataItems.add(dummyChildDataItem);
-        //
-        dummyChildDataItem = new DummyChildDataItem();
-        dummyChildDataItem.setChildName("Child Item 5");
-        dummyChildDataItems.add(dummyChildDataItem);
-        //
-        dummyParentDataItem.setChildDataItems(dummyChildDataItems);
-        dummyDataItems.add(dummyParentDataItem);*/
-        ////////
+
         for (String header:btn_name)
         {
             dummyParentDataItem = new DummyParentDataItem();
@@ -549,6 +431,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                 dummyChildDataItem = new DummyChildDataItem();
                 dummyChildDataItem.setChildName(child.getName());
                 dummyChildDataItem.setChildContent(child.getContentType()+" "+ child.getContent()+" "+child.getId());
+                dummyChildDataItem.setChildContentType(child.getContentType());
                 dummyChildDataItem.setChildId(child.getId());
                 dummyChildDataItems.add(dummyChildDataItem);
             }
@@ -583,22 +466,37 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
             int noOfChild = dummyParentDataItem.getChildDataItems().size();
             if (noOfChild < noOfChildTextViews) {
                 for (int index = noOfChild; index < noOfChildTextViews; index++) {
-                    TextView currentTextView = (TextView) holder.linearLayout_childItems.getChildAt(index);
-                    currentTextView.setVisibility(View.GONE);
+//                    TextView currentTextView = (TextView) holder.linearLayout_childItems.getChildAt(index);
+//                    currentTextView.setVisibility(View.GONE);
+                    LinearLayout linearLayout  = (LinearLayout) holder.linearLayout_childItems.getChildAt(index);
+                    TextView textView = (TextView) linearLayout.getChildAt(1);
+                    linearLayout.setVisibility(View.GONE);
                 }
             }
             for (int textViewIndex = 0; textViewIndex < noOfChild; textViewIndex++) {
-                TextView currentTextView = (TextView) holder.linearLayout_childItems.getChildAt(textViewIndex);
-                currentTextView.setText(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildName());
-                currentTextView.setHint(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContent());
+//                TextView currentTextView = (TextView) holder.linearLayout_childItems.getChildAt(textViewIndex);
+//                currentTextView.setText(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildName());
+//                currentTextView.setHint(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContent());
+                LinearLayout linearLayout  = (LinearLayout) holder.linearLayout_childItems.getChildAt(textViewIndex);
+                ImageView imageView = (ImageView) linearLayout.getChildAt(0);
+                switch (dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContentType())
+                {
+                    case "VIDEO":
+                        imageView.setImageResource(R.mipmap.ic_video);
+                        break;
+                    case "PICTURE":
+                        imageView.setImageResource(R.mipmap.ic_picture);
+                        break;
+                    case "DOCUMENT":
+                        imageView.setImageResource(R.mipmap.ic_document);
+                        break;
+
+                }
+                TextView textView = (TextView) linearLayout.getChildAt(1);
+                textView.setText(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildName());
+                textView.setHint(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContent());
                 if (dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildId()<=checkId2)
-                currentTextView.setBackgroundColor(Color.parseColor("#918c8c"));
-                /*currentTextView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(mContext, "" + ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });*/
+                textView.setBackgroundColor(Color.parseColor("#918c8c"));
             }
         }
 
@@ -628,15 +526,27 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     if (intMaxSizeTemp > intMaxNoOfChild) intMaxNoOfChild = intMaxSizeTemp;
                 }
                 for (int indexView = 0; indexView < intMaxNoOfChild; indexView++) {
+                    LinearLayout linearLayout = new LinearLayout(context);
+                    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    ImageView imageView = new ImageView(context);
+                    imageView.setImageResource(R.mipmap.ic_video);
+                    linearLayout.addView(imageView);
+
                     TextView textView = new TextView(context);
+                    textView.setText(indexView+"");
                     textView.setId(indexView);
+                    textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     textView.setPadding(0, 20, 0, 20);
-                    textView.setGravity(Gravity.CENTER);
+                    //textView.setGravity(Gravity.CENTER);
                     //textView.setBackground(ContextCompat.getDrawable(context, R.drawable.background_sub_module_text));
-                    Log.d("JSON","OnViewHold----->"+textView.getHint());
+
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     textView.setOnClickListener(this);
-                    linearLayout_childItems.addView(textView, layoutParams);
+
+                    linearLayout.addView(textView);
+
+                    //linearLayout_childItems.addView(textView, layoutParams);
+                    linearLayout_childItems.addView(linearLayout,layoutParams);
                 }
                 textView_parentName.setOnClickListener(this);
             }
@@ -656,7 +566,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     Toast.makeText(context, "This is "+textViewClicked.getHint(), Toast.LENGTH_SHORT).show();
 
                     String contentSection = (String) textViewClicked.getHint();
-                    Log.d("JSON","Check content "+contentSection);
+                    Log.d("SubJson","Check content "+contentSection);
                     String[] parts = contentSection.split(" ");
                     String type = parts[0];
                     String content = parts[1];
@@ -665,7 +575,15 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     int idInt;
                     idInt = Integer.parseInt(id);
 //                    String type = listHash.get(listDataHeader.get(parent)).get(child).getContentType();
-                    Log.d("JSON","OnClick Subsection "+type+"---"+content+"----"+idInt+"----->"+checkId);
+                    Log.d("SubJson","OnClick Subsection "+type+"---"+content+"----"+idInt+"----->"+checkId);
+                    if(checkId == -1) {
+                        Log.d("SubJson", "OnAddProgress " + idUser + "  " + idCourse + "  " + idInt);
+                        AddProgress(idInt);
+                        CourseDetail.RecyclerDataAdapter.this.notifyDataSetChanged();
+                    }else {
+                        UpdateProgress(idInt);
+                        CourseDetail.RecyclerDataAdapter.this.notifyDataSetChanged();
+                    }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putInt("nowID",idInt);
                     editor.putString("type",type);
@@ -879,8 +797,71 @@ public static String POST(String url,int courseId,int memberId){
 
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
+    public void AddProgress(int sectionId) {
+        final ElearningAPI elearningAPI = MyAPI.getAPI();
+        try {
+            JSONObject jsonObject = new JSONObject(String.format("{\"memberId\":%d,\"courseId\":%d,\"sectionId\":%d}",idUser,idCourse,sectionId));
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),(jsonObject).toString());
+            Call<ResponseBody> response = elearningAPI.addProgress(body);
+            response.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> rawResponse) {
+                    try {
+                        String json = rawResponse.body().string();
+                        Log.d("SubJson","On Rest"+json);
+                        Gson gson = new Gson();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void UpdateProgress(int sectionId) {
+        final ElearningAPI elearningAPI = MyAPI.getAPI();
+        try {
+            JSONObject jsonObject = new JSONObject(String.format("{\"memberId\":%d,\"courseId\":%d,\"sectionId\":%d}",idUser,idCourse,sectionId));
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),(jsonObject).toString());
+            Call<ResponseBody> response = elearningAPI.updateProgress(body);
+            response.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> rawResponse) {
+                    try {
+                        String json = rawResponse.body().string();
+                        Log.d("SubJson","On Rest Update"+json);
+                        Gson gson = new Gson();
+                        UpdateProgress updateProgress = gson.fromJson(json,UpdateProgress.class);
+                        UpdateProgressBar(updateProgress.getProgress().getPercent());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void UpdateProgressBar(int percent){
+        progressBar.setProgress(percent);
+
 
     }
 

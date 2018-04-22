@@ -1,5 +1,7 @@
 package com.example.windows10.ltd_learning;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -12,7 +14,7 @@ public class CourseById {
      * courses : [{"id":27,"categoryId":36,"name":"Discrete mathematics","detail":"discrete function","sectionList":[],"createdDate":1509469200000,"teacher":null,"rating":0,"enabled":null,"viewable":null},{"id":25,"categoryId":19,"name":"Engineering Material","detail":"covalent and metallic bond, crystal systems","sectionList":[28,29,30,36,43],"createdDate":1501779600000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":4,"enabled":true,"viewable":true},{"id":38,"categoryId":19,"name":"Chemistry","detail":"Chem","sectionList":[],"createdDate":1512147600000,"teacher":null,"rating":0,"enabled":null,"viewable":null}]
      * response : {"status":true,"message":"request successfully"}
      */
-
+    @SerializedName("response")
     private ResponseBean response;
     private List<CoursesBean> courses;
 
