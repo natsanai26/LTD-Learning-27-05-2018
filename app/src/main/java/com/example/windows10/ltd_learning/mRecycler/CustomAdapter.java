@@ -41,7 +41,7 @@ import java.util.Map;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>{
-    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
+    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/stream?content=";
     private SharedPreferences sharedPreferences;
     private Context mContext;
     private List<Course.CoursesBean> mData;
@@ -112,39 +112,27 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             @Override
             public void onClick(View view) {
                 holder.courseName.setText(mData.get(position).getName());
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String MyPREFERENCES = "MyPrefs" ;
-                        sharedPreferences = mContext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                String MyPREFERENCES = "MyPrefs" ;
+                sharedPreferences = mContext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("destroyInCourseDetail",false);
+                Course.CoursesBean course_onclick = mData.get(position);
 
-                        Course.CoursesBean course_onclick = mData.get(position);
-
-                        //List<?> sectionList = course_onclick.getSectionList();
-                        Intent intent = new Intent(mContext,CourseDetail.class);
-                        //Log.d("JSON","##>>From onClickCourse"+sectionList);
-                        intent.putExtra("course_id",course_onclick.getId());
-                        Log.d("JSON","##>>From onClickCourse"+course_onclick.getId());
-                        if(course_onclick.getProgress() != null){
-                            Log.d("JSON","##>>From onClickCourse"+course_onclick.getProgress().getSectionId());
-                            intent.putExtra("progress_section_id",course_onclick.getProgress().getSectionId());
-                            editor.putInt("id_section_progress",course_onclick.getProgress().getSectionId());
-                            editor.commit();
-                        }
-                        intent.putExtra("course_name",course_onclick.getName());
-                        intent.putExtra("course_rating",course_onclick.getRating());
-                        intent.putExtra("course_voter",course_onclick.getVoter());
-                        mContext.startActivity(intent);
-
-//                CoursDetailFragment courseDetailFragment = new CoursDetailFragment();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("name",mData[position].getName());
-//                bundle.putString("detail",mData[position].getDetail());
-//                courseDetailFragment.setArguments(bundle);
-//                mTransaction.replace(R.id.content_id,courseDetailFragment).addToBackStack(null).commit();
-                    }
-                });
+                //List<?> sectionList = course_onclick.getSectionList();
+                Intent intent = new Intent(mContext,CourseDetail.class);
+                //Log.d("JSON","##>>From onClickCourse"+sectionList);
+                intent.putExtra("course_id",course_onclick.getId());
+                Log.d("JSON","##>>From onClickCourse"+course_onclick.getId());
+                if(course_onclick.getProgress() != null){
+                    Log.d("JSON","##>>From onClickCourse"+course_onclick.getProgress().getSectionId());
+                    intent.putExtra("progress_section_id",course_onclick.getProgress().getSectionId());
+                    editor.putInt("id_section_progress",course_onclick.getProgress().getSectionId());
+                }
+                editor.commit();
+                intent.putExtra("course_name",course_onclick.getName());
+                intent.putExtra("course_rating",course_onclick.getRating());
+                intent.putExtra("course_voter",course_onclick.getVoter());
+                mContext.startActivity(intent);
             }
         });
     }

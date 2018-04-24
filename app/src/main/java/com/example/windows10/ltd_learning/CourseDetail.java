@@ -1,6 +1,7 @@
 package com.example.windows10.ltd_learning;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,6 +45,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
+import com.devbrackets.android.exomedia.listener.VideoControlsSeekListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.example.windows10.ltd_learning.mFragment.TopOnCourseDetailFragment;
 import com.example.windows10.ltd_learning.mRecycler.Adapter;
@@ -86,7 +88,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Windows10 on 12/5/2017.
  */
 
-public class CourseDetail extends AppCompatActivity implements OnPreparedListener {
+public class CourseDetail extends AppCompatActivity implements OnPreparedListener,VideoControlsSeekListener {
+    private ImageView commentBox;
     private boolean checkPreviewed = true;
     private SharedPreferences sharedPreferences;
     private String previewURLVideo;
@@ -99,7 +102,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     Button[] b1;
     TextView[] t1;
     private double ratingCourse;
-    private VideoView videoView;
+    protected VideoView videoView;
     private Button btn,btn2;
     private TextView txt1,txt2,txt3,txt4,txt5,txt6;
     private SharedPreferences sp;
@@ -114,7 +117,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     private int idUser,idCourse;
     private static String URL_addProgress = "http://localhost:8090/elearning/course/progress/add";
     private static String URL_updateProgress = "http://localhost:8090/elearning/course/progress/update";
-    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
+    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/stream?content=";
     private static String URL_unEnroll = "http://158.108.207.7:8090/elearning/course/unenroll";
     private static String URL_courseID = "http://158.108.207.7:8090/elearning/course?courseId=";
     private static String URL_isRegis = "http://158.108.207.7:8090/elearning/course/isRegis";
@@ -158,16 +161,30 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         Log.d("Section","check section progress "+progress_section_id);
 //        testIdUser.setText("UserID : "+idUser);
 //        testIdCourse.setText("CourseID :"+idCourse);
+        commentBox = (ImageView) findViewById(R.id.image_comment);
         progressBar = (ProgressBar) findViewById(R.id.progressInDetail);
         progressBar.setProgress(progressValue);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         voter = (TextView) findViewById(R.id.voter);
-        voter.setText( (int)courseVoter+" people");
+        voter.setText( (int)courseVoter+" vote");
         //ratingBar.setRating((float) ratingCourse);
         courseName = getIntent().getStringExtra("course_name");
         tx_name.setText(getIntent().getStringExtra("course_name"));
         ratingButton = (Button)findViewById(R.id.rateButton) ;
         ratingButton.setEnabled(false);
+
+        commentBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CourseDetail.this,CommentActivity.class);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putInt("id_comment",idUser);
+                intent.putExtra("course_id",idCourse);
+                intent.putExtra("member_id",idUser);
+                editor.commit();
+                startActivity(intent);
+            }
+        });
 
         ratingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -373,16 +390,20 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     //----------------------------Section View-----------------------------------------------------
     private void setUpSectionLayout(){
         List<SectionList> sectionLists = getSectionListFromID();
-        Log.d("JSON","Check CourseDetail ===> "+sectionLists.get(1).getContent());
-        Log.d("JSON","Check CourseDetail ===> "+sectionLists.get(1).getSubsection().get(0).getContent());
+        Log.d("DuDu","Check CourseDetail ===> "+sectionLists.size());
+        Log.d("DuDu","Check CourseDetail ===> "+sectionLists.get(1).getSubsection().get(0).getName());
+        Log.d("DuDu","Check CourseDetail ===> "+sectionLists.get(1).getSubsection().get(0).getContent());
 
         sub_section_name = new ArrayList<String>();
         btn_name = new ArrayList<String>();
         table_section = new ArrayList<List<SectionList.SubsectionBean>>();
 
         Log.d("JSON","Check Size Section ===> "+sectionLists.size());
-        for(int i = 1; i<sectionLists.size();i++){
-            btn_name.add(sectionLists.get(i).getContent());
+        int k = 0,sizesub;
+        sizesub = sectionLists.get(1).getSubsection().size();
+        for(int i = 1; i<sectionLists.size() ;i++){
+            btn_name.add(sectionLists.get(i).getName());
+            sizesub = sectionLists.get(i).getSubsection().size();
             table_section.add(new ArrayList<SectionList.SubsectionBean>());
         }
         Log.d("table_sec",table_section.size()+"");
@@ -404,6 +425,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         listHash = new HashMap<>();
         for (int i=0;i<btn_name.size();i++)
         {
+            Log.d("DuDu","-->"+btn_name.get(i));
             listHash.put(btn_name.get(i),table_section.get(i));
         }
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -441,6 +463,16 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
         }
         return dummyDataItems;
+    }
+
+    @Override
+    public boolean onSeekStarted() {
+        return false;
+    }
+
+    @Override
+    public boolean onSeekEnded(long seekTime) {
+        return false;
     }
 
     public class RecyclerDataAdapter extends RecyclerView.Adapter<CourseDetail.RecyclerDataAdapter.MyViewHolder> {

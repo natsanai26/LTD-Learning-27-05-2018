@@ -25,6 +25,7 @@ public class SectionList  {
 
     private int id;
     private int courseId;
+    private String name;
     private Object parentSectionId;
     private String content;
     private String contentType;
@@ -48,6 +49,14 @@ public class SectionList  {
 
     public void setCourseId(int courseId) {
         this.courseId = courseId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Object getParentSectionId() {

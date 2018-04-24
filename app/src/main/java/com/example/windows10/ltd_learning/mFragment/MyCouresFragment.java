@@ -74,15 +74,6 @@ public class MyCouresFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mycourse_frag_rv,container,false);
-//        listView = (ListView)rootView.findViewById(R.id.mycourse_lv);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent(getActivity().getApplicationContext(),CourseDetailForMyCourse.class);
-//                intent.putExtra("course_name",listView.getItemAtPosition(i).toString());
-//                startActivity(intent);
-//            }
-//        });
 
 
         Intent intent  = getActivity().getIntent();
@@ -133,6 +124,7 @@ public class MyCouresFragment extends Fragment {
                 return result;
             }
             protected void onPostExecute(String jsonString)  {
+                Log.d("JCOMMENT","++"+jsonString);
                 showData(jsonString);
             }
         }.execute(url);
@@ -170,67 +162,4 @@ public class MyCouresFragment extends Fragment {
             recyclerView.setAdapter(null);
         }
     }
-//    public void getInfomation(int id){
-//        Log.d("JSON","####TestURL"+URL_getMyCourse+String.valueOf(USER_ID));
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getMyCourse+id, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//
-//                Log.d("##JSON",response);
-//                GsonBuilder builder = new GsonBuilder();
-//                Gson gson = builder.create();
-//                MyCourse courseResult = gson.fromJson(response,MyCourse.class);
-//                Log.d("##JSON",courseResult.getResponse().getMessage()+" "+courseResult.getCourses().get(0).getName()+" "+courseResult.getCourses().size());
-//                setAllCourse(courseResult);
-////                GsonBuilder builder = new GsonBuilder();
-////                Gson gson = builder.create();
-////
-//////                List<Course> courses = Arrays.asList(gson.fromJson(response,Course[].class));
-////                java.lang.reflect.Type collectionType = new TypeToken<Collection<MyCourse>>() {}.getType();
-////                Collection<MyCourse> enums = gson.fromJson(response,collectionType);
-////                MyCourse.CoursesBean[] courseResult = enums.toArray(new MyCourse.CoursesBean[enums.size()]);
-////                setAllCourse(courseResult);
-//
-//            }
-//        },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.d("JSON","Error JSON");
-//                    }
-//                });
-//        MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);
-//
-//    }
-//
-//    private void setAllCourse(MyCourse courses){
-//
-//        course_all = courses;
-//        Log.d("JSON","##FromGetInMyCourse-->"+course_all.getCourses().get(0).getName());
-//
-//        addCourse();
-//
-//
-//    }
-//
-//    public void addCourse(){
-//        course_name = new ArrayList<String>();
-//        Log.d("JSON","##FromAddCourse-->"+course_all.getCourses().get(0).getName());
-//        if(course_all != null) {
-//
-//            for (int i = 0; i < course_all.getCourses().size(); i++) {
-//                course_name.add(course_all.getCourses().get(i).getName());
-//            }
-//        }
-//        else {
-//            course_name.add("Test my Course1");
-//            course_name.add("Test my Course2");
-//            course_name.add("Test my Course3");
-//        }
-//
-//
-//        adapter = new ArrayAdapter(getActivity().getApplicationContext(),R.layout.list_item_mycourse,course_name);
-//        listView.setAdapter(adapter);
-//    }
-
 }

@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 //        myDrawer.addDrawerListener(myTogle);
 //        myTogle.syncState();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+//        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         toolbar  = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ab = getSupportActionBar();
@@ -132,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationItem.setInactiveColor(Color.parseColor("#FFFFFF"));
         bottomNavigationItem.setTranslucentNavigationEnabled(true);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setHasFixedSize(true);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mRecyclerView.setHasFixedSize(true);
         AHBottomNavigation.OnTabSelectedListener onTabSelectedListener1 = new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addCategory(){
         category_name = new ArrayList<String>();
-        Log.d("JSON","Data Cat ALL"+cat_all[0].getCategoryName()+" "+cat_all[1].getId()+" "+cat_all[0].getCourseList().size());
+//        Log.d("JSON","Data Cat ALL"+cat_all[0].getCategoryName()+" "+cat_all[1].getId()+" "+cat_all[0].getCourseList().size());
         if(cat_all != null){
             for (int i = 0; i < cat_all.length; i++) {
                 if(cat_all[i].getCourseList() != null)

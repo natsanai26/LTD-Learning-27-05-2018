@@ -39,7 +39,7 @@ import com.squareup.picasso.Picasso;
 
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
+    private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/stream?content=";
     private List<Course> mCourse = new ArrayList<>();
     private boolean mHorizontal;
     private boolean mPager;

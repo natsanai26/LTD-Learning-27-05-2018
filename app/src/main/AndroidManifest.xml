@@ -24,6 +24,8 @@
         <activity android:name=".AddRatingActivity"></activity>
         <activity android:name=".CourseDetailForMyCourse"></activity>
         <activity android:name=".PdfActivityActivity"></activity>
+        <activity android:name=".CommentActivity"></activity>
+
     </application>
 
 </manifest>

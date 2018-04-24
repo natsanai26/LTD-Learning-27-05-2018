@@ -5,21 +5,22 @@
     android:background="#e4e4e4"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
-        android:verticalScrollbarPosition="defaultPosition"
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:verticalScrollbarPosition="defaultPosition">
 
         <com.devbrackets.android.exomedia.ui.widget.VideoView
             android:id="@+id/video_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:useDefaultControls="true"/>
+            app:useDefaultControls="true" />
 
     </RelativeLayout>
 
-<ScrollView
+    <ScrollView
     android:id="@+id/container_detail"
     android:orientation="vertical"
     android:background="#e4e4e4"
@@ -80,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="1 people"
+                    android:text="1 vote"
                     android:textColor="#000000"
                     android:textSize="15dp"/>
             </LinearLayout>
@@ -136,7 +137,10 @@
             android:orientation="vertical"
             android:paddingTop="20dp">
 
-
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -146,6 +150,13 @@
                 android:textColor="#000000"
                 android:textSize="18dp" />
 
+            <ImageView
+                android:layout_marginLeft="190dp"
+                android:id="@+id/image_comment"
+                android:src="@drawable/ic_comment"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+            </LinearLayout>
             <!--<ExpandableListView-->
                 <!--android:id="@+id/lvExp"-->
                 <!--android:layout_width="match_parent"-->
