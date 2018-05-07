@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private Adapter mAdapter;
     private static Course[] courseResult;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -183,7 +183,8 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case 2:
                             MyCouresFragment myCouresFragment = new MyCouresFragment();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.content_id, myCouresFragment).commit();
+
+                                getSupportFragmentManager().beginTransaction().replace(R.id.content_id, myCouresFragment).commit();
                             toolbar.setTitle("MyCourses");
                             break;
                         case 3:

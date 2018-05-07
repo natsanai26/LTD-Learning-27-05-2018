@@ -101,32 +101,18 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Course.CoursesBean course = (Course.CoursesBean) mCourse.get(position);
         String content_get_pic;
+        if(course.getTeacherProfile() != null)
+            Picasso.with(mContext).load(course.getTeacherProfile()).into(holder.image_teacher);
+        holder.teacherName.setText(course.getTeacherName()+" "+course.getTeacherSurname());
         holder.ratingBar.setRating((float) course.getRating());
         holder.nameTextView.setText(course.getName());
         content_get_pic = course.getContent_pic();
-        Log.d("JSON", "In Adapter "+content_get_pic);
+        Log.d("JSON", "In Adapter "+content_get_pic+" T-Name "+course.getTeacherName());
         if(content_get_pic != null){
             getURLPic(content_get_pic,holder);
         }
-//        getImageCourse(holder);
-
-//        holder.nameTextView.setText(Integer.toString(mCourse.get(position).getId()));
-//
-//        holder.setItemClickListener(new ItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Toast.makeText(mContext,"Hello : "+mCourse.get(position),Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
     }
 
-
-//    public void getImageCourse(ViewHolder holder){
-//        String url = "http://158.108.207.7:8080/";
-//
-//        Picasso.with(mContext).load(url+"api/docImg/key999/48/46").into(holder.imageView);
-//    }
     @Override
     public int getItemCount() {
         return mCourse.size();
@@ -135,7 +121,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public ImageView imageView;
+        public TextView teacherName;
+        public ImageView imageView,image_teacher;
         public RatingBar ratingBar;
         private SharedPreferences sharedPreferences;
         private int idUser;
@@ -150,6 +137,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             super(itemView);
             this.courses = courses;
             this.ctx = context;
+            image_teacher = itemView.findViewById(R.id.image_teacher);
+            teacherName = itemView.findViewById(R.id.nameTxt_teacher);
             sharedPreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
             nameTextView = (TextView) itemView.findViewById(R.id.nameTxt);
             ratingBar = itemView.findViewById(R.id.ratingBar);

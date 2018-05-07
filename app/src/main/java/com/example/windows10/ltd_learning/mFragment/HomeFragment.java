@@ -90,13 +90,13 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_fragment, container, false);
-        vp_image = (ViewPager) rootView.findViewById(R.id.viewPager_id);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this.getActivity());
-        vp_image.setAdapter(viewPagerAdapter);
+//        vp_image = (ViewPager) rootView.findViewById(R.id.viewPager_id);
+//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this.getActivity());
+//        vp_image.setAdapter(viewPagerAdapter);
 
-        sliderDotpanel = (LinearLayout) rootView.findViewById(R.id.sliderDot);
-        dotsCount = viewPagerAdapter.getCount();
-        dots = new ImageView[dotsCount];
+//        sliderDotpanel = (LinearLayout) rootView.findViewById(R.id.sliderDot);
+//        dotsCount = viewPagerAdapter.getCount();
+//        dots = new ImageView[dotsCount];
 
         for (int i = 0; i < dotsCount; i++) {
             dots[i] = new ImageView(this.getActivity());
@@ -109,33 +109,33 @@ public class HomeFragment extends Fragment {
             sliderDotpanel.addView(dots[i], params);
         }
 
-        dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
+//        dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
 
-        vp_image.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                for (int i = 0; i < dotsCount; i++) {
-                    dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
-                }
-                dots[position].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
+//        vp_image.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//                for (int i = 0; i < dotsCount; i++) {
+//                    dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
+//                }
+//                dots[position].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
+//
+//
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
 
         sharedPreferences = getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "not found");
@@ -234,8 +234,8 @@ public class HomeFragment extends Fragment {
         List<Course> course_tops = getTopCourse();
         List<Course> course_news = getNewCourse();
         SnapAdapter snapAdapter = new SnapAdapter();
-        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "New Course ( "+course_news.size()+" )", course_news));
-        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "Top Course ( "+course_tops.size()+" ) ", course_tops));
+        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "New Courses ("+course_news.size()+")", course_news));
+        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "Top Courses ("+course_tops.size()+") ", course_tops));
 
         rv.setAdapter(snapAdapter);
     }
@@ -304,8 +304,10 @@ public class HomeFragment extends Fragment {
 
             if(idCourse_picNew.get(j) == courseNew.getCourses().get(i).getId()){
                 courses.add(new Course.CoursesBean(courseNew.getCourses().get(i).getName(), courseNew.getCourses().get(i).getId()
-                        ,courseNew.getCourses().get(i).getRating(),content_picNew.get(j),courseNew.getCourses().get(i).getVoter()));
-                Log.d("JSON","in loop NewCourse -------> "+content_picNew.get(j));
+                        ,courseNew.getCourses().get(i).getRating(),content_picNew.get(j),courseNew.getCourses().get(i).getVoter()
+                        ,courseNew.getCourses().get(i).getTeacher().getName(),courseNew.getCourses().get(i).getTeacher().getSurname()
+                        , (String) courseNew.getCourses().get(i).getTeacher().getPhotoUrl()));
+                Log.d("JSON","in loop NewCourse -------> "+content_picNew.get(j)+" T "+courseNew.getCourses().get(i).getTeacher().getPhotoUrl());
                 j++;
 
             }
@@ -320,16 +322,15 @@ public class HomeFragment extends Fragment {
     private List<Course> getTopCourse() {
         List<Course> courses = new ArrayList<>();
         int j = 0;
-        for (int i = 0; i < courseTop.getCourses().size(); i++) {
+        for (int i = 0; i < courseTop.getCourses().size()&& j <idCourse_picTop.size(); i++) {
 //            courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
 //                    ,courseTop.getCourses().get(i).getRating(),"",courseTop.getCourses().get(i).getVoter()));
                 if(idCourse_picTop.get(j) == courseTop.getCourses().get(i).getId()){
                     courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
-                            ,courseTop.getCourses().get(i).getRating(),content_picTop.get(j),courseTop.getCourses().get(i).getVoter()));
+                            ,courseTop.getCourses().get(i).getRating(),content_picTop.get(j),courseTop.getCourses().get(i).getVoter()
+                            ,courseTop.getCourses().get(i).getTeacher().getName(),courseTop.getCourses().get(i).getTeacher().getSurname()
+                            ,(String) courseNew.getCourses().get(i).getTeacher().getPhotoUrl()));
                     j++;
-                    if(j == idCourse_picTop.size()){
-                        break;
-                    }
                 }
                 else {
                     courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()

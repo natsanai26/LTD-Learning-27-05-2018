@@ -85,6 +85,7 @@ public class Course {
         private Progress progress;
         private double voter=9;
         private List<SectionList> sectionList;
+        private String teacher_name,teacher_surname,teacher_profile;
 
         public CoursesBean(){
         }
@@ -111,14 +112,19 @@ public class Course {
             content_pic = content;
             this.voter = v;
         }
-        public CoursesBean(String courseName,int id,double rate,String content,double v,Progress p){
-            progress = p;
+        public CoursesBean(String courseName,int id,double rate,String content,double v,String tname,String sname,String tpicture){
+            teacher_profile = tpicture;
+            teacher_surname = sname;
+            teacher_name = tname;
             this.id = id;
             name = courseName;
             rating = rate;
             content_pic = content;
             this.voter = v;
         }
+        public String getTeacherProfile(){return teacher_profile;}
+        public String getTeacherName(){return teacher_name;}
+        public String getTeacherSurname(){return teacher_surname;}
 
         public int getId() {
             return id;

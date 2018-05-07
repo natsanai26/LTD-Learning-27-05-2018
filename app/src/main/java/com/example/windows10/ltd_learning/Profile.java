@@ -1,5 +1,7 @@
 package com.example.windows10.ltd_learning;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -74,6 +76,14 @@ public class Profile
         this.profile = profile;
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
     private int idmember;
     private String name;
     private String surname;
@@ -82,6 +92,7 @@ public class Profile
     private String email;
     private String type;
     private String profile;
+    private String photoUrl;
 
 
 

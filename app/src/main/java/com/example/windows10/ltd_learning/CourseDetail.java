@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -89,7 +90,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class CourseDetail extends AppCompatActivity implements OnPreparedListener,VideoControlsSeekListener {
-    private ImageView commentBox;
+
+    private ImageView commentBox,fullscreen;
     private boolean checkPreviewed = true;
     private SharedPreferences sharedPreferences;
     private String previewURLVideo;
@@ -133,6 +135,12 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     private HashMap<String,List<SectionList.SubsectionBean>> listHash;
     private ProgressBar progressBar;
     private int progressValue;
+    private final int FULL_SCREEN_REQUEST_CODE = 1;
+
+    private RecyclerView mRecyclerView;
+    CourseDetail.RecyclerDataAdapter recyclerDataAdapter;
+
+    View.OnClickListener ocl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +171,8 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 //        testIdCourse.setText("CourseID :"+idCourse);
         commentBox = (ImageView) findViewById(R.id.image_comment);
         progressBar = (ProgressBar) findViewById(R.id.progressInDetail);
+        fullscreen = (ImageView) findViewById(R.id.full_screen);
+
         progressBar.setProgress(progressValue);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         voter = (TextView) findViewById(R.id.voter);
@@ -173,11 +183,22 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         ratingButton = (Button)findViewById(R.id.rateButton) ;
         ratingButton.setEnabled(false);
 
+        fullscreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                videoView.pause();
+                Intent intent = new Intent(CourseDetail.this,FullScreenVideoActivity.class);
+                intent.putExtra("video_path",sharedPreferences.getString("myVideo",""));
+                intent.putExtra("video_seek",videoView.getCurrentPosition());
+                startActivityForResult(intent,FULL_SCREEN_REQUEST_CODE);
+            }
+        });
         commentBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CourseDetail.this,CommentActivity.class);
                 SharedPreferences.Editor editor = sp.edit();
+                editor.putInt("id_course_comment",idCourse);
                 editor.putInt("id_comment",idUser);
                 intent.putExtra("course_id",idCourse);
                 intent.putExtra("member_id",idUser);
@@ -210,11 +231,9 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     intent.putExtra("course_id",idCourse);
                     intent.putExtra("course_name",courseName);
                     ratingButton.setEnabled(true);
-                    finish();
-                    startActivity(getIntent());
                     enroll.setText("Unenroll");
                     enroll.setTextColor(Color.parseColor("#DD0F0F"));
-//                    showSectionCourse();
+                    reLoad();
                 }else if(enrolled){
                     Toast.makeText(CourseDetail.this,"UnEnroll Doing!!", Toast.LENGTH_LONG).show();
                     AlertDialog.Builder builder = new AlertDialog.Builder(CourseDetail.this);
@@ -226,8 +245,6 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                             enroll.setTextColor(Color.parseColor("#000000"));
                             ratingButton.setEnabled(false);
                             unEnrolled();
-                            finish();
-                            startActivity(getIntent());
                         }
                     }).setNegativeButton("Cancel",null);
                     AlertDialog alert = builder.create();
@@ -237,7 +254,13 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
             }
         });
+
         getDetailCourseById(idCourse);
+    }
+    public void reLoad(){
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     @Override
@@ -295,6 +318,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
     private void setupVideoView() {
         // Make sure to use the correct VideoView import
+
         videoView = (VideoView)findViewById(R.id.video_view);
         videoView.setOnPreparedListener(this);
         String path = sharedPreferences.getString("myVideo","");
@@ -307,6 +331,10 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         }else if(type.equals("DOCUMENT")){
             Log.d("JSON","This is doc");
             setPdfView("http://158.108.207.7:8080/"+path);
+        }else if(type.equals("PICTURE")){
+            Intent intent = new Intent(CourseDetail.this,ImageDialog.class);
+            intent.putExtra("url_pic","http://158.108.207.7:8080/"+path);
+            startActivity(intent);
         }
     }
 
@@ -315,6 +343,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         intent.putExtra("url",url);
         startActivity(intent);
     }
+
     @Override
     public void onPrepared() {
         //Starts the video playback as soon as it is ready
@@ -362,9 +391,6 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         editor.commit();
 
         Log.d("JSON","Check Bool "+checkBool);
-        if(checkBool){
-            MainActivity.onTabSelectedListener2.onTabSelected(2,true);
-        }
         super.onDestroy();
     }
 
@@ -415,7 +441,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                 //sub_section_name.add(sectionLists.get(j).getSubsection().get(i).getContent());
                 //table_section.get(j)
                 //if(sectionLists.get(j).getSubsection().get(i).getContentType().equals("TEXT"))
-                    table_section.get(j-1).add(sectionLists.get(j).getSubsection().get(i));
+                table_section.get(j-1).add(sectionLists.get(j).getSubsection().get(i));
 
             }
 
@@ -428,12 +454,20 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
             Log.d("DuDu","-->"+btn_name.get(i));
             listHash.put(btn_name.get(i),table_section.get(i));
         }
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        CourseDetail.RecyclerDataAdapter recyclerDataAdapter = new CourseDetail.RecyclerDataAdapter(getDummyDataToPass(listHash));
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerDataAdapter = new CourseDetail.RecyclerDataAdapter(getDummyDataToPass(listHash));
+
+
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(recyclerDataAdapter);
         mRecyclerView.setHasFixedSize(true);
 
+        int checkId2 = sharedPreferences.getInt("id_section_progress",-1);
+        final int position = findCurrentSection(checkId2);
+        if (position!=-1){
+            expandViewAtProsition(position-1);
+        }
     }
     private ArrayList<DummyParentDataItem> getDummyDataToPass(HashMap<String,List<SectionList.SubsectionBean>> listHash) {
         ArrayList<DummyParentDataItem> dummyDataItems = new ArrayList<>();
@@ -477,11 +511,22 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
     public class RecyclerDataAdapter extends RecyclerView.Adapter<CourseDetail.RecyclerDataAdapter.MyViewHolder> {
         private ArrayList<DummyParentDataItem> dummyParentDataItems;
+        private RecyclerDataAdapter recyclerDataAdapter1;
 
+        private ArrayList<TextView> expandHeader = new ArrayList<TextView>();
+        boolean chk=true;
         RecyclerDataAdapter(ArrayList<DummyParentDataItem> dummyParentDataItems) {
             this.dummyParentDataItems = dummyParentDataItems;
-        }
 
+
+
+
+        }
+        public void expand(int parentPosition)
+        {
+//            expandHeader.get(parentPosition).performClick();
+            Toast.makeText(CourseDetail.this,"size:"+expandHeader.size(),Toast.LENGTH_SHORT).show();
+        }
         @Override
         public CourseDetail.RecyclerDataAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_parent_child_listing, parent, false);
@@ -494,6 +539,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
             holder.textView_parentName.setText(dummyParentDataItem.getParentName());
             int checkId2 = sharedPreferences.getInt("id_section_progress",-1);
             //
+            //expandHeader.add(holder.textView_parentName);
             int noOfChildTextViews = holder.linearLayout_childItems.getChildCount();
             int noOfChild = dummyParentDataItem.getChildDataItems().size();
             if (noOfChild < noOfChildTextViews) {
@@ -514,21 +560,39 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                 switch (dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContentType())
                 {
                     case "VIDEO":
-                        imageView.setImageResource(R.mipmap.ic_video);
+                        imageView.setImageResource(R.drawable.ic_action_playback_play);
                         break;
                     case "PICTURE":
-                        imageView.setImageResource(R.mipmap.ic_picture);
+                        imageView.setImageResource(R.drawable.ic_pic);
                         break;
                     case "DOCUMENT":
-                        imageView.setImageResource(R.mipmap.ic_document);
+                        imageView.setImageResource(R.drawable.ic_action_document);
                         break;
 
                 }
                 TextView textView = (TextView) linearLayout.getChildAt(1);
                 textView.setText(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildName());
                 textView.setHint(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContent());
-                if (dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildId()<=checkId2)
-                textView.setBackgroundColor(Color.parseColor("#918c8c"));
+                if (dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildId()!=checkId2 && chk){
+                    textView.setTextColor(Color.parseColor("#918c8c"));
+                    switch (dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContentType())
+                    {
+                        case "VIDEO":
+                            imageView.setImageResource(R.drawable.ic_action_playback_play_g);
+                            break;
+                        case "PICTURE":
+                            imageView.setImageResource(R.drawable.ic_picture_g);
+                            break;
+                        case "DOCUMENT":
+                            imageView.setImageResource(R.drawable.ic_action_document_g);
+                            break;
+
+                    }
+                }
+                if(dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildId()==checkId2 ){
+                    chk = false;
+                }
+
             }
         }
 
@@ -537,10 +601,11 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
             return dummyParentDataItems.size();
         }
 
+
         class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             private int checkId;
             private Context context;
-            private TextView textView_parentName;
+            public TextView textView_parentName;
             private LinearLayout linearLayout_childItems;
 
             MyViewHolder(View itemView) {
@@ -561,19 +626,22 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     LinearLayout linearLayout = new LinearLayout(context);
                     linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                     ImageView imageView = new ImageView(context);
-                    imageView.setImageResource(R.mipmap.ic_video);
+                    imageView.setImageResource(R.drawable.ic_action_video);
                     linearLayout.addView(imageView);
 
                     TextView textView = new TextView(context);
                     textView.setText(indexView+"");
+                    textView.setTextColor(Color.parseColor("#000000"));
+                    textView.setTextSize(15);
                     textView.setId(indexView);
                     textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    textView.setPadding(0, 20, 0, 20);
+                    textView.setPadding(0, 10, 0, 10);
                     //textView.setGravity(Gravity.CENTER);
                     //textView.setBackground(ContextCompat.getDrawable(context, R.drawable.background_sub_module_text));
 
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    textView.setOnClickListener(this);
+
+                        textView.setOnClickListener(this);
 
                     linearLayout.addView(textView);
 
@@ -581,7 +649,12 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     linearLayout_childItems.addView(linearLayout,layoutParams);
                 }
                 textView_parentName.setOnClickListener(this);
+
+                expandHeader.add(textView_parentName);
+
             }
+
+
 
 
             @Override
@@ -592,7 +665,8 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     } else {
                         linearLayout_childItems.setVisibility(View.VISIBLE);
                     }
-                } else {
+                }
+                else {
                     TextView textViewClicked = (TextView) view;
                     textViewClicked.setBackgroundColor(Color.parseColor("#918c8c"));
                     Toast.makeText(context, "This is "+textViewClicked.getHint(), Toast.LENGTH_SHORT).show();
@@ -611,10 +685,10 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     if(checkId == -1) {
                         Log.d("SubJson", "OnAddProgress " + idUser + "  " + idCourse + "  " + idInt);
                         AddProgress(idInt);
-                        CourseDetail.RecyclerDataAdapter.this.notifyDataSetChanged();
+                        //CourseDetail.RecyclerDataAdapter.this.notifyDataSetChanged();
                     }else {
                         UpdateProgress(idInt);
-                        CourseDetail.RecyclerDataAdapter.this.notifyDataSetChanged();
+                        //CourseDetail.RecyclerDataAdapter.this.notifyDataSetChanged();
                     }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putInt("nowID",idInt);
@@ -622,6 +696,8 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                     editor.putBoolean("checkVideo",false);
                     editor.commit();
                     getURLVideo(content);
+
+
 
                 }
             }
@@ -695,6 +771,8 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
     private void unEnrolled(){
         String json = POST(URL_unEnroll,idCourse,idUser);
+        finish();
+        startActivity(getIntent());
         Log.d("JSON", "####From unEnrolled");
 
     }
@@ -705,62 +783,62 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
 
     }
 
-public static String POST(String url,int courseId,int memberId){
-    InputStream inputStream = null;
-    String result = "";
-    try {
+    public static String POST(String url,int courseId,int memberId){
+        InputStream inputStream = null;
+        String result = "";
+        try {
 
-        // 1. create HttpClient
-        HttpClient httpclient = new DefaultHttpClient();
+            // 1. create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
 
-        // 2. make POST request to the given URL
-        HttpPost httpPost = new HttpPost(url);
+            // 2. make POST request to the given URL
+            HttpPost httpPost = new HttpPost(url);
 
-        String json = "";
+            String json = "";
 
-        // 3. build jsonObject
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.accumulate("courseId", courseId);
-        jsonObject.accumulate("memberId", memberId);
+            // 3. build jsonObject
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("courseId", courseId);
+            jsonObject.accumulate("memberId", memberId);
 
 
-        // 4. convert JSONObject to JSON to String
-        json = jsonObject.toString();
+            // 4. convert JSONObject to JSON to String
+            json = jsonObject.toString();
 
-        // ** Alternative way to convert Person object to JSON string usin Jackson Lib
-        // ObjectMapper mapper = new ObjectMapper();
-        // json = mapper.writeValueAsString(person);
+            // ** Alternative way to convert Person object to JSON string usin Jackson Lib
+            // ObjectMapper mapper = new ObjectMapper();
+            // json = mapper.writeValueAsString(person);
 
-        // 5. set json to StringEntity
-        StringEntity se = new StringEntity(json);
+            // 5. set json to StringEntity
+            StringEntity se = new StringEntity(json);
 
-        // 6. set httpPost Entity
-        httpPost.setEntity(se);
+            // 6. set httpPost Entity
+            httpPost.setEntity(se);
 
-        // 7. Set some headers to inform server about the type of the content
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-type", "application/json");
+            // 7. Set some headers to inform server about the type of the content
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
 
-        // 8. Execute POST request to the given URL
-        HttpResponse httpResponse = httpclient.execute(httpPost);
+            // 8. Execute POST request to the given URL
+            HttpResponse httpResponse = httpclient.execute(httpPost);
 
-        // 9. receive response as inputStream
-        inputStream = httpResponse.getEntity().getContent();
+            // 9. receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
 
-        // 10. convert inputstream to string
-        if(inputStream != null)
-            result = convertInputStreamToString(inputStream);
+            // 10. convert inputstream to string
+            if(inputStream != null)
+                result = convertInputStreamToString(inputStream);
 
-        else
-            result = "Did not work!";
+            else
+                result = "Did not work!";
 
-    } catch (Exception e) {
-        Log.d("InputStream", e.getLocalizedMessage());
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+
+        // 11. return result
+        return result;
     }
-
-    // 11. return result
-    return result;
-}
     public static String POST2(String url,int memberId,int courseId){
         InputStream inputStream = null;
         String result = "";
@@ -857,8 +935,8 @@ public static String POST(String url,int courseId,int memberId){
             e.printStackTrace();
         }
     }
-
-    public void UpdateProgress(int sectionId) {
+    int position;
+    public void UpdateProgress(final int sectionId) {
         final ElearningAPI elearningAPI = MyAPI.getAPI();
         try {
             JSONObject jsonObject = new JSONObject(String.format("{\"memberId\":%d,\"courseId\":%d,\"sectionId\":%d}",idUser,idCourse,sectionId));
@@ -873,6 +951,23 @@ public static String POST(String url,int courseId,int memberId){
                         Gson gson = new Gson();
                         UpdateProgress updateProgress = gson.fromJson(json,UpdateProgress.class);
                         UpdateProgressBar(updateProgress.getProgress().getPercent());
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("id_section_progress",updateProgress.getProgress().getSectionId());
+                        editor.commit();
+                        RecyclerDataAdapter recyclerDataAdapter2 = new RecyclerDataAdapter(getDummyDataToPass(listHash));
+                        //recyclerDataAdapter2.setOnClickListenner(ocl);
+                        mRecyclerView.setAdapter(recyclerDataAdapter2);
+
+                        //recyclerDataAdapter2.expand(1);
+                        //mRecyclerView.findViewHolderForAdapterPosition(1).itemView.findViewById(R.id.tv_parentName).performClick();
+
+                        final int position = findCurrentSection(sectionId);
+
+                        if (position!=-1){
+                            expandViewAtProsition(position-1);
+                        }
+
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -893,8 +988,35 @@ public static String POST(String url,int courseId,int memberId){
 
     public void UpdateProgressBar(int percent){
         progressBar.setProgress(percent);
+    }
 
+    public void expandViewAtProsition(final int position)
+    {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.tv_parentName).performClick();
+            }
+        },1);
+    }
 
+    public int findCurrentSection(int subSectionId)
+    {
+        int position = 0;
+
+        for (SectionList sectionList:getSectionListFromID())
+        {
+            for (SectionList.SubsectionBean subsectionBean1:sectionList.getSubsection())
+            {
+                if (subsectionBean1.getId()==subSectionId)
+                {
+                    return position;
+                }
+            }
+
+            position++;
+        }
+        return -1;
     }
 
 

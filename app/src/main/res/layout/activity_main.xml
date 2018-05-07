@@ -56,7 +56,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom" />
 
-        <include layout="@layout/content_main" />
+        <include
+            layout="@layout/content_main" />
     </android.support.design.widget.CoordinatorLayout>
     <ListView android:id="@+id/drawer"
         android:layout_width="240dp"

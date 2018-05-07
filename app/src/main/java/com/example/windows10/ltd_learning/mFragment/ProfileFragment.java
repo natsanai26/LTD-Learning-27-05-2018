@@ -1,10 +1,15 @@
 package com.example.windows10.ltd_learning.mFragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,11 +22,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.windows10.ltd_learning.CourseDetail;
+import com.example.windows10.ltd_learning.ElearningAPI;
+import com.example.windows10.ltd_learning.ImageDialog;
 import com.example.windows10.ltd_learning.MainActivity;
+import com.example.windows10.ltd_learning.MyAPI;
 import com.example.windows10.ltd_learning.Profile;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.Register;
+import com.example.windows10.ltd_learning.UploadPictureActivity;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -32,9 +43,20 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Windows10 on 10/11/2017.
@@ -57,7 +79,9 @@ public class ProfileFragment extends Fragment {
     private TextView pSurname;
     private TextView pEmail;
     private static final String MyPREFERENCES = "MyPrefs" ;
-
+    private int idMember;
+    private int SELECT_FILE=0,REQUEST_CAMERA=1;
+    private ImageView camera,picture,imageP,userPicture,editImage;
     private Button changePasswd;
     private Button logoutButton;
     private Button editProfile;
@@ -66,13 +90,16 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //username.setVisibility(EditText.GONE);
         sharedPreferences = getContext().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        final int idMember = sharedPreferences.getInt("idMember",-1);
+        idMember = sharedPreferences.getInt("idMember",-1);
         // Permission StrictMode
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
         View rootView;
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         if (idMember==-1)
         {
             rootView = inflater.inflate(R.layout.profile_fragment, container, false);
@@ -114,6 +141,7 @@ public class ProfileFragment extends Fragment {
                         editor.putString("pName",profile.getName());
                         editor.putString("pSurname",profile.getSurname());
                         editor.putString("pEmail",profile.getEmail());
+                        editor.putString("photoUrl",profile.getPhotoUrl());
                         editor.commit();
                         Intent intent = new Intent(getContext(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -127,11 +155,21 @@ public class ProfileFragment extends Fragment {
         {
             rootView = inflater.inflate(R.layout.profile_logon, container, false);
             bindViewLogon(rootView);
-            pProfile.setText(sharedPreferences.getString("pProfile","not found"));
             pUsername.setText(sharedPreferences.getString("pUsername","not found"));
             pName.setText(sharedPreferences.getString("pName","not found"));
             pSurname.setText(sharedPreferences.getString("pSurname","not found"));
             pEmail.setText(sharedPreferences.getString("pEmail","not found"));
+//            userPicture.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                }
+//            });
+            editImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getContext(), UploadPictureActivity.class));
+                }
+            });
             logoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -181,8 +219,25 @@ public class ProfileFragment extends Fragment {
                 }
             });
         }
+//        camera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent,REQUEST_CAMERA);
+//            }
+//        });
+//
+//        picture.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                intent.setType("image/*");
+//                startActivityForResult(intent.createChooser(intent,"Select File"),SELECT_FILE);
+//            }
+//        });
         return rootView;
     }
+
 
     public void bindViewLogin(View view)
     {
@@ -192,19 +247,45 @@ public class ProfileFragment extends Fragment {
 
         registerButton = (Button)view.findViewById(R.id.registerButton);
         loginResult = (TextView)view.findViewById(R.id.loginResult);
+        imageP = view.findViewById(R.id.image_profile);
     }
     public void bindViewLogon(View view)
     {
-        pProfile = (TextView)view.findViewById(R.id.pprofile);
         pUsername = (TextView)view.findViewById(R.id.pusername);
         pName = (TextView)view.findViewById(R.id.pname);
         pSurname = (TextView)view.findViewById(R.id.psurname);
         pEmail = (TextView)view.findViewById(R.id.pemail) ;
+        imageP = view.findViewById(R.id.image_profile);
 
         changePasswd = (Button)view.findViewById(R.id.changePasswd);
         logoutButton = (Button)view.findViewById(R.id.logoutButton);
         editProfile = (Button) view.findViewById(R.id.editProfile);
+        userPicture = view.findViewById(R.id.image_profile);
+        editImage = view.findViewById(R.id.edit_image);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (idMember!=-1) {
+            if (sharedPreferences.getBoolean("picUpdate", false))
+                setUserPicture();
+            else
+                Picasso.with(getContext()).load(MyAPI.BASE_URL_ELEARNNING + "elearning/" + sharedPreferences.getString("photoUrl", "")).into(userPicture);
+        }
+
+    }
+    private void setUserPicture()
+    {
+        //userPicture.set
+        File file = new File(sharedPreferences.getString("photoUrl",""));
+        if (file.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            userPicture.setImageBitmap(myBitmap);
+
+        }
+    }
+
     public String sendPut(String data, String url) {
         int responseCode = -1;
         String s="";

@@ -19,7 +19,8 @@ public class Comment {
      * editTime : 1524482926000
      * sub-dialogues : [{"iddialogue":4,"courseId":407,"parentId":3,"member":{"idmember":138,"name":"natsanai2","surname":"Muang","username":"student","passwd":"$2a$10$FLB7jHpRK5euMzX5QxYxtekpexf.hoF4aL1CKnaxVz.t1Zg6W49SG","email":"nat.m@ku.th","socialId":null,"socialType":null,"photoUrl":null,"type":"student","profile":""},"msg":"I bet the people who disliked are thinking of \"dis I like\"","editTime":1524482926000},{"iddialogue":5,"courseId":407,"parentId":3,"member":{"idmember":138,"name":"natsanai2","surname":"Muang","username":"student","passwd":"$2a$10$FLB7jHpRK5euMzX5QxYxtekpexf.hoF4aL1CKnaxVz.t1Zg6W49SG","email":"nat.m@ku.th","socialId":null,"socialType":null,"photoUrl":null,"type":"student","profile":""},"msg":"Brings back the old FIFA 15 vibes... The FIFA 17 songs are so crap :/ I just mute them and listen to this while I play","editTime":1524487498000}]
      */
-
+    public static final int MY_COMMENT_TYPE = 0;
+    public static final int OTHERS_COMMENT_TYPE = 1;
     private int iddialogue;
     private int courseId;
     private int parentId;

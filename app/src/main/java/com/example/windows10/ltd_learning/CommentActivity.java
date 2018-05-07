@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -21,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.windows10.ltd_learning.mRecycler.CommentAdapter;
+import com.example.windows10.ltd_learning.mRecycler.CommentAdapter2;
 import com.example.windows10.ltd_learning.mRecycler.CustomMyCourse;
 import com.example.windows10.ltd_learning.mRecycler.MyCourse;
 import com.google.gson.Gson;
@@ -54,6 +58,7 @@ import retrofit2.Callback;
  */
 
 public class CommentActivity extends AppCompatActivity {
+    private CommentAdapter commentAdapter;
     private String URL_GET_Comment_idCourse = "http://158.108.207.7:8090/elearning/dialogue?courseId=";
     private RecyclerView rv_comment;
     private Toolbar toolbar;
@@ -78,7 +83,6 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AddComment(id_member,id_course,"\""+edit_add.getText().toString()+"\"");
-                Toast.makeText(CommentActivity.this,"Add+++.",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -86,6 +90,7 @@ public class CommentActivity extends AppCompatActivity {
         edit_add =(EditText) findViewById(R.id.edit_comment);
         add = (ImageView) findViewById(R.id.add_comment);
         rv_comment = (RecyclerView) findViewById(R.id.rv_comment);
+//        ListView listView = (ListView)findViewById(R.id.rv_comment);
         toolbar = (Toolbar) findViewById(R.id.toolbar_comment);
         toolbar.setTitle("Comment");
     }
@@ -167,8 +172,15 @@ public class CommentActivity extends AppCompatActivity {
     public void showData(String jsonString)
     {
         if (!jsonString.equals("")) {
-//            GsonBuilder builder = new GsonBuilder();
-//            Gson gson = builder.create();
+//            Log.d("SPILT","check "+jsonString);
+//            int intIndex = jsonString.indexOf("\"iddialogue\"");
+//            boolean check_subdialog;
+//            Log.d("SPILT","check "+intIndex);
+//            if(intIndex == - 1) {
+//                check_subdialog = false;
+//            } else {
+//                check_subdialog = true;
+//            }
             java.lang.reflect.Type collectionType = new TypeToken<Collection<Comment>>() {}.getType();
             List<Comment> commentResult =  new Gson().fromJson( jsonString , collectionType);
 
@@ -176,17 +188,35 @@ public class CommentActivity extends AppCompatActivity {
 //            List<RateModel.ResultBean> rateResult = data.getResult();
 //            java.lang.reflect.Type collectionType = new TypeToken<Collection<RateModel>>() {}.getType();
 //            List<RateModel> rateResult =  new Gson().fromJson( jsonString , collectionType);
-            Log.d("JSON","check "+commentResult);
+            Log.d("JSON","check cmAll "+commentResult);
 
+            commentAdapter = new CommentAdapter(CommentActivity.this, commentResult);
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_comment);
             recyclerView.setLayoutManager(new LinearLayoutManager(CommentActivity.this));
-            recyclerView.setAdapter(new CommentAdapter(CommentActivity.this, commentResult));
+            recyclerView.setAdapter(commentAdapter);
             recyclerView.setHasFixedSize(true);
+
+            rv_comment.post(new Runnable() {
+                @Override
+                public void run() {
+                    rv_comment.smoothScrollToPosition(commentAdapter.getItemCount());
+
+                }
+            });
+//            ListView listView = (ListView)findViewById(R.id.rv_comment);
+//            listView.setAdapter(new CommentAdapter2(CommentActivity.this,commentResult));
 
         } else {
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_comment);
             recyclerView.setLayoutManager(new LinearLayoutManager(CommentActivity.this));
             recyclerView.setAdapter(null);
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        getComment(URL_GET_Comment_idCourse+String.valueOf(id_course));
+        super.onResume();
     }
 }

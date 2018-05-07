@@ -2,6 +2,7 @@ package com.example.windows10.ltd_learning;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -9,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
@@ -91,6 +93,10 @@ public interface ElearningAPI {
     Call<ResponseBody> getCourseByTeacherName(
             @Query("teacherName") String teacherName
     );
+    @GET("/elearning/course/dialogue")
+    Call<ResponseBody> getDialougueById(
+            @Query("id") int id
+    );
 
     @POST("/elearning/dialogue/add")
     Call<ResponseBody> addComment(
@@ -98,4 +104,18 @@ public interface ElearningAPI {
             @Query("courseId") int courseId,
             @Body RequestBody params
     );
+    @POST("/elearning/dialogue/add")
+    Call<ResponseBody> addRepliedComment(
+            @Query("memberId") int memberId,
+            @Query("courseId") int courseId,
+            @Query("parentId") int parentId,
+            @Body RequestBody params
+    );
+    @Multipart
+    @POST("/elearning/files-up/member/picture")
+    Call<ResponseBody> uploadPicture(
+            @Part MultipartBody.Part file,
+            @Part("memberId") int memberId
+    );
+
 }

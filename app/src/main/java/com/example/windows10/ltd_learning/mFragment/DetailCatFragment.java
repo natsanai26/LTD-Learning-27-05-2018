@@ -101,8 +101,8 @@ public class DetailCatFragment extends Fragment {
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
                 CategoryAll courseByCat = gson.fromJson(response, CategoryAll.class);
+                    setCourseByCat(courseByCat);
 
-                setCourseByCat(courseByCat);
             }
         },
                 new Response.ErrorListener() {
@@ -117,16 +117,18 @@ public class DetailCatFragment extends Fragment {
 
     private void setCourseByCat(CategoryAll course) {
         course_by_cat = course;
-        id_in_courseCat = new ArrayList<Integer>();
-        Log.d("JSON", "From set Course in DetailCat " + course_by_cat.getCategoryName() + " ==== " + course_by_cat.getCourseList().get(0));
-        for (int i = 0; i < course_by_cat.getCourseList().size(); i++) {
-            id_in_courseCat.add(i, course_by_cat.getCourseList().get(i));
-        }
+        if(course.getCourseList() != null) {
+            id_in_courseCat = new ArrayList<Integer>();
+            for (int i = 0; i < course_by_cat.getCourseList().size(); i++) {
+                id_in_courseCat.add(i, course_by_cat.getCourseList().get(i));
+            }
+
         Log.d("JSON", "From set Course Check ID" + id_in_courseCat);
         String list_id = TextUtils.join(",", id_in_courseCat);
         Log.d("JSON", "From set Course Check ID" + list_id);
         Log.d("JSON", "From set Course Check ID" + URL_getCourseByID + list_id);
         getCourseFromId(URL_getCourseByID + list_id);
+        }
     }
 
     public void getCourseFromId(String url) {

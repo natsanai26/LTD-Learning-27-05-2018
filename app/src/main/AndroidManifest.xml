@@ -3,6 +3,10 @@
     package="com.example.windows10.ltd_learning">
      
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:allowBackup="true"
@@ -25,6 +29,12 @@
         <activity android:name=".CourseDetailForMyCourse"></activity>
         <activity android:name=".PdfActivityActivity"></activity>
         <activity android:name=".CommentActivity"></activity>
+        <activity android:name=".RpliedCommentActivity"></activity>
+        <activity android:name=".ImageDialog" android:theme="@style/myDialogTheme" />
+        <activity android:name=".FullScreenVideoActivity"
+            android:screenOrientation="sensorLandscape">
+        </activity>
+        <activity android:name=".UploadPictureActivity"></activity>
 
     </application>
 

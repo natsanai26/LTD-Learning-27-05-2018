@@ -87,9 +87,15 @@ public class MyCouresFragment extends Fragment {
         Log.d("JSON","####TestShared"+USER_ID);
         Log.d("JSON","##IDfromMyCourse"+String.valueOf(USER_ID));
 //        getInfomation(USER_ID);
-        getMyCourse(URL_getMyCourse+String.valueOf(USER_ID));
         return rootView;
     }
+
+    @Override
+    public void onResume() {
+        getMyCourse(URL_getMyCourse+String.valueOf(USER_ID));
+        super.onResume();
+    }
+
     public void getMyCourse(String url)
     {
         new AsyncTask<String, Void, String>() {

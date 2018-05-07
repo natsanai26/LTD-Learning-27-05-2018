@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_snap"
     card_view:cardBackgroundColor="#FFFFFF"
     android:orientation="horizontal"
@@ -8,7 +9,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
     card_view:cardElevation="5dp"
-    android:layout_height="150dp">
+    android:layout_height="180dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,20 +23,19 @@
 
             <ImageView
                 android:id="@+id/imageView_home"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="100dp"
-                android:src="@drawable/maxresdefault"
-                android:scaleType="centerInside"
                 android:adjustViewBounds="true"
-                />
+                android:scaleType="centerInside"
+                android:src="@drawable/maxresdefault" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/text_layout"
-            android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/image_layout">
+            android:layout_below="@+id/image_layout"
+            android:layout_margin="4dp">
 
             <TextView
                 android:id="@+id/nameTxt"
@@ -43,17 +43,54 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Name Course Test Test"
-                android:textStyle="bold"
+                android:textColor="#000000"
                 android:textSize="14dp"
-                android:textColor="#000000" />
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginLeft="4dp"
-            android:id="@+id/s1"
-            android:layout_below="@+id/text_layout"
+            android:id="@+id/profile_lay"
             android:layout_width="wrap_content"
-            android:layout_height="30dp">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_layout">
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/image_teacher"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/github_318_8470"
+                app:civ_border_color="#FFFFFF"
+                app:civ_border_width="4dp"
+                app:civ_shadow_radius="2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/teacher_name_lay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_layout"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/profile_lay">
+
+            <TextView
+                android:id="@+id/nameTxt_teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Teacher Name"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/s1_con"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/teacher_name_lay"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/profile_lay">
+
             <LinearLayout
                 android:id="@+id/s1"
                 android:layout_width="wrap_content"
@@ -72,15 +109,15 @@
                 <RatingBar
                     android:id="@+id/ratingBar"
                     style="?android:attr/ratingBarStyleSmall"
-                    android:progressTint="@android:color/holo_orange_dark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
+                    android:progressTint="@android:color/holo_orange_dark"
                     android:rating="2.5"
-                    android:stepSize="0.5"
-                    />
+                    android:stepSize="0.5" />
             </LinearLayout>
         </LinearLayout>
+
 
     </RelativeLayout>
 
