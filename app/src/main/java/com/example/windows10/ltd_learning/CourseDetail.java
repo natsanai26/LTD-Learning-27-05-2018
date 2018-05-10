@@ -560,13 +560,13 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                 switch (dummyParentDataItem.getChildDataItems().get(textViewIndex).getChildContentType())
                 {
                     case "VIDEO":
-                        imageView.setImageResource(R.drawable.ic_action_playback_play);
+                        imageView.setImageResource(R.drawable.ic_action_playback_red);
                         break;
                     case "PICTURE":
-                        imageView.setImageResource(R.drawable.ic_pic);
+                        imageView.setImageResource(R.drawable.ic_action_picture_yel);
                         break;
                     case "DOCUMENT":
-                        imageView.setImageResource(R.drawable.ic_action_document);
+                        imageView.setImageResource(R.drawable.ic_action_document_blu);
                         break;
 
                 }

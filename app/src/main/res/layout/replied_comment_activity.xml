@@ -13,27 +13,24 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_con"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_height="wrap_content">
+            android:id="@+id/card_con"
+            android:layout_marginTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <RelativeLayout
                 android:id="@+id/relative_lay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#e2e2e2">
+                android:background="#045757">
 
                 <!--<LinearLayout
                     android:id="@+id/image_layout_search"
@@ -55,6 +52,7 @@
                     android:id="@+id/name_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_name_layout"
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/image_layout_search">
 
@@ -65,7 +63,7 @@
                         android:layout_margin="3dp"
                         android:gravity="left"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore."
-                        android:textColor="#000000"
+                        android:textColor="#ffffff"
                         android:textSize="15dp"></TextView>
                 </LinearLayout>
 
@@ -73,7 +71,6 @@
                     android:id="@+id/user_name_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/name_layout"
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/image_layout_search">
 
@@ -84,6 +81,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="center"
                         android:text="Username"
+                        android:textColor="#bfbdbd"
                         android:textSize="13dp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -93,8 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/name_layout"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/user_name_layout">
+                    android:layout_marginLeft="5dp">
 
                     <TextView
                         android:id="@+id/date"
@@ -102,47 +99,45 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
+                        android:padding="2dp"
                         android:text="12122018"
+                        android:textColor="#bfbdbd"
                         android:textSize="13dp"
                         android:textStyle="bold" />
                 </LinearLayout>
-
-
             </RelativeLayout>
-
-
         </android.support.v7.widget.CardView>
-        <LinearLayout
-            android:layout_below="@+id/card_con"
-            android:id="@+id/edit_layout"
-            android:background="#FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <EditText
-                android:lines="2"
-                android:maxLines="5"
-                android:hint="Add a replied comment..."
-                android:id="@+id/edit_comment"
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="40dp" />
-            <ImageView
-                android:id="@+id/add_reply"
-                android:src="@drawable/ic_action_send"
-                android:layout_width="50dp"
-                android:layout_height="40dp" />
-        </LinearLayout>
-
 
 
         <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/edit_layout"
-        android:id="@+id/rv_replied"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            android:layout_below="@+id/card_con"
+            android:id="@+id/rv_replied"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/edit_layout" />
+
+        <LinearLayout
+            android:id="@+id/edit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#FFFFFF"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit_comment"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="0.5"
+                android:hint="Add a comment..." />
+
+            <ImageView
+                android:id="@+id/add_reply"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_action_send" />
+        </LinearLayout>
+
     </RelativeLayout>
 
-</ScrollView>
 </LinearLayout>
