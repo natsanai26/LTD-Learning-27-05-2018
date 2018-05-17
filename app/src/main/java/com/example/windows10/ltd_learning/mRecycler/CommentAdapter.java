@@ -3,26 +3,20 @@ package com.example.windows10.ltd_learning.mRecycler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.windows10.ltd_learning.Comment;
-import com.example.windows10.ltd_learning.CommentActivity;
-import com.example.windows10.ltd_learning.CourseDetail;
+import com.example.windows10.ltd_learning.mModel.Comment;
 import com.example.windows10.ltd_learning.R;
-import com.example.windows10.ltd_learning.RpliedCommentActivity;
+import com.example.windows10.ltd_learning.mActivity.RpliedCommentActivity;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 

@@ -21,10 +21,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.windows10.ltd_learning.Course;
-import com.example.windows10.ltd_learning.CourseDetail;
+import com.example.windows10.ltd_learning.mActivity.CourseDetail;
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
+import com.example.windows10.ltd_learning.mModel.MyCourse;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class CustomMyCourse extends RecyclerView.Adapter<CustomAdapter.MyViewHol
 
             private void getImageCourse(String response, CustomAdapter.MyViewHolder holder) {
                 String url = "http://158.108.207.7:8080/";
-                Picasso.with(mContext).load(url + response).into(holder.imageView);
+                Picasso.with(mContext).load(url + response).fit().centerCrop().into(holder.imageView);
             }
         },
                 new Response.ErrorListener() {

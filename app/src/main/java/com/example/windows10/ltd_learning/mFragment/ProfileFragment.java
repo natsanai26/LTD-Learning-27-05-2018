@@ -1,15 +1,12 @@
 package com.example.windows10.ltd_learning.mFragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,15 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.windows10.ltd_learning.CourseDetail;
-import com.example.windows10.ltd_learning.ElearningAPI;
-import com.example.windows10.ltd_learning.ImageDialog;
-import com.example.windows10.ltd_learning.MainActivity;
+import com.example.windows10.ltd_learning.mActivity.MainActivity;
 import com.example.windows10.ltd_learning.MyAPI;
-import com.example.windows10.ltd_learning.Profile;
+import com.example.windows10.ltd_learning.mModel.Profile;
 import com.example.windows10.ltd_learning.R;
-import com.example.windows10.ltd_learning.Register;
-import com.example.windows10.ltd_learning.UploadPictureActivity;
+import com.example.windows10.ltd_learning.mActivity.UploadPictureActivity;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -48,15 +41,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Windows10 on 10/11/2017.

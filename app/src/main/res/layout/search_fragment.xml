@@ -46,23 +46,35 @@
             android:layout_weight="1"
             android:text="Teacher name" />
     </LinearLayout>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <android.support.v7.widget.RecyclerView
-        android:layout_above="@+id/default_layout"
-        android:id="@+id/rv_search"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
 
     <LinearLayout
-        android:background="@color/colorPrimary"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/default_layout"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:orientation="horizontal"></LinearLayout>
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/default_layout" />
+
+            <LinearLayout
+                android:id="@+id/default_layout"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal"></LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

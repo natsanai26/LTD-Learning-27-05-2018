@@ -1,7 +1,6 @@
 package com.example.windows10.ltd_learning.mFragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,11 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -22,23 +19,14 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.windows10.ltd_learning.CategoryAll;
-import com.example.windows10.ltd_learning.Course;
-import com.example.windows10.ltd_learning.CourseByCat;
-import com.example.windows10.ltd_learning.CourseById;
-import com.example.windows10.ltd_learning.CourseDetail;
-import com.example.windows10.ltd_learning.CourseDetailForMyCourse;
-import com.example.windows10.ltd_learning.CourseTop;
+import com.example.windows10.ltd_learning.mModel.CategoryAll;
+import com.example.windows10.ltd_learning.mModel.Course;
+import com.example.windows10.ltd_learning.mModel.CourseById;
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.mRecycler.CustomAdapter;
-import com.example.windows10.ltd_learning.mRecycler.ListViewAdapter;
-import com.example.windows10.ltd_learning.mRecycler.MyCourse;
-import com.example.windows10.ltd_learning.mRecycler.Snap;
-import com.example.windows10.ltd_learning.mRecycler.SnapAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -51,7 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**

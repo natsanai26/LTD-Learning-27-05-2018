@@ -3,8 +3,6 @@ package com.example.windows10.ltd_learning.mRecycler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,25 +14,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.view.inputmethod.CorrectionInfo;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.windows10.ltd_learning.Course;
-import com.example.windows10.ltd_learning.CourseDetail;
-import com.example.windows10.ltd_learning.CourseDetailForMyCourse;
-import com.example.windows10.ltd_learning.ItemClickListener;
-import com.example.windows10.ltd_learning.MainActivity;
+import com.example.windows10.ltd_learning.mModel.Course;
+import com.example.windows10.ltd_learning.mActivity.CourseDetail;
+import com.example.windows10.ltd_learning.mActivity.CourseDetailForMyCourse;
+
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
-import com.example.windows10.ltd_learning.SearchActivity;
 import com.squareup.picasso.Picasso;
 
 
@@ -77,7 +71,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
             private void getImageCourse(String response, ViewHolder holder) {
                 String url = "http://158.108.207.7:8080/";
-                Picasso.with(mContext).load(url+response).into(holder.imageView);
+                Picasso.with(mContext).load(url+response).resize(640,360).into(holder.imageView);
             }
         },
                 new Response.ErrorListener() {
@@ -129,7 +123,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         private boolean isEnroll;
         private static final String MyPREFERENCES = "MyPrefs" ;
         public TextView nameTextView;
-        private ItemClickListener itemClickListener;
+
         private List<Course> courses = new ArrayList<>();
         private Context ctx;
 

@@ -10,31 +10,31 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:allowBackup="true"
+        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".mActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SearchActivity"></activity>
-        <activity android:name=".CourseDetail"></activity>
-        <activity android:name=".Register"></activity>
-        <activity android:name=".AddRatingActivity"></activity>
-        <activity android:name=".CourseDetailForMyCourse"></activity>
-        <activity android:name=".PdfActivityActivity"></activity>
-        <activity android:name=".CommentActivity"></activity>
-        <activity android:name=".RpliedCommentActivity"></activity>
-        <activity android:name=".ImageDialog" android:theme="@style/myDialogTheme" />
-        <activity android:name=".FullScreenVideoActivity"
+
+        <activity android:name=".mActivity.CourseDetail"></activity>
+        <activity android:name=".mActivity.AddRatingActivity"></activity>
+        <activity android:name=".mActivity.CourseDetailForMyCourse"></activity>
+        <activity android:name=".mActivity.PdfActivityActivity"></activity>
+        <activity android:name=".mActivity.CommentActivity"></activity>
+        <activity android:name=".mActivity.RpliedCommentActivity"></activity>
+        <activity android:name=".mActivity.ImageDialog" android:theme="@style/myDialogTheme" />
+        <activity android:name=".mActivity.FullScreenVideoActivity"
             android:screenOrientation="sensorLandscape">
         </activity>
-        <activity android:name=".UploadPictureActivity"></activity>
+        <activity android:name=".mActivity.UploadPictureActivity"></activity>
 
     </application>
 

@@ -3,12 +3,6 @@ package com.example.windows10.ltd_learning.mRecycler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,11 +18,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.windows10.ltd_learning.Course;
-import com.example.windows10.ltd_learning.CourseDetail;
+import com.example.windows10.ltd_learning.mModel.Course;
+import com.example.windows10.ltd_learning.mActivity.CourseDetail;
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
-import com.example.windows10.ltd_learning.mFragment.CoursDetailFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -73,7 +66,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
             private void getImageCourse(String response, MyViewHolder holder) {
                 String url = "http://158.108.207.7:8080/";
-                Picasso.with(mContext).load(url+response).into(holder.imageView);
+                Picasso.with(mContext).load(url+response).fit().centerCrop().into(holder.imageView);
             }
         },
                 new Response.ErrorListener() {

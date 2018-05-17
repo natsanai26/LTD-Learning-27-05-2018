@@ -13,10 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.windows10.ltd_learning.MainActivity;
-import com.example.windows10.ltd_learning.Profile;
+import com.example.windows10.ltd_learning.mActivity.MainActivity;
+import com.example.windows10.ltd_learning.mModel.Profile;
 import com.example.windows10.ltd_learning.R;
 import com.google.gson.Gson;
 

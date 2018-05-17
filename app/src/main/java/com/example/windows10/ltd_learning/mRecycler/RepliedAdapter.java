@@ -1,38 +1,21 @@
 package com.example.windows10.ltd_learning.mRecycler;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.example.windows10.ltd_learning.Comment;
-import com.example.windows10.ltd_learning.Course;
-import com.example.windows10.ltd_learning.CourseDetail;
-import com.example.windows10.ltd_learning.MySingleton;
+import com.example.windows10.ltd_learning.mModel.Comment;
 import com.example.windows10.ltd_learning.R;
-import com.example.windows10.ltd_learning.RpliedCommentActivity;
-import com.example.windows10.ltd_learning.SingleDialogue;
-import com.squareup.picasso.Picasso;
+import com.example.windows10.ltd_learning.mModel.SingleDialogue;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Windows10 on 4/30/2018.

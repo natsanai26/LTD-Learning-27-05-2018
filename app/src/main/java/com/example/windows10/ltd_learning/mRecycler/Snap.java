@@ -1,6 +1,6 @@
 package com.example.windows10.ltd_learning.mRecycler;
 
-import com.example.windows10.ltd_learning.Course;
+import com.example.windows10.ltd_learning.mModel.Course;
 
 import java.util.List;
 
