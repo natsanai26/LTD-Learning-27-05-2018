@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.windows10.ltd_learning.mModel.Course;
@@ -51,7 +53,8 @@ public class SearchFragment extends Fragment {
     private Button byTeacherName;
     private String searchBy="name";
     private ImageView loadingImage;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private HomeFragment.RecyclerViewReadyCallback recyclerViewReadyCallback;
 
     public interface RecyclerViewReadyCallback {
@@ -85,6 +88,17 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getCourse(URL_GET_COURSE+"?"+searchBy+"="+textSearch.getText().toString());
+            }
+        });
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getContext(),"refresh",Toast.LENGTH_LONG).show();
+                getCourse(URL_GET_COURSE+"?"+searchBy+"="+textSearch.getText().toString());
+
             }
         });
 
@@ -129,6 +143,7 @@ public class SearchFragment extends Fragment {
 
                 protected void onPostExecute(String jsonString) {
                     showData(jsonString);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }.execute(url);
 

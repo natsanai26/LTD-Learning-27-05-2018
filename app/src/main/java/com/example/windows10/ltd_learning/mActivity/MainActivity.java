@@ -106,14 +106,17 @@ public class MainActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DetailCatFragment fragment = new DetailCatFragment();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("id_category",cat_all[i].getId());
-                editor.commit();
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_id, fragment).addToBackStack(null).commit();
-                toolbar.setTitle(cat_all[i].getCategoryName());
-                Log.d("JSON","## From item click "+cat_all[i].getId()+"..."+i);
-                myDrawer.closeDrawers();
+                if (cat_all[i].getCourseList()!=null) {
+                    DetailCatFragment fragment = new DetailCatFragment();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("id_category", cat_all[i].getId());
+                    editor.commit();
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.content_id, fragment).addToBackStack(null).commit();
+                    toolbar.setTitle(cat_all[i].getCategoryName());
+                    Log.d("JSON", "## From item click " + cat_all[i].getId() + "..." + i);
+                    myDrawer.closeDrawers();
+                }
             }
         });
 

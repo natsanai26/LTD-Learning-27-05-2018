@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -59,6 +60,7 @@ public class DetailCatFragment extends Fragment {
     private int category_id;
     private static final String MyPREFERENCES = "MyPrefs";
     private SharedPreferences sharedPreferences;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private View rootView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +79,13 @@ public class DetailCatFragment extends Fragment {
         category_id = sharedPreferences.getInt("id_category", -1);
         Log.d("JSON", "## From DetailCat " + category_id);
         getInfomation(category_id);
+        swipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getInfomation(category_id);
+            }
+        });
         return rootView;
     }
 
@@ -89,6 +98,7 @@ public class DetailCatFragment extends Fragment {
                 Gson gson = builder.create();
                 CategoryAll courseByCat = gson.fromJson(response, CategoryAll.class);
                     setCourseByCat(courseByCat);
+                swipeRefreshLayout.setRefreshing(false);
 
             }
         },

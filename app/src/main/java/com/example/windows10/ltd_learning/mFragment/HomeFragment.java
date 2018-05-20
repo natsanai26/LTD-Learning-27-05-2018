@@ -2,6 +2,7 @@ package com.example.windows10.ltd_learning.mFragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -98,11 +100,10 @@ public class HomeFragment extends Fragment {
 //        dots = new ImageView[dotsCount];
         elearningAPI = MyAPI.getAPI();
         loadingImage = rootView.findViewById(R.id.imageView);
-        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(loadingImage);
-        Glide.with(getContext()).load(R.drawable.loading).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageViewTarget);
+        Glide.with(getContext()).load(R.drawable.loading).into(loadingImage);
 
 
-        for (int i = 0; i < dotsCount; i++) {
+        /*for (int i = 0; i < dotsCount; i++) {
             dots[i] = new ImageView(this.getActivity());
             dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
 
@@ -111,7 +112,7 @@ public class HomeFragment extends Fragment {
 
             params.setMargins(8, 0, 8, 0);
             sliderDotpanel.addView(dots[i], params);
-        }
+        }*/
 
 //        dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
 
@@ -166,6 +167,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getInfoNewCourse() {
+
         Call<ResponseBody> responseBody = elearningAPI.getNewCourse(10);
         responseBody.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -188,29 +190,13 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        /*StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getNewCourse, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("##JSON", response);
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                CourseNew course = gson.fromJson(response, CourseNew.class);
-                Log.d("##JSON", "Fromm NewCourse"+course.getResponse().getMessage() + " " + course.getCourses().get(0).getName() + " " + course.getCourses().size());
-                setNewCourse(course);
 
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON", "Error JSON");
-                    }
-                });
-        MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);*/
 
     }
 
     private void getInfoTopCourse() {
+
+
 
         Call<ResponseBody> responseBody = elearningAPI.getTopCourse(10);
         responseBody.enqueue(new Callback<ResponseBody>() {
@@ -234,25 +220,7 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        /*StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getTopCourse, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("##JSON", response);
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                CourseTop course = gson.fromJson(response, CourseTop.class);
-                Log.d("##JSON", course.getResponse().getMessage() + " " + course.getCourses().get(0).getName() + " " + course.getCourses().size());
-                setTopCourse(course);
 
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON", "Error JSON");
-                    }
-                });
-        MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);*/
 
     }
 

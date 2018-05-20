@@ -49,15 +49,32 @@
     </FrameLayout>
     </android.support.design.widget.AppBarLayout>
 
+        <!--<RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+                android:id="@+id/myBottomNavigation_ID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom" />
+            <include
+                layout="@layout/content_main"
+                />
+
+
+        </RelativeLayout>-->
 
         <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
-        android:id="@+id/myBottomNavigation_ID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
-
+            android:id="@+id/myBottomNavigation_ID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
         <include
-            layout="@layout/content_main" />
+            layout="@layout/content_main"
+            />
+
     </android.support.design.widget.CoordinatorLayout>
     <ListView android:id="@+id/drawer"
         android:layout_width="240dp"

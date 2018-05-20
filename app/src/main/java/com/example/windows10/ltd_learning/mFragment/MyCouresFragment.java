@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -58,6 +59,7 @@ public class MyCouresFragment extends Fragment {
     private static final String MyPREFERENCES = "MyPrefs" ;
     private ImageView loadingImage;
     RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private HomeFragment.RecyclerViewReadyCallback recyclerViewReadyCallback;
 
     public interface RecyclerViewReadyCallback {
@@ -83,6 +85,13 @@ public class MyCouresFragment extends Fragment {
         Log.d("JSON","####TestShared"+USER_ID);
         Log.d("JSON","##IDfromMyCourse"+String.valueOf(USER_ID));
 //        getInfomation(USER_ID);
+        swipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getMyCourse(URL_getMyCourse+String.valueOf(USER_ID));
+            }
+        });
         return rootView;
     }
 
@@ -129,6 +138,7 @@ public class MyCouresFragment extends Fragment {
                 Log.d("JCOMMENT","++"+jsonString);
                 loadingImage.setVisibility(View.GONE);
                 showData(jsonString);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
 
