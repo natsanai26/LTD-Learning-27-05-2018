@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -20,10 +19,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.example.windows10.ltd_learning.MyAPI;
-import com.example.windows10.ltd_learning.mModel.Course;
-import com.example.windows10.ltd_learning.mActivity.CourseDetail;
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
+import com.example.windows10.ltd_learning.mActivity.CourseDetail;
+import com.example.windows10.ltd_learning.mModel.Course;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -31,72 +30,45 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Windows10 on 2/6/2018.
+ * Created by Windows10 on 5/23/2018.
  */
 
-
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>{
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
+{
     private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/stream?content=";
-    private SharedPreferences sharedPreferences;
     private Context mContext;
     private List<Course.CoursesBean> mData;
+    private SharedPreferences sharedPreferences;
 
-    public interface OnItemClickListener {
-        public void onItemClick(View view , int position);
-    }
-
-    public CustomAdapter(Context context, List<Course.CoursesBean> data)
+    public HomeAdapter(Context context,List<Course.CoursesBean> courses)
     {
-        mContext = context;
-        mData = data;
-
+        this.mContext = context;
+        this.mData = courses;
     }
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item,parent,false);
-        MyViewHolder myViewHolder = new MyViewHolder(view);
-        return myViewHolder;
-    }
-
-    public void getURLPic(String content, final MyViewHolder holder){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getURLPicture + content, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("JSON","url --> "+response);
-                getImageCourse(response, holder);
-            }
-
-            private void getImageCourse(String response, MyViewHolder holder) {
-                Glide.with(mContext).load(MyAPI.BASE_URL_COURSE_API+response).error(R.drawable.maxresdefault).fitCenter().into(holder.imageView);
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON", "Error JSON");
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("token", "key999");
-                return params;
-            }
-        };
-        MySingleton.getInstance(mContext).addToReauestQue(stringRequest);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.model,parent,false);
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.courseName.setText(mData.get(position).getName());
         holder.ratingBar.setRating((float) mData.get(position).getRating());
         holder.teacherName.setText(mData.get(position).getTeacher().getName()+" "+mData.get(position).getTeacher().getSurname());
-        if((int)mData.get(position).getVoter()<=1)
+        /*if((int)mData.get(position).getVoter()<=1)
             holder.numberText.setText(mData.get(position).getRating()+" from "+(int)mData.get(position).getVoter()+" vote");
         else
             holder.numberText.setText(mData.get(position).getRating()+" from "+(int)mData.get(position).getVoter()+" votes");
-        holder.progressBar.setVisibility(View.INVISIBLE);
+            */
+        //holder.progressBar.setVisibility(View.INVISIBLE);
 //        Log.d("JSON","Check Percent "+mData.get(position).getProgress().getSectionId());
+        if (mData.get(position).getTeacher().getPhotoUrl()!=null)
+            if (mData.get(position).getTeacher().getPhotoUrl().contains("https://"))
+                Glide.with(mContext).load(mData.get(position).getTeacher().getPhotoUrl()).into(holder.image_teacher);
+            else
+                Glide.with(mContext).load(MyAPI.BASE_URL_ELEARNNING+"elearning/"+mData.get(position).getTeacher().getPhotoUrl()).into(holder.image_teacher);
         String content_get_pic = null;
         if(mData.get(position).getSectionList().size() != 0){
             content_get_pic = mData.get(position).getSectionList().get(0).getContent();
@@ -134,28 +106,53 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         });
     }
 
-
-
     @Override
     public int getItemCount() {
         return mData.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
-        public ProgressBar progressBar;
-        public TextView numberText;
-        public TextView courseName;
-        public RatingBar ratingBar;
+    public void getURLPic(String content, final HomeAdapter.ViewHolder holder){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getURLPicture + content, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("JSON","url --> "+response);
+                getImageCourse(response, holder);
+            }
+
+            private void getImageCourse(String response, HomeAdapter.ViewHolder holder) {
+                String url = "http://158.108.207.7:8080/";
+                Glide.with(mContext).load(url+response).placeholder(R.drawable.loading4).error(R.drawable.maxresdefault).into(holder.imageView);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("JSON", "Error JSON");
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("token", "key999");
+                return params;
+            }
+        };
+        MySingleton.getInstance(mContext).addToReauestQue(stringRequest);
+    }
+    public static class ViewHolder extends RecyclerView.ViewHolder
+    {
         public TextView teacherName;
-        public ImageView imageView;
-        public MyViewHolder(View itemView) {
+        public ImageView imageView,image_teacher;
+        public RatingBar ratingBar;
+        public TextView courseName;
+
+        public ViewHolder(View itemView) {
             super(itemView);
-            progressBar = itemView.findViewById(R.id.progressBar);
-            numberText = itemView.findViewById(R.id.number_vote);
-            imageView = itemView.findViewById(R.id.rv_image);
-            courseName = itemView.findViewById(R.id.name);
+            image_teacher = itemView.findViewById(R.id.image_teacher);
+            teacherName = itemView.findViewById(R.id.nameTxt_teacher);
+            courseName = (TextView) itemView.findViewById(R.id.nameTxt);
             ratingBar = itemView.findViewById(R.id.ratingBar);
-            teacherName = itemView.findViewById(R.id.teacher_name);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView_home);
         }
     }
 }

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -39,6 +40,8 @@ import com.example.windows10.ltd_learning.MyAPI;
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.mModel.SectionList;
+import com.example.windows10.ltd_learning.mRecycler.CustomAdapter;
+import com.example.windows10.ltd_learning.mRecycler.HomeAdapter;
 import com.example.windows10.ltd_learning.mRecycler.Snap;
 import com.example.windows10.ltd_learning.mRecycler.SnapAdapter;
 import com.google.gson.Gson;
@@ -68,6 +71,7 @@ public class HomeFragment extends Fragment {
     private ImageView[] dots;
     private ViewPager vp_image;
     private RecyclerView rv;
+    private RecyclerView rv2;
     private CardView cardView;
     private static CategoryAll[] cat_all;
     private static Course[] course_all;
@@ -80,8 +84,12 @@ public class HomeFragment extends Fragment {
     private static final String URL_getNewCourse = "http://158.108.207.7:8090/elearning/course?new=10";
     private static final String URL_getTopCourse = "http://158.108.207.7:8090/elearning/course?top=10";
     private ElearningAPI elearningAPI;
+    private TextView cat1;
+    private TextView cat2;
     private ImageView loadingImage;
     private RecyclerViewReadyCallback recyclerViewReadyCallback;
+
+    private  boolean b1=false,b2=false;
 
     public interface RecyclerViewReadyCallback {
         void onLayoutReady();
@@ -91,56 +99,14 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_fragment, container, false);
-//        vp_image = (ViewPager) rootView.findViewById(R.id.viewPager_id);
-//        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this.getActivity());
-//        vp_image.setAdapter(viewPagerAdapter);
-
-//        sliderDotpanel = (LinearLayout) rootView.findViewById(R.id.sliderDot);
-//        dotsCount = viewPagerAdapter.getCount();
-//        dots = new ImageView[dotsCount];
         elearningAPI = MyAPI.getAPI();
         loadingImage = rootView.findViewById(R.id.imageView);
-        Glide.with(getContext()).load(R.drawable.loading).into(loadingImage);
+        cat1 = (TextView) rootView.findViewById(R.id.cat1);
+        cat2 = (TextView) rootView.findViewById(R.id.cat2);
+        //Glide.with(getContext()).load(R.drawable.spinner).into(loadingImage);
 
 
-        /*for (int i = 0; i < dotsCount; i++) {
-            dots[i] = new ImageView(this.getActivity());
-            dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            params.setMargins(8, 0, 8, 0);
-            sliderDotpanel.addView(dots[i], params);
-        }*/
-
-//        dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
-
-//        vp_image.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//
-//                for (int i = 0; i < dotsCount; i++) {
-//                    dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.nonactive_dot));
-//                }
-//                dots[position].setImageDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.active_dot));
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
-//
-//
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
 
         sharedPreferences = getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "not found");
@@ -159,12 +125,22 @@ public class HomeFragment extends Fragment {
         getInfoTopCourse();
         getInfoNewCourse();
 
+
         rv = (RecyclerView) rootView.findViewById(R.id.home_RV);
-        rv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        rv.setLayoutManager(new LinearLayoutManager(this.getActivity(),LinearLayoutManager.HORIZONTAL,false));
+
         rv.setNestedScrollingEnabled(false);
+
+        rv2 = (RecyclerView) rootView.findViewById(R.id.home_RV_2);
+        rv2.setLayoutManager(new LinearLayoutManager(this.getActivity(),LinearLayoutManager.HORIZONTAL,false));
+
+
 
         return rootView;
     }
+
+
+
 
     private void getInfoNewCourse() {
 
@@ -176,8 +152,14 @@ public class HomeFragment extends Fragment {
                     try {
                         String result = response.body().string();
                         Gson gson = new Gson();
-                        CourseNew course = gson.fromJson(result, CourseNew.class);
-                        setNewCourse(course);
+                        //CourseNew course = gson.fromJson(result, CourseNew.class);
+                        Course course = gson.fromJson(result,Course.class);
+                        HomeAdapter homeAdapter = new HomeAdapter(getContext(),course.getCourses());
+                        rv2.setAdapter(homeAdapter);
+                        //setNewCourse(course);
+                        cat1.setText(String.format("New courses (%d)",course.getCourses().size()));
+
+                        b1=true;
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -206,8 +188,16 @@ public class HomeFragment extends Fragment {
                     try {
                         String result = response.body().string();
                         Gson gson = new Gson();
-                        CourseTop course = gson.fromJson(result, CourseTop.class);
-                        setTopCourse(course);
+                        //CourseTop course = gson.fromJson(result, CourseTop.class);
+                        Course course = gson.fromJson(result, Course.class);
+                        //setTopCourse(course);
+                        HomeAdapter homeAdapter = new HomeAdapter(getContext(),course.getCourses());
+                        rv.setAdapter(homeAdapter);
+
+
+
+                        cat2.setText(String.format("Top courses (%d)",course.getCourses().size()));
+                        b2=true;
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -252,15 +242,17 @@ public class HomeFragment extends Fragment {
 
     SnapAdapter snapAdapter;
 
-    private void setupAdapterTop() {
+    /*private void setupAdapterTop() {
 
         List<Course> course_tops = getTopCourse();
         List<Course> course_news = getNewCourse();
 
 
         snapAdapter = new SnapAdapter();
-        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "New Courses (" + course_news.size() + ")", course_news));
-        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "Top Courses (" + course_tops.size() + ") ", course_tops));
+//        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "New Courses (" + course_news.size() + ")", course_news));
+//        snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "Top Courses (" + course_tops.size() + ") ", course_tops));
+        //snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "New Courses (" + course_news.size() + ")", courseNew));
+        //snapAdapter.addSnap(new Snap(Gravity.CENTER_HORIZONTAL, "Top Courses (" + course_tops.size() + ") ", courseTop));
 
 
         rv.setAdapter(snapAdapter);
@@ -286,13 +278,13 @@ public class HomeFragment extends Fragment {
 
         });
 
-    }
+    }*/
 
 
     private void setNewCourse(CourseNew course) {
         courseNew = course;
         setURLPictureNewCourse();
-        setupAdapterTop();
+        //setupAdapterTop();
     }
 
     private void setTopCourse(CourseTop course) {
@@ -338,10 +330,6 @@ public class HomeFragment extends Fragment {
             }
         }
 
-//        for(int i =0; i<content_pic.size();i++){
-//            Log.d("JSON","content pic -------> "+content_pic.get(i)+" FROM ID "+idCourse_pic.get(i));
-//        }
-
     }
 
     private List<Course> getNewCourse() {
@@ -349,8 +337,6 @@ public class HomeFragment extends Fragment {
         int j = 0;
         for (int i = 0; i < courseNew.getCourses().size() && j < idCourse_picNew.size(); i++) { //&& j < idCourse_picNew.size()
 
-//            courses.add(new Course.CoursesBean(courseNew.getCourses().get(i).getName(), courseNew.getCourses().get(i).getId()
-//                    ,courseNew.getCourses().get(i).getRating(),"",courseNew.getCourses().get(i).getVoter()));
 
             if (idCourse_picNew.get(j) == courseNew.getCourses().get(i).getId()) {
                 courses.add(new Course.CoursesBean(courseNew.getCourses().get(i).getName(), courseNew.getCourses().get(i).getId()
@@ -373,8 +359,6 @@ public class HomeFragment extends Fragment {
         int j = 0;
         try {
             for (int i = 0; i < courseTop.getCourses().size() && j < idCourse_picTop.size(); i++) {
-//            courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
-//                    ,courseTop.getCourses().get(i).getRating(),"",courseTop.getCourses().get(i).getVoter()));
                 if (idCourse_picTop.get(j) == courseTop.getCourses().get(i).getId()) {
                     courses.add(new Course.CoursesBean(courseTop.getCourses().get(i).getName(), courseTop.getCourses().get(i).getId()
                             , courseTop.getCourses().get(i).getRating(), content_picTop.get(j), courseTop.getCourses().get(i).getVoter()

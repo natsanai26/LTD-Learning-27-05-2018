@@ -68,13 +68,7 @@ public class Profile
         this.type = type;
     }
 
-    public String getProfile() {
-        return profile;
-    }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
 
     public String getPhotoUrl() {
         return photoUrl;
@@ -91,7 +85,7 @@ public class Profile
     private String passwd;
     private String email;
     private String type;
-    private String profile;
+
     private String photoUrl;
 
 

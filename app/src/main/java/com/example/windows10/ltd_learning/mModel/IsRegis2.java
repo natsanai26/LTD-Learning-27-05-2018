@@ -11,38 +11,29 @@ import java.util.List;
 public class IsRegis2 {
     /**
      * response : {"status":true,"message":"registered"}
-     * rating : 3.5
-     * course : {"id":25,"categoryId":19,"name":"Engineering Material","detail":"covalent and metallic bond, crystal systems","sectionList":[{"id":28,"courseId":25,"name":"Untitled","parentSectionId":null,"content":"test_01","contentType":"TEXT","rank":1,"sub-section":[{"id":29,"courseId":25,"name":"Untitled","parentSectionId":28,"content":"New test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"name":"Untitled","parentSectionId":29,"content":"High","contentType":"TEXT","rank":1,"sub-section":[]}]},{"id":30,"courseId":25,"name":"Untitled","parentSectionId":28,"content":"Pxifbc_Wgz8MSQH0xbyaIg","contentType":"VIDEO","rank":1,"sub-section":[]}]}],"createdDate":1501779600000,"teacher":{"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null},"rating":3.16667,"enabled":true,"viewable":true}
+     * course : {"id":510,"categoryId":37,"name":"English2","detail":"<span style='color: rgb(255, 0, 0); font-family: thaisans_neueregular, Helvetica, sans-serif; font-size: 17px; letter-spacing: 0.36px; background-color: rgb(255, 255, 0);'>????????????????????????? ?????????????????????? 10,000 ?? ?????? 7+8 ?????? 750 ??? <\/span>","sectionList":[{"id":536,"courseId":510,"name":"Untitled","parentSectionId":null,"content":"sgYXbBmfqWDZ4oRPo36_Ww","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":537,"courseId":510,"name":"Section","parentSectionId":null,"content":null,"contentType":"VIDEO","rank":1,"sub-section":[{"id":560,"courseId":510,"name":"Lesson1 ","parentSectionId":537,"content":"y4jLllb-3z90-OATJ8QI6w","contentType":"VIDEO","rank":1,"sub-section":[]}]}],"createdDate":1524548102000,"teacher":{"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":null},"rating":0,"voter":0,"enabled":true,"viewable":false,"progress":{"idprogress":122,"percent":100,"sectionId":560}}
      * isRegis : true
+     * userRating : null
      */
 
-    private Response response;
-    @SerializedName("userRating")
-    private double rating;
-    private Course course;
+    private ResponseBean response;
+    private CourseBean course;
     private boolean isRegis;
+    private Object userRating;
 
-    public Response getResponse() {
+    public ResponseBean getResponse() {
         return response;
     }
 
-    public void setResponse(Response response) {
+    public void setResponse(ResponseBean response) {
         this.response = response;
     }
 
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public Course getCourse() {
+    public CourseBean getCourse() {
         return course;
     }
 
-    public void setCourse(Course course) {
+    public void setCourse(CourseBean course) {
         this.course = course;
     }
 
@@ -54,7 +45,15 @@ public class IsRegis2 {
         this.isRegis = isRegis;
     }
 
-    public static class Response {
+    public Object getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(Object userRating) {
+        this.userRating = userRating;
+    }
+
+    public static class ResponseBean {
         /**
          * status : true
          * message : registered
@@ -80,18 +79,20 @@ public class IsRegis2 {
         }
     }
 
-    public static class Course {
+    public static class CourseBean {
         /**
-         * id : 25
-         * categoryId : 19
-         * name : Engineering Material
-         * detail : covalent and metallic bond, crystal systems
-         * sectionList : [{"id":28,"courseId":25,"name":"Untitled","parentSectionId":null,"content":"test_01","contentType":"TEXT","rank":1,"sub-section":[{"id":29,"courseId":25,"name":"Untitled","parentSectionId":28,"content":"New test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"name":"Untitled","parentSectionId":29,"content":"High","contentType":"TEXT","rank":1,"sub-section":[]}]},{"id":30,"courseId":25,"name":"Untitled","parentSectionId":28,"content":"Pxifbc_Wgz8MSQH0xbyaIg","contentType":"VIDEO","rank":1,"sub-section":[]}]}]
-         * createdDate : 1501779600000
-         * teacher : {"idmember":137,"name":"Sumit","surname":"Mejan","username":"q3","passwd":"$2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6","email":"q3@gmail.com","socialId":null,"socialType":null,"photoUrl":"https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg","type":"teacher","profile":null}
-         * rating : 3.16667
+         * id : 510
+         * categoryId : 37
+         * name : English2
+         * detail : <span style='color: rgb(255, 0, 0); font-family: thaisans_neueregular, Helvetica, sans-serif; font-size: 17px; letter-spacing: 0.36px; background-color: rgb(255, 255, 0);'>????????????????????????? ?????????????????????? 10,000 ?? ?????? 7+8 ?????? 750 ??? </span>
+         * sectionList : [{"id":536,"courseId":510,"name":"Untitled","parentSectionId":null,"content":"sgYXbBmfqWDZ4oRPo36_Ww","contentType":"PICTURE","rank":0,"sub-section":[]},{"id":537,"courseId":510,"name":"Section","parentSectionId":null,"content":null,"contentType":"VIDEO","rank":1,"sub-section":[{"id":560,"courseId":510,"name":"Lesson1 ","parentSectionId":537,"content":"y4jLllb-3z90-OATJ8QI6w","contentType":"VIDEO","rank":1,"sub-section":[]}]}]
+         * createdDate : 1524548102000
+         * teacher : {"idmember":136,"name":"Somsak","surname":"Chaipranee","username":"q2","passwd":"$2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi","email":"q2@gmail.com","socialId":null,"socialType":null,"photoUrl":null,"type":"teacher","profile":null}
+         * rating : 0
+         * voter : 0
          * enabled : true
-         * viewable : true
+         * viewable : false
+         * progress : {"idprogress":122,"percent":100,"sectionId":560}
          */
 
         private int id;
@@ -99,10 +100,12 @@ public class IsRegis2 {
         private String name;
         private String detail;
         private long createdDate;
-        private Teacher teacher;
+        private TeacherBean teacher;
         private double rating;
+        private int voter;
         private boolean enabled;
         private boolean viewable;
+        private ProgressBean progress;
         private List<SectionListBean> sectionList;
 
         public int getId() {
@@ -145,11 +148,11 @@ public class IsRegis2 {
             this.createdDate = createdDate;
         }
 
-        public Teacher getTeacher() {
+        public TeacherBean getTeacher() {
             return teacher;
         }
 
-        public void setTeacher(Teacher teacher) {
+        public void setTeacher(TeacherBean teacher) {
             this.teacher = teacher;
         }
 
@@ -159,6 +162,14 @@ public class IsRegis2 {
 
         public void setRating(double rating) {
             this.rating = rating;
+        }
+
+        public int getVoter() {
+            return voter;
+        }
+
+        public void setVoter(int voter) {
+            this.voter = voter;
         }
 
         public boolean isEnabled() {
@@ -177,6 +188,14 @@ public class IsRegis2 {
             this.viewable = viewable;
         }
 
+        public ProgressBean getProgress() {
+            return progress;
+        }
+
+        public void setProgress(ProgressBean progress) {
+            this.progress = progress;
+        }
+
         public List<SectionListBean> getSectionList() {
             return sectionList;
         }
@@ -185,28 +204,26 @@ public class IsRegis2 {
             this.sectionList = sectionList;
         }
 
-        public static class Teacher {
+        public static class TeacherBean {
             /**
-             * idmember : 137
-             * name : Sumit
-             * surname : Mejan
-             * username : q3
-             * passwd : $2a$10$b4ymHRHAGk2cspPrSJWBfOrwFIdoipQ64/SOmyyZsPBSE2cOwEBI6
-             * email : q3@gmail.com
+             * idmember : 136
+             * name : Somsak
+             * surname : Chaipranee
+             * username : q2
+             * passwd : $2a$10$0JMHkyjZe2O8ZAbSbbw/z..U2EdEn.LK.Y3qq5RSOjGb8w4GnYwMi
+             * email : q2@gmail.com
              * socialId : null
              * socialType : null
-             * photoUrl : https://lh6.googleusercontent.com/-Jn90tvQ4880/AAAAAAAAAAI/AAAAAAAAAGs/ho8LQp6y7T4/photo.jpg
+             * photoUrl : null
              * type : teacher
              * profile : null
              */
 
-            @SerializedName("idmember")
-            private int memberId;
+            private int idmember;
             private String name;
             private String surname;
             private String username;
-            @SerializedName("passwd")
-            private String password;
+            private String passwd;
             private String email;
             private Object socialId;
             private Object socialType;
@@ -214,12 +231,12 @@ public class IsRegis2 {
             private String type;
             private Object profile;
 
-            public int getMemberId() {
-                return memberId;
+            public int getIdmember() {
+                return idmember;
             }
 
-            public void setMemberId(int memberId) {
-                this.memberId = memberId;
+            public void setIdmember(int idmember) {
+                this.idmember = idmember;
             }
 
             public String getName() {
@@ -246,12 +263,12 @@ public class IsRegis2 {
                 this.username = username;
             }
 
-            public String getPassword() {
-                return password;
+            public String getPasswd() {
+                return passwd;
             }
 
-            public void setPassword(String password) {
-                this.password = password;
+            public void setPasswd(String passwd) {
+                this.passwd = passwd;
             }
 
             public String getEmail() {
@@ -303,16 +320,52 @@ public class IsRegis2 {
             }
         }
 
+        public static class ProgressBean {
+            /**
+             * idprogress : 122
+             * percent : 100
+             * sectionId : 560
+             */
+
+            private int idprogress;
+            private int percent;
+            private int sectionId;
+
+            public int getIdprogress() {
+                return idprogress;
+            }
+
+            public void setIdprogress(int idprogress) {
+                this.idprogress = idprogress;
+            }
+
+            public int getPercent() {
+                return percent;
+            }
+
+            public void setPercent(int percent) {
+                this.percent = percent;
+            }
+
+            public int getSectionId() {
+                return sectionId;
+            }
+
+            public void setSectionId(int sectionId) {
+                this.sectionId = sectionId;
+            }
+        }
+
         public static class SectionListBean {
             /**
-             * id : 28
-             * courseId : 25
+             * id : 536
+             * courseId : 510
              * name : Untitled
              * parentSectionId : null
-             * content : test_01
-             * contentType : TEXT
-             * rank : 1
-             * sub-section : [{"id":29,"courseId":25,"name":"Untitled","parentSectionId":28,"content":"New test_02","contentType":"TEXT","rank":1,"sub-section":[{"id":36,"courseId":25,"name":"Untitled","parentSectionId":29,"content":"High","contentType":"TEXT","rank":1,"sub-section":[]}]},{"id":30,"courseId":25,"name":"Untitled","parentSectionId":28,"content":"Pxifbc_Wgz8MSQH0xbyaIg","contentType":"VIDEO","rank":1,"sub-section":[]}]
+             * content : sgYXbBmfqWDZ4oRPo36_Ww
+             * contentType : PICTURE
+             * rank : 0
+             * sub-section : []
              */
 
             private int id;
@@ -323,7 +376,7 @@ public class IsRegis2 {
             private String contentType;
             private int rank;
             @SerializedName("sub-section")
-            private List<SubsectionBeanX> subsection;
+            private List<?> subsection;
 
             public int getId() {
                 return id;
@@ -381,186 +434,12 @@ public class IsRegis2 {
                 this.rank = rank;
             }
 
-            public List<SubsectionBeanX> getSubsection() {
+            public List<?> getSubsection() {
                 return subsection;
             }
 
-            public void setSubsection(List<SubsectionBeanX> subsection) {
+            public void setSubsection(List<?> subsection) {
                 this.subsection = subsection;
-            }
-
-            public static class SubsectionBeanX {
-                /**
-                 * id : 29
-                 * courseId : 25
-                 * name : Untitled
-                 * parentSectionId : 28
-                 * content : New test_02
-                 * contentType : TEXT
-                 * rank : 1
-                 * sub-section : [{"id":36,"courseId":25,"name":"Untitled","parentSectionId":29,"content":"High","contentType":"TEXT","rank":1,"sub-section":[]}]
-                 */
-
-                private int id;
-                private int courseId;
-                private String name;
-                private int parentSectionId;
-                private String content;
-                private String contentType;
-                private int rank;
-                @SerializedName("sub-section")
-                private List<SubsectionBean> subsection;
-
-                public int getId() {
-                    return id;
-                }
-
-                public void setId(int id) {
-                    this.id = id;
-                }
-
-                public int getCourseId() {
-                    return courseId;
-                }
-
-                public void setCourseId(int courseId) {
-                    this.courseId = courseId;
-                }
-
-                public String getName() {
-                    return name;
-                }
-
-                public void setName(String name) {
-                    this.name = name;
-                }
-
-                public int getParentSectionId() {
-                    return parentSectionId;
-                }
-
-                public void setParentSectionId(int parentSectionId) {
-                    this.parentSectionId = parentSectionId;
-                }
-
-                public String getContent() {
-                    return content;
-                }
-
-                public void setContent(String content) {
-                    this.content = content;
-                }
-
-                public String getContentType() {
-                    return contentType;
-                }
-
-                public void setContentType(String contentType) {
-                    this.contentType = contentType;
-                }
-
-                public int getRank() {
-                    return rank;
-                }
-
-                public void setRank(int rank) {
-                    this.rank = rank;
-                }
-
-                public List<SubsectionBean> getSubsection() {
-                    return subsection;
-                }
-
-                public void setSubsection(List<SubsectionBean> subsection) {
-                    this.subsection = subsection;
-                }
-
-                public static class SubsectionBean {
-                    /**
-                     * id : 36
-                     * courseId : 25
-                     * name : Untitled
-                     * parentSectionId : 29
-                     * content : High
-                     * contentType : TEXT
-                     * rank : 1
-                     * sub-section : []
-                     */
-
-                    private int id;
-                    private int courseId;
-                    private String name;
-                    private int parentSectionId;
-                    private String content;
-                    private String contentType;
-                    private int rank;
-                    @SerializedName("sub-section")
-                    private List<?> subsection;
-
-                    public int getId() {
-                        return id;
-                    }
-
-                    public void setId(int id) {
-                        this.id = id;
-                    }
-
-                    public int getCourseId() {
-                        return courseId;
-                    }
-
-                    public void setCourseId(int courseId) {
-                        this.courseId = courseId;
-                    }
-
-                    public String getName() {
-                        return name;
-                    }
-
-                    public void setName(String name) {
-                        this.name = name;
-                    }
-
-                    public int getParentSectionId() {
-                        return parentSectionId;
-                    }
-
-                    public void setParentSectionId(int parentSectionId) {
-                        this.parentSectionId = parentSectionId;
-                    }
-
-                    public String getContent() {
-                        return content;
-                    }
-
-                    public void setContent(String content) {
-                        this.content = content;
-                    }
-
-                    public String getContentType() {
-                        return contentType;
-                    }
-
-                    public void setContentType(String contentType) {
-                        this.contentType = contentType;
-                    }
-
-                    public int getRank() {
-                        return rank;
-                    }
-
-                    public void setRank(int rank) {
-                        this.rank = rank;
-                    }
-
-                    public List<?> getSubsection() {
-                        return subsection;
-                    }
-
-                    public void setSubsection(List<?> subsection) {
-                        this.subsection = subsection;
-                    }
-                }
             }
         }
     }

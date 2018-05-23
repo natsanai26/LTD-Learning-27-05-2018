@@ -84,6 +84,11 @@ public interface ElearningAPI {
             @Query("name") String name
     );
 
+    @GET("/elearning/course")
+    Call<ResponseBody> getAllCourses(
+
+    );
+
     @GET("/elearning/dialogue")
     Call<ResponseBody> getCommentByCourseId(
             @Query("courseId") int courseId

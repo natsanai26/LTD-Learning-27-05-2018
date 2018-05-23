@@ -21,6 +21,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.example.windows10.ltd_learning.MyAPI;
 import com.example.windows10.ltd_learning.mActivity.CourseDetail;
 import com.example.windows10.ltd_learning.MySingleton;
 import com.example.windows10.ltd_learning.R;
@@ -67,8 +69,8 @@ public class CustomMyCourse extends RecyclerView.Adapter<CustomAdapter.MyViewHol
             }
 
             private void getImageCourse(String response, CustomAdapter.MyViewHolder holder) {
-                String url = "http://158.108.207.7:8080/";
-                Picasso.with(mContext).load(url + response).fit().centerCrop().into(holder.imageView);
+
+                Glide.with(mContext).load(MyAPI.BASE_URL_COURSE_API + response).placeholder(R.drawable.loading4).error(R.drawable.maxresdefault).fitCenter().into(holder.imageView);
             }
         },
                 new Response.ErrorListener() {
@@ -92,7 +94,10 @@ public class CustomMyCourse extends RecyclerView.Adapter<CustomAdapter.MyViewHol
         holder.courseName.setText(mData.get(position).getName());
         holder.ratingBar.setRating((float) mData.get(position).getRating());
         holder.teacherName.setText(mData.get(position).getTeacher().getName() + " " + mData.get(position).getTeacher().getSurname());
-        holder.numberText.setText(mData.get(position).getRating() + " from " + (int)mData.get(position).getVoter() + " vote");
+        if((int)mData.get(position).getVoter() <=1)
+            holder.numberText.setText(mData.get(position).getRating() + " from " + (int)mData.get(position).getVoter() + " vote");
+        else
+            holder.numberText.setText(mData.get(position).getRating() + " from " + (int)mData.get(position).getVoter() + " votes");
         Log.d("PercentJ","Hello Percent ");
         if(mData.get(position).getProgress()!= null){
             String MyPREFERENCES = "MyPrefs";

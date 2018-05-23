@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
     private Button registerButton;
     private TextView loginResult;
     //logon
-    private TextView pProfile;
+
     private TextView pUsername;
     private TextView pName;
     private TextView pSurname;
@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     //mCallback.someEvent(new RegisterFragment());
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_id,new RegisterFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_id,new RegisterFragment()).addToBackStack(null).commit();
                 }
             });
             loginButton.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +122,7 @@ public class ProfileFragment extends Fragment {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("checkLogin",true);
                         editor.putInt("idMember",profile.getIdmember());
-                        editor.putString("pProfile",profile.getProfile());
+
                         editor.putString("pUsername",profile.getUsername());
                         editor.putString("pName",profile.getName());
                         editor.putString("pSurname",profile.getSurname());
@@ -173,22 +173,25 @@ public class ProfileFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     String txt = String.format("{\n" +
-                                    "        \"idmember\":%d,\n" +
-                                    "        \"name\": \"%s\",\n" +
-                                    "        \"surname\": \"%s\",\n" +
-                                    "        \"email\": \"%s\",\n" +
-                                    "        \"profile\": \"%s\"\n" +
+                                    "\"idmember\": %d,\n" +
+                                    "\"name\": \"%s\",\n" +
+                                    "\"surname\": \"%s\",\n" +
+                                    "\"email\": \"%s\"\n" +
                                     "}",
                             idMember,
                             pName.getText().toString(),
                             pSurname.getText().toString(),
-                            pEmail.getText().toString(),
-                            pProfile.getText().toString());
+                            pEmail.getText().toString());
+
                     Gson gson = new Gson();
-                    Profile p = gson.fromJson(sendPut(txt,URL_UPDATE_MEMBER),Profile.class);
+                    String jsonString = sendPut(txt,URL_UPDATE_MEMBER);
+                    Toast.makeText(getContext(),"Update success!!",Toast.LENGTH_SHORT).show();
+                    Log.d("jjpp","+++"+jsonString);
+                    Profile p = gson.fromJson(jsonString,Profile.class);
+                    Log.d("ppp","+++++"+p);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                    editor.putString("pProfile",p.getProfile());
+
                     editor.putString("pName",p.getName());
                     editor.putString("pSurname",p.getSurname());
                     editor.putString("pEmail",p.getEmail());

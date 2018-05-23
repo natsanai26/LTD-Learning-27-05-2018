@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.windows10.ltd_learning.mInterface.ElearningAPI;
 import com.example.windows10.ltd_learning.MyAPI;
@@ -35,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.logging.StreamHandler;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -47,6 +49,7 @@ import retrofit2.Response;
  */
 
 public class RpliedCommentActivity extends AppCompatActivity {
+    private  boolean checkEnroll;
     private Toolbar toolbar;
     private SharedPreferences sharedPreferences;
     private static final String MyPREFERENCES = "MyPrefs" ;
@@ -65,6 +68,7 @@ public class RpliedCommentActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         id_course = sharedPreferences.getInt("id_course_comment",-1);
         id_member = sharedPreferences.getInt("id_comment",-1);
+        checkEnroll = sharedPreferences.getBoolean("checkEnroll",false);
         Log.d("RPP","--->"+id_course);
         Intent intent = getIntent();
         id_dialougue = intent.getIntExtra("id_parent",-1);
@@ -72,10 +76,25 @@ public class RpliedCommentActivity extends AppCompatActivity {
         username.setText(intent.getStringExtra("username_parent"));
         date.setText(intent.getStringExtra("string_date"));
         getCommentById(id_dialougue);
+        if (!checkEnroll) {
+            edit_comment.setEnabled(false);
+
+        }else {
+            edit_comment.setEnabled(true);
+        }
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddComment(id_member,id_course,id_dialougue,"\""+edit_comment.getText().toString()+"\"");
+                if (checkEnroll){
+                    if (!(edit_comment.getText().toString().trim().equals(""))){
+                        AddComment(id_member,id_course,id_dialougue,"\""+edit_comment.getText().toString()+"\"");
+                    }else {
+                            Toast.makeText(RpliedCommentActivity.this,"Text is Empty.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(RpliedCommentActivity.this,"Please enroll this course.",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

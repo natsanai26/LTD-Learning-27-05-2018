@@ -27,7 +27,7 @@
                 android:layout_height="100dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
-                android:src="@drawable/maxresdefault" />
+                android:src="@drawable/loading4" />
         </LinearLayout>
 
         <LinearLayout

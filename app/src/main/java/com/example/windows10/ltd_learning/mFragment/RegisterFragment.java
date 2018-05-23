@@ -49,6 +49,7 @@ public class RegisterFragment extends Fragment
     private EditText email;
     private TextView txtWarning ;
     private Button registerButton;
+    private Button cancelButton;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class RegisterFragment extends Fragment
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("checkLogin",true);
                 editor.putInt("idMember",profile_.getIdmember());
-                editor.putString("pProfile",profile_.getProfile());
+
                 editor.putString("pUsername",profile_.getUsername());
                 editor.putString("pName",profile_.getName());
                 editor.putString("pSurname",profile_.getSurname());
@@ -94,6 +95,13 @@ public class RegisterFragment extends Fragment
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 //Toast.makeText(RegisterFragment.this.getContext(),json,Toast.LENGTH_LONG);
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
             }
         });
 
@@ -110,6 +118,7 @@ public class RegisterFragment extends Fragment
         email = (EditText)view. findViewById(R.id.memail);
         txtWarning = (TextView)view. findViewById(R.id.txtWarning);
         registerButton = (Button)view.findViewById(R.id.registerButton);
+        cancelButton = view.findViewById(R.id.cancelButton);
     }
 
     public static String POST(String url, String name,String surname,String username,String password,String profile,String email){

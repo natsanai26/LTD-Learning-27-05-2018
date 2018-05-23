@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.windows10.ltd_learning.mInterface.ElearningAPI;
 import com.example.windows10.ltd_learning.MyAPI;
@@ -47,6 +48,7 @@ import retrofit2.Callback;
  */
 
 public class CommentActivity extends AppCompatActivity {
+    private boolean checkEnroll;
     private CommentAdapter commentAdapter;
     private String URL_GET_Comment_idCourse = "http://158.108.207.7:8090/elearning/dialogue?courseId=";
     private RecyclerView rv_comment;
@@ -63,15 +65,34 @@ public class CommentActivity extends AppCompatActivity {
         init();
         sharedPreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
         Intent intent = getIntent();
         id_course = intent.getIntExtra("course_id",1);
         id_member = intent.getIntExtra("member_id",1);
+        checkEnroll = intent.getBooleanExtra("checkEnroll",false);
+        Log.d("JSON#",""+"Check Enroll "+checkEnroll);
         Log.d("JSON#",""+id_course);
         getComment(URL_GET_Comment_idCourse+String.valueOf(id_course));
+        if (!checkEnroll) {
+            edit_add.setEnabled(false);
+        }else {
+            edit_add.setEnabled(true);
+        }
+
         add.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                AddComment(id_member,id_course,"\""+edit_add.getText().toString()+"\"");
+                if (checkEnroll){
+                    if (!(edit_add.getText().toString().trim().equals(""))){
+                        AddComment(id_member,id_course,"\""+edit_add.getText().toString()+"\"");
+                    }else {
+                        Toast.makeText(CommentActivity.this,"Text is Empty.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(CommentActivity.this,"Please enroll this course.",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

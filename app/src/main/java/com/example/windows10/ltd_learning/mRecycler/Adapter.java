@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.example.windows10.ltd_learning.mModel.Course;
 import com.example.windows10.ltd_learning.mActivity.CourseDetail;
 import com.example.windows10.ltd_learning.mActivity.CourseDetailForMyCourse;
@@ -71,7 +72,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
             private void getImageCourse(String response, ViewHolder holder) {
                 String url = "http://158.108.207.7:8080/";
-                Picasso.with(mContext).load(url+response).resize(640,360).into(holder.imageView);
+                Glide.with(mContext).load(url+response).fitCenter().into(holder.imageView);
             }
         },
                 new Response.ErrorListener() {

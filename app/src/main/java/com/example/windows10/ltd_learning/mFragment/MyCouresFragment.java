@@ -23,7 +23,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.example.windows10.ltd_learning.MyAPI;
 import com.example.windows10.ltd_learning.R;
+import com.example.windows10.ltd_learning.mInterface.ElearningAPI;
 import com.example.windows10.ltd_learning.mRecycler.CustomMyCourse;
 import com.example.windows10.ltd_learning.mModel.MyCourse;
 import com.google.gson.Gson;
@@ -39,6 +41,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Windows10 on 10/11/2017.
@@ -65,13 +72,15 @@ public class MyCouresFragment extends Fragment {
     public interface RecyclerViewReadyCallback {
         void onLayoutReady();
     }
+
+    private ElearningAPI elearningAPI;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mycourse_frag_rv,container,false);
-
+        elearningAPI = MyAPI.getAPI();
         loadingImage =  rootView.findViewById(R.id.imageView);
-
+        recyclerView = rootView.findViewById(R.id.rv_mycourse);
         Glide.with(getContext()).load(R.drawable.loading).into(loadingImage);
 
         Intent intent  = getActivity().getIntent();
@@ -89,7 +98,7 @@ public class MyCouresFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getMyCourse(URL_getMyCourse+String.valueOf(USER_ID));
+                getMyCourse();
             }
         });
         return rootView;
@@ -97,13 +106,13 @@ public class MyCouresFragment extends Fragment {
 
     @Override
     public void onResume() {
-        getMyCourse(URL_getMyCourse+String.valueOf(USER_ID));
+        getMyCourse();
         super.onResume();
     }
 
-    public void getMyCourse(String url)
+    public void getMyCourse()
     {
-        new AsyncTask<String, Void, String>() {
+        /*new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... url) {
                 String result = "";
@@ -142,7 +151,75 @@ public class MyCouresFragment extends Fragment {
             }
 
 
-        }.execute(url);
+        }.execute(url);*/
+        Call<ResponseBody> responseBody = elearningAPI.getCourseByStudentId(USER_ID);
+        responseBody.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> rawResponse) {
+                try {
+                    String jsonString = rawResponse.body().string();
+                    Log.d("js","+++"+jsonString);
+                    if (!jsonString.equals(""))
+                    {
+                        Gson gson = new Gson();
+                        MyCourse data = gson.fromJson(jsonString,MyCourse.class);
+                        MyCourse.ResponseBean response = data.getResponse();
+
+                        if (response.isStatus())
+                        {
+                            List<MyCourse.CoursesBean> courses = data.getCourses();
+//                List<MyCourse.CoursesBean> courses = getMyCourseFull();
+
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            recyclerView.setAdapter(new CustomMyCourse(getContext(), courses));
+                            recyclerView.setHasFixedSize(true);
+                            recyclerView.setVisibility(View.INVISIBLE);
+                            recyclerViewReadyCallback = new HomeFragment.RecyclerViewReadyCallback() {
+                                @Override
+                                public void onLayoutReady() {
+                                    //
+                                    //here comes your code that will be executed after all items are laid down
+                                    //
+                                    loadingImage.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
+                                }
+                            };
+                            recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    if (recyclerViewReadyCallback != null) {
+                                        recyclerViewReadyCallback.onLayoutReady();
+                                    }
+                                    recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                }
+
+                            });
+
+                        }
+                        else
+                        {
+                            RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_mycourse);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                            recyclerView.setAdapter(null);
+                        }
+                    }
+                    else
+                    {
+                        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_mycourse);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        recyclerView.setAdapter(null);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
     public void showData(String jsonString)

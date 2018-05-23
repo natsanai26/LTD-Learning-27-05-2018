@@ -46,6 +46,8 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBar ab;
     private ActionBarDrawerToggle mDrawerToggle;
     private static final  String URL_getAllCat = "http://158.108.207.7:8090/elearning/category";
-    private static CategoryAll[] cat_all;
+    private static ArrayList<CategoryAll> cat_all;
     private List<String> category_name;
     private ArrayAdapter adapter_array;
     private String[] mDrawerTitle = {"Cover", "Guitar", "Bass", "Drum"};
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String URL = "http://158.108.207.7:8090/elearning/course";
     private MaterialSearchView searchView;
     private ListView mListView;
-    public  AHBottomNavigation bottomNavigationItem;
+    public static AHBottomNavigation bottomNavigationItem;
     private int user_id;
     private static String[] course_new;
     private RecyclerView mRecyclerView;
@@ -106,15 +108,15 @@ public class MainActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (cat_all[i].getCourseList()!=null) {
+                if (cat_all.get(i).getCourseList()!=null) {
                     DetailCatFragment fragment = new DetailCatFragment();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("id_category", cat_all[i].getId());
+                    editor.putInt("id_category", cat_all.get(i).getId());
                     editor.commit();
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.content_id, fragment).addToBackStack(null).commit();
-                    toolbar.setTitle(cat_all[i].getCategoryName());
-                    Log.d("JSON", "## From item click " + cat_all[i].getId() + "..." + i);
+                    toolbar.setTitle(cat_all.get(i).getCategoryName());
+                    Log.d("JSON", "## From item click " + cat_all.get(i).getId() + "..." + i);
                     myDrawer.closeDrawers();
                 }
             }
@@ -251,11 +253,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 try {
                     String jsonString = response.body().string();
-                    java.lang.reflect.Type collectionType = new TypeToken<Collection<CategoryAll>>() {}.getType();
-                    Collection<CategoryAll> enums = gson.fromJson(jsonString,collectionType);
-                    CategoryAll[] categoryAllsResult = enums.toArray(new CategoryAll[enums.size()]);
+                    java.lang.reflect.Type collectionType = new TypeToken<ArrayList<CategoryAll>>() {}.getType();
+                   /* Collection<CategoryAll> enums = gson.fromJson(jsonString,collectionType);
+                    CategoryAll[] categoryAllsResult = enums.toArray(new CategoryAll[enums.size()]);*/
+                   ArrayList<CategoryAll> categoryAlls = gson.fromJson(jsonString,collectionType);
 
-                    setAllCat(categoryAllsResult);
+                    setAllCat(categoryAlls);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -270,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    private void setAllCat(CategoryAll[] cats){
+    private void setAllCat(ArrayList<CategoryAll> cats){
 
         cat_all = cats;
         addCategory();
@@ -278,13 +281,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void addCategory(){
         category_name = new ArrayList<String>();
+
+       Collections.sort(cat_all, new Comparator<CategoryAll>() {
+           @Override
+           public int compare(CategoryAll o1, CategoryAll o2) {
+               return o1.getCategoryName().compareTo(o2.getCategoryName());
+           }
+       });
+
 //        Log.d("JSON","Data Cat ALL"+cat_all[0].getCategoryName()+" "+cat_all[1].getId()+" "+cat_all[0].getCourseList().size());
         if(cat_all != null){
-            for (int i = 0; i < cat_all.length; i++) {
-                if(cat_all[i].getCourseList() != null)
-                    category_name.add(cat_all[i].getCategoryName()+" ("+cat_all[i].getCourseList().size()+")");
+            for (int i = 0; i < cat_all.size(); i++) {
+                if(cat_all.get(i).getCourseList() != null)
+                    category_name.add(cat_all.get(i).getCategoryName()+" ("+cat_all.get(i).getCourseList().size()+")");
                 else
-                    category_name.add(cat_all[i].getCategoryName()+" (0)");
+                    category_name.add(cat_all.get(i).getCategoryName()+" (0)");
             }
         }else {
             category_name.add("Test my CAT 1");
