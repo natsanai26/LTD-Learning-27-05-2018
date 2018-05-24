@@ -66,11 +66,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
 //        Log.d("JSON","Check Percent "+mData.get(position).getProgress().getSectionId());
         if (mData.get(position).getTeacher().getPhotoUrl()!=null){
             if (mData.get(position).getTeacher().getPhotoUrl().contains("https://")){
-                Picasso.with(mContext).load(mData.get(position).getTeacher().getPhotoUrl()).into(holder.image_teacher);
+                Picasso.with(mContext).load(mData.get(position).getTeacher().getPhotoUrl()).fit().centerCrop().into(holder.image_teacher);
             }
         else {
                 Log.d("Image","check "+mData.get(position).getTeacher().getPhotoUrl());
-                Picasso.with(mContext).load(MyAPI.BASE_URL_ELEARNNING+"elearning/"+mData.get(position).getTeacher().getPhotoUrl()).into(holder.image_teacher);
+                Picasso.with(mContext).load(MyAPI.BASE_URL_ELEARNNING+"elearning/"+mData.get(position).getTeacher().getPhotoUrl()).fit().centerCrop().into(holder.image_teacher);
             }
         }
         String content_get_pic = null;
@@ -125,7 +125,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
 
             private void getImageCourse(String response, HomeAdapter.ViewHolder holder) {
                 String url = "http://158.108.207.7:8080/";
-                Picasso.with(mContext).load(url+response).placeholder(R.drawable.loading4).error(R.drawable.maxresdefault).into(holder.imageView);
+                Glide.with(mContext).load(url+response).placeholder(R.drawable.loading4).error(R.drawable.maxresdefault).override(640,360).centerCrop().into(holder.imageView);
             }
         },
                 new Response.ErrorListener() {

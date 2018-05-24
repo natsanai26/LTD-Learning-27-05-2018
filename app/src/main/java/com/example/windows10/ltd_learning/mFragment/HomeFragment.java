@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -86,6 +87,7 @@ public class HomeFragment extends Fragment {
     private TextView cat2;
     private ImageView loadingImage;
     private RecyclerViewReadyCallback recyclerViewReadyCallback;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private  boolean b1=false,b2=false;
 
@@ -103,7 +105,16 @@ public class HomeFragment extends Fragment {
         cat2 = (TextView) rootView.findViewById(R.id.cat2);
         //Glide.with(getContext()).load(R.drawable.spinner).into(loadingImage);
 
+        swipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getInfoNewCourse();
+                getInfoTopCourse();
+                swipeRefreshLayout.setRefreshing(false);
 
+            }
+        });
 
 
         sharedPreferences = getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
@@ -120,9 +131,9 @@ public class HomeFragment extends Fragment {
 
         }
 //        getInfomation();
-        getInfoTopCourse();
-        getInfoNewCourse();
 
+        getInfoNewCourse();
+        getInfoTopCourse();
 
         rv = (RecyclerView) rootView.findViewById(R.id.home_RV);
         rv.setLayoutManager(new LinearLayoutManager(this.getActivity(),LinearLayoutManager.HORIZONTAL,false));

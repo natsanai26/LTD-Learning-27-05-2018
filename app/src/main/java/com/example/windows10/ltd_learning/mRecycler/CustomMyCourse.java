@@ -50,7 +50,6 @@ public class CustomMyCourse extends RecyclerView.Adapter<CustomAdapter.MyViewHol
     public CustomMyCourse(Context context, List<MyCourse.CoursesBean> data) {
         mContext = context;
         mData = data;
-
     }
 
     @Override

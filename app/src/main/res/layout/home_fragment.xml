@@ -1,86 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/swipe_refresh_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/default_layout">
 
-
-
-
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:orientation="vertical">
 
 
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-
-
-            <LinearLayout
-                android:id="@+id/sliderDot"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/viewPager_id"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="horizontal">
-
-            </LinearLayout>
-
-<LinearLayout
-    android:id="@+id/rv"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/cat1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="25dp"
-        android:text=""
-        android:textColor="#000000"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/home_RV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </android.support.v7.widget.RecyclerView>
-    <TextView
-        android:id="@+id/cat2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:textSize="25dp"
-        android:text=""
-        android:textColor="#000000"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/home_RV_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+            android:gravity="center"
+            android:orientation="vertical">
 
 
             <RelativeLayout
-                android:id="@+id/viewPager_id"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_below="@+id/rv">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/cat1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="25dp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/home_RV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+
+                    <TextView
+                        android:id="@+id/cat2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="25dp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/home_RV_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/viewPager_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/rv">
+
+                </RelativeLayout>
 
             </RelativeLayout>
 
-        </RelativeLayout>
-    </LinearLayout>
+        </LinearLayout>
 
-</ScrollView>
+
+    </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>
 
 
