@@ -43,7 +43,7 @@ public interface ElearningAPI {
 
     );
 
-    @POST("/elearning/course/isRegis")
+    @POST("/elearning/course/isRegis?support=mobile")
     Call<ResponseBody> isRegis(
             @Body RequestBody params
     );

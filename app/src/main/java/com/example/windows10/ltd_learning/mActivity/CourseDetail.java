@@ -113,8 +113,6 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     private Button enroll;
     private TextView tx_name,tx_detail,testIdUser,testIdCourse,tvDetailCourse;
     private int idUser,idCourse;
-    private static String URL_addProgress = "http://localhost:8090/elearning/course/progress/add";
-    private static String URL_updateProgress = "http://localhost:8090/elearning/course/progress/update";
     private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/stream?content=";
     private static String URL_unEnroll = "http://158.108.207.7:8090/elearning/course/unenroll";
     private static String URL_courseID = "http://158.108.207.7:8090/elearning/course?courseId=";
@@ -347,9 +345,9 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
                         }
                         if(isRegis2.getCourse().getTeacher().getPhotoUrl()!=null){
                             if (isRegis2.getCourse().getTeacher().getPhotoUrl().contains("https://"))
-                                Glide.with(CourseDetail.this).load(isRegis2.getCourse().getTeacher().getPhotoUrl()).into(image_teacher);
+                                Picasso.with(CourseDetail.this).load(isRegis2.getCourse().getTeacher().getPhotoUrl()).into(image_teacher);
                             else
-                                Glide.with(CourseDetail.this).load(MyAPI.BASE_URL_ELEARNNING+"elearning/"+isRegis2.getCourse().getTeacher().getPhotoUrl()).into(image_teacher);
+                                Picasso.with(CourseDetail.this).load(MyAPI.BASE_URL_ELEARNNING+"elearning/"+isRegis2.getCourse().getTeacher().getPhotoUrl()).into(image_teacher);
                         }
                         teacherName.setText(isRegis2.getCourse().getTeacher().getName()+" "+isRegis2.getCourse().getTeacher().getSurname());
                         tvDetailCourse.setText(isRegis2.getCourse().getDetail());
@@ -505,7 +503,6 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
         editor.putString("url_video_preview",previewVideoContent);
         editor.commit();
         getURLPath(previewVideoContent);
-        Toast.makeText(this,previewVideoContent+" "+previewVideoContentType,Toast.LENGTH_SHORT).show();
         for (int j=2;j<sectionLists.size();j++) {
             //sub_section_name = new ArrayList<String>();
             for (int i = 0; i < sectionLists.get(j).getSubsection().size(); i++) {

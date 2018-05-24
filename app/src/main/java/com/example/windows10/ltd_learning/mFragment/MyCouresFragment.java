@@ -59,7 +59,6 @@ public class MyCouresFragment extends Fragment {
     private View rootView;
     private static int USER_ID;
     private static MyCourse course_all;
-    private static final String URL_getMyCourse = "http://158.108.207.7:8090/elearning/course?studentId=";
     private  SharedPreferences sharedPreferences;
     private int user_id;
     private TextView mID;

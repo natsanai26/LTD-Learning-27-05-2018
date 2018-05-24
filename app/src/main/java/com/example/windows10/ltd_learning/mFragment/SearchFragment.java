@@ -52,7 +52,6 @@ import retrofit2.Response;
  */
 
 public class SearchFragment extends Fragment {
-    private final String URL_GET_COURSE = "http://158.108.207.7:8090/elearning/course";
 
     private EditText textSearch;
     private Button searchButton;

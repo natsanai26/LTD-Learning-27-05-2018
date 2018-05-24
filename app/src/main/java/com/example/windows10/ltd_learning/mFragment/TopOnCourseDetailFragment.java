@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
+import com.example.windows10.ltd_learning.MyAPI;
 import com.example.windows10.ltd_learning.R;
 
 /**
@@ -37,7 +38,7 @@ public class TopOnCourseDetailFragment extends Fragment implements OnPreparedLis
         videoView.setOnPreparedListener(this);
 
         //For now we just picked an arbitrary item to play
-        videoView.setVideoURI(Uri.parse("http://158.108.207.7:8080/api/ts/key999/25/30/index.m3u8"));
+        videoView.setVideoURI(Uri.parse(MyAPI.BASE_URL_COURSE_API+"/api/ts/key999/25/30/index.m3u8"));
     }
 
     @Override

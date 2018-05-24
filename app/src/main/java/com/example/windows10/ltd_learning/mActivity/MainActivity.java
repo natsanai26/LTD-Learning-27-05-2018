@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private ActionBar ab;
     private ActionBarDrawerToggle mDrawerToggle;
-    private static final  String URL_getAllCat = "http://158.108.207.7:8090/elearning/category";
     private static ArrayList<CategoryAll> cat_all;
     private List<String> category_name;
     private ArrayAdapter adapter_array;
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private static boolean CheckOnSearch = false;
     private static Course[] course_all;
-    private static final String URL = "http://158.108.207.7:8090/elearning/course";
     private MaterialSearchView searchView;
     private ListView mListView;
     public static AHBottomNavigation bottomNavigationItem;
@@ -162,6 +160,9 @@ public class MainActivity extends AppCompatActivity {
                             HomeFragment homeFragment = new HomeFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.content_id, homeFragment).commit();
                             toolbar.setTitle("Home");
+                            bottomNavigationItem.disableItemAtPosition(0);
+                            bottomNavigationItem.enableItemAtPosition(1);
+                            bottomNavigationItem.enableItemAtPosition(2);
                             break;
                         case 1:
                             SearchFragment searchFragment = new SearchFragment();
@@ -169,6 +170,9 @@ public class MainActivity extends AppCompatActivity {
 
                             CheckOnSearch = true;
                             toolbar.setTitle("Search");
+                            bottomNavigationItem.disableItemAtPosition(1);
+                            bottomNavigationItem.enableItemAtPosition(0);
+                            bottomNavigationItem.enableItemAtPosition(0);
                             break;
 //                        case 2:
 //                            MyCouresFragment myCouresFragment = new MyCouresFragment();
@@ -179,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
                             ProfileFragment profileFragment = new ProfileFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.content_id, profileFragment).commit();
                             toolbar.setTitle("Login");
+                            bottomNavigationItem.disableItemAtPosition(2);
+                            bottomNavigationItem.enableItemAtPosition(0);
+                            bottomNavigationItem.enableItemAtPosition(1);
                             break;
                     }
                 }
@@ -188,6 +195,10 @@ public class MainActivity extends AppCompatActivity {
                         case 0:
                             HomeFragment homeFragment = new HomeFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.content_id, homeFragment).commit();
+                            bottomNavigationItem.disableItemAtPosition(0);
+                            bottomNavigationItem.enableItemAtPosition(1);
+                            bottomNavigationItem.enableItemAtPosition(2);
+                            bottomNavigationItem.enableItemAtPosition(3);
                             toolbar.setTitle("Home");
                             break;
                         case 1:
@@ -195,17 +206,29 @@ public class MainActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction().replace(R.id.content_id, searchFragment).commit();
                             CheckOnSearch = true;
                             toolbar.setTitle("Search");
+                            bottomNavigationItem.disableItemAtPosition(1);
+                            bottomNavigationItem.enableItemAtPosition(0);
+                            bottomNavigationItem.enableItemAtPosition(2);
+                            bottomNavigationItem.enableItemAtPosition(3);
                             break;
                         case 2:
                             MyCouresFragment myCouresFragment = new MyCouresFragment();
 
                                 getSupportFragmentManager().beginTransaction().replace(R.id.content_id, myCouresFragment).commit();
                             toolbar.setTitle("MyCourses");
+                            bottomNavigationItem.disableItemAtPosition(2);
+                            bottomNavigationItem.enableItemAtPosition(0);
+                            bottomNavigationItem.enableItemAtPosition(1);
+                            bottomNavigationItem.enableItemAtPosition(3);
                             break;
                         case 3:
                             ProfileFragment profileFragment = new ProfileFragment();
                             getSupportFragmentManager().beginTransaction().replace(R.id.content_id, profileFragment).commit();
                             toolbar.setTitle("Profile");
+                            bottomNavigationItem.disableItemAtPosition(3);
+                            bottomNavigationItem.enableItemAtPosition(0);
+                            bottomNavigationItem.enableItemAtPosition(1);
+                            bottomNavigationItem.enableItemAtPosition(2);
                             break;
                     }
 
@@ -309,30 +332,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getInfomation(){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-
-//                List<Course> courses = Arrays.asList(gson.fromJson(response,Course[].class));
-                java.lang.reflect.Type collectionType = new TypeToken<Collection<Course>>() {}.getType();
-                Collection<Course> enums = gson.fromJson(response,collectionType);
-                Course[] courseResult = enums.toArray(new Course[enums.size()]);
-                Log.d("JSON","##"+courseResult[0].getCourses().get(2).getName());
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
-                    }
-                });
-        MySingleton.getInstance(this).addToReauestQue(stringRequest);
-    }
+//    private void getInfomation(){
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//
+//                GsonBuilder builder = new GsonBuilder();
+//                Gson gson = builder.create();
+//
+////                List<Course> courses = Arrays.asList(gson.fromJson(response,Course[].class));
+//                java.lang.reflect.Type collectionType = new TypeToken<Collection<Course>>() {}.getType();
+//                Collection<Course> enums = gson.fromJson(response,collectionType);
+//                Course[] courseResult = enums.toArray(new Course[enums.size()]);
+//                Log.d("JSON","##"+courseResult[0].getCourses().get(2).getName());
+//
+//            }
+//        },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.d("JSON","Error JSON");
+//                    }
+//                });
+//        MySingleton.getInstance(this).addToReauestQue(stringRequest);
+//    }
 
     private void createNavItems(){
         AHBottomNavigationItem homeItem = new AHBottomNavigationItem("Home",R.drawable.ic_home);
@@ -386,12 +409,6 @@ public class MainActivity extends AppCompatActivity {
                 myDrawer.openDrawer(GravityCompat.START);
                 return true;
         }
-//        if(id == R.id.search){
-//            Toast.makeText(this,"Hello Search",Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(this,SearchActivity.class);
-//            intent.putExtra("key_name",course_new);
-//            startActivity(intent);
-//        }
         return super.onOptionsItemSelected(item);
     }
 }

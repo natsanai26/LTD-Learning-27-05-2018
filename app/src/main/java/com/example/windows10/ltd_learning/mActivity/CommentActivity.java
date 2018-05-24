@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,6 +59,8 @@ public class CommentActivity extends AppCompatActivity {
     private EditText edit_add;
     private SharedPreferences sharedPreferences;
     private static final String MyPREFERENCES = "MyPrefs" ;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,10 +69,19 @@ public class CommentActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
+
         Intent intent = getIntent();
         id_course = intent.getIntExtra("course_id",1);
         id_member = intent.getIntExtra("member_id",1);
         checkEnroll = intent.getBooleanExtra("checkEnroll",false);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getComment(URL_GET_Comment_idCourse+String.valueOf(id_course));
+
+            }
+        });
         Log.d("JSON#",""+"Check Enroll "+checkEnroll);
         Log.d("JSON#",""+id_course);
         getComment(URL_GET_Comment_idCourse+String.valueOf(id_course));
@@ -97,6 +109,7 @@ public class CommentActivity extends AppCompatActivity {
         });
     }
     public void init(){
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         edit_add =(EditText) findViewById(R.id.edit_comment);
         add = (ImageView) findViewById(R.id.add_comment);
         rv_comment = (RecyclerView) findViewById(R.id.rv_comment);
@@ -175,6 +188,7 @@ public class CommentActivity extends AppCompatActivity {
             protected void onPostExecute(String jsonString)  {
                 Log.d("JCOMMENT","++"+jsonString);
                 showData(jsonString);
+                swipeRefreshLayout.setRefreshing(false);
             }
         }.execute(url);
     }

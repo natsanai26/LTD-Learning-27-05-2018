@@ -81,8 +81,6 @@ public class HomeFragment extends Fragment {
     private static CourseNew courseNew;
     private static CourseByCat course_by_cat_1, course_by_cat_2, course_by_cat_3, course_by_cat_4;
     private static final String URL_getURLPicture = "http://158.108.207.7:8080/api/app?id=";
-    private static final String URL_getNewCourse = "http://158.108.207.7:8090/elearning/course?new=10";
-    private static final String URL_getTopCourse = "http://158.108.207.7:8090/elearning/course?top=10";
     private ElearningAPI elearningAPI;
     private TextView cat1;
     private TextView cat2;
@@ -155,7 +153,7 @@ public class HomeFragment extends Fragment {
                         //CourseNew course = gson.fromJson(result, CourseNew.class);
                         Course course = gson.fromJson(result,Course.class);
                         HomeAdapter homeAdapter = new HomeAdapter(getContext(),course.getCourses());
-                        rv2.setAdapter(homeAdapter);
+                        rv.setAdapter(homeAdapter);
                         //setNewCourse(course);
                         cat1.setText(String.format("New courses (%d)",course.getCourses().size()));
 
@@ -192,7 +190,7 @@ public class HomeFragment extends Fragment {
                         Course course = gson.fromJson(result, Course.class);
                         //setTopCourse(course);
                         HomeAdapter homeAdapter = new HomeAdapter(getContext(),course.getCourses());
-                        rv.setAdapter(homeAdapter);
+                        rv2.setAdapter(homeAdapter);
 
 
 

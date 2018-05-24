@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,9 +58,9 @@ public class RpliedCommentActivity extends AppCompatActivity {
     private ImageView add;
     private TextView textDetail,username,date;
     private RepliedAdapter commentAdapter;
-    private String url = "http://158.108.207.7:8090/elearning/dialogue?id=";
     private int id_dialougue,id_course,id_member;
     private ElearningAPI elearningAPI;
+    private SwipeRefreshLayout swipeRefreshLayout;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.replied_comment_activity);
@@ -98,9 +99,18 @@ public class RpliedCommentActivity extends AppCompatActivity {
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCommentById(id_dialougue);
+
+            }
+        });
+
 
     }
     public void init(){
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         edit_comment = (EditText)findViewById(R.id.edit_comment);
         add = (ImageView) findViewById(R.id.add_reply);
         textDetail = (TextView) findViewById(R.id.textDetail);
@@ -200,6 +210,7 @@ public class RpliedCommentActivity extends AppCompatActivity {
                 try {
                     String jsonString = response.body().string();
                     showData(jsonString);
+                    swipeRefreshLayout.setRefreshing(false);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -240,13 +251,6 @@ public class RpliedCommentActivity extends AppCompatActivity {
 
             }
 
-//            rv_comment.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    rv_comment.smoothScrollToPosition(commentAdapter.getItemCount());
-//
-//                }
-//            });
 
         } else {
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_replied);
@@ -255,12 +259,4 @@ public class RpliedCommentActivity extends AppCompatActivity {
         }
 
     }
-
-//    @Override
-//    protected void onDestroy() {
-//        Intent intent = new Intent(RpliedCommentActivity.this,CommentActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-//        super.onDestroy();
-//    }
 }

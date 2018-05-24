@@ -64,11 +64,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
             */
         //holder.progressBar.setVisibility(View.INVISIBLE);
 //        Log.d("JSON","Check Percent "+mData.get(position).getProgress().getSectionId());
-        if (mData.get(position).getTeacher().getPhotoUrl()!=null)
-            if (mData.get(position).getTeacher().getPhotoUrl().contains("https://"))
-                Glide.with(mContext).load(mData.get(position).getTeacher().getPhotoUrl()).into(holder.image_teacher);
-            else
-                Glide.with(mContext).load(MyAPI.BASE_URL_ELEARNNING+"elearning/"+mData.get(position).getTeacher().getPhotoUrl()).into(holder.image_teacher);
+        if (mData.get(position).getTeacher().getPhotoUrl()!=null){
+            if (mData.get(position).getTeacher().getPhotoUrl().contains("https://")){
+                Picasso.with(mContext).load(mData.get(position).getTeacher().getPhotoUrl()).into(holder.image_teacher);
+            }
+        else {
+                Log.d("Image","check "+mData.get(position).getTeacher().getPhotoUrl());
+                Picasso.with(mContext).load(MyAPI.BASE_URL_ELEARNNING+"elearning/"+mData.get(position).getTeacher().getPhotoUrl()).into(holder.image_teacher);
+            }
+        }
         String content_get_pic = null;
         if(mData.get(position).getSectionList().size() != 0){
             content_get_pic = mData.get(position).getSectionList().get(0).getContent();
@@ -121,7 +125,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>
 
             private void getImageCourse(String response, HomeAdapter.ViewHolder holder) {
                 String url = "http://158.108.207.7:8080/";
-                Glide.with(mContext).load(url+response).placeholder(R.drawable.loading4).error(R.drawable.maxresdefault).into(holder.imageView);
+                Picasso.with(mContext).load(url+response).placeholder(R.drawable.loading4).error(R.drawable.maxresdefault).into(holder.imageView);
             }
         },
                 new Response.ErrorListener() {

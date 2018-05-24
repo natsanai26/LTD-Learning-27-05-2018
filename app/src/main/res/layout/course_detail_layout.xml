@@ -282,14 +282,13 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
     </ScrollView>
 
     <ImageView
         android:id="@+id/full_screen"
         android:layout_gravity="right"
-        android:layout_marginTop="-340dp"
+        android:layout_marginTop="-360dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/icons8_full"/>

@@ -96,8 +96,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Course.CoursesBean course = (Course.CoursesBean) mCourse.get(position);
         String content_get_pic;
-        if(course.getTeacherProfile() != null)
+        Log.d("Image","check "+course.getTeacherProfile());
+        if(course.getTeacherProfile() != null){
             Picasso.with(mContext).load(course.getTeacherProfile()).into(holder.image_teacher);
+        }
         holder.teacherName.setText(course.getTeacherName()+" "+course.getTeacherSurname());
         holder.ratingBar.setRating((float) course.getRating());
         holder.nameTextView.setText(course.getName());

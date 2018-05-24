@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.windows10.ltd_learning.MyAPI;
 import com.example.windows10.ltd_learning.mModel.CategoryAll;
 import com.example.windows10.ltd_learning.mModel.Course;
 import com.example.windows10.ltd_learning.mModel.CourseById;
@@ -53,8 +54,7 @@ public class DetailCatFragment extends Fragment {
     private ArrayAdapter adapter;
     private List<CourseById> list_course;
     private static Course course_all;
-    private static String URL_getCourseByID = "http://158.108.207.7:8090/elearning/course?courseId=";
-    private static final String URL_getAllCourse = "http://158.108.207.7:8090/elearning/course";
+    private static String URL_getCourseByID = "elearning/course?courseId=";
     private static CategoryAll course_by_cat;
     private static final String URL_getByCat_Id = "http://158.108.207.7:8090/elearning/category?id=";
     private int category_id;
@@ -123,8 +123,7 @@ public class DetailCatFragment extends Fragment {
         Log.d("JSON", "From set Course Check ID" + id_in_courseCat);
         String list_id = TextUtils.join(",", id_in_courseCat);
         Log.d("JSON", "From set Course Check ID" + list_id);
-        Log.d("JSON", "From set Course Check ID" + URL_getCourseByID + list_id);
-        getCourseFromId(URL_getCourseByID + list_id);
+        getCourseFromId(MyAPI.BASE_URL_ELEARNNING+URL_getCourseByID + list_id);
         }
     }
 

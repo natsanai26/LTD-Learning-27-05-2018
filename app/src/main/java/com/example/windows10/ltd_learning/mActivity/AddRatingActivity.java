@@ -28,7 +28,6 @@ import retrofit2.Callback;
 
 public class AddRatingActivity extends AppCompatActivity {
     private TextView rate_now,rate_old;
-    private final String URL_ADD_RATING = "http://158.108.207.7:8090/elearning/course/addRating";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
