@@ -39,7 +39,7 @@ import retrofit2.Response;
  * Created by Windows10 on 4/30/2018.
  */
 
-public class RpliedCommentActivity extends AppCompatActivity {
+public class RepliedCommentActivity extends AppCompatActivity {
     private  boolean checkEnroll;
     private Toolbar toolbar;
     private SharedPreferences sharedPreferences;
@@ -80,11 +80,11 @@ public class RpliedCommentActivity extends AppCompatActivity {
                     if (!(edit_comment.getText().toString().trim().equals(""))){
                         AddComment(id_member,id_course,id_dialougue,"\""+edit_comment.getText().toString()+"\"");
                     }else {
-                            Toast.makeText(RpliedCommentActivity.this,"Text is Empty.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RepliedCommentActivity.this,"Text is Empty.",Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
-                    Toast.makeText(RpliedCommentActivity.this,"Please enroll this course.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RepliedCommentActivity.this,"Please enroll this course.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -229,14 +229,14 @@ public class RpliedCommentActivity extends AppCompatActivity {
                 replie_comment = commentResult.getSubdialogues();
                 Log.d("JSONRP", "check " + replie_comment);
 
-                commentAdapter = new RepliedAdapter(RpliedCommentActivity.this, replie_comment);
+                commentAdapter = new RepliedAdapter(RepliedCommentActivity.this, replie_comment);
                 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_replied);
-                recyclerView.setLayoutManager(new LinearLayoutManager(RpliedCommentActivity.this));
+                recyclerView.setLayoutManager(new LinearLayoutManager(RepliedCommentActivity.this));
                 recyclerView.setAdapter(commentAdapter);
                 recyclerView.setHasFixedSize(true);
             }else {
                 RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_replied);
-                recyclerView.setLayoutManager(new LinearLayoutManager(RpliedCommentActivity.this));
+                recyclerView.setLayoutManager(new LinearLayoutManager(RepliedCommentActivity.this));
                 recyclerView.setAdapter(null);
 
             }
@@ -244,7 +244,7 @@ public class RpliedCommentActivity extends AppCompatActivity {
 
         } else {
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_replied);
-            recyclerView.setLayoutManager(new LinearLayoutManager(RpliedCommentActivity.this));
+            recyclerView.setLayoutManager(new LinearLayoutManager(RepliedCommentActivity.this));
             recyclerView.setAdapter(null);
         }
 

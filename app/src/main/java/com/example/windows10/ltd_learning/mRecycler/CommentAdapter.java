@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.windows10.ltd_learning.mModel.Comment;
 import com.example.windows10.ltd_learning.R;
-import com.example.windows10.ltd_learning.mActivity.RpliedCommentActivity;
+import com.example.windows10.ltd_learning.mActivity.RepliedCommentActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -93,7 +93,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         holder.textReplied.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, RpliedCommentActivity.class);
+                Intent intent = new Intent(mContext, RepliedCommentActivity.class);
                 intent.putExtra("id_parent",mData.get(position).getIddialogue());
                 intent.putExtra("text_detail",mData.get(position).getMsg());
                 intent.putExtra("username_parent",mData.get(position).getMember().getName());

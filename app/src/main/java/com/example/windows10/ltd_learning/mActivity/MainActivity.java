@@ -32,7 +32,6 @@ import com.example.windows10.ltd_learning.mFragment.MyCouresFragment;
 import com.example.windows10.ltd_learning.mFragment.ProfileFragment;
 import com.example.windows10.ltd_learning.mFragment.SearchFragment;
 import com.example.windows10.ltd_learning.mModel.Course;
-import com.example.windows10.ltd_learning.mRecycler.Adapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
 //    List<Course> courses = getCourse();
     private Gson gson = new Gson();
-    private Adapter mAdapter;
+
     private static Course[] courseResult;
     private ElearningAPI elearningAPI;
     @Override

@@ -36,7 +36,6 @@ import com.example.windows10.ltd_learning.mInterface.MySingleton;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.mModel.SectionList;
 import com.example.windows10.ltd_learning.mRecycler.HomeAdapter;
-import com.example.windows10.ltd_learning.mRecycler.SnapAdapter;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -266,7 +265,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    SnapAdapter snapAdapter;
+
 
     /*private void setupAdapterTop() {
 

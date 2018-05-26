@@ -396,7 +396,7 @@ public class CourseDetail extends AppCompatActivity implements OnPreparedListene
     }
 
     private  void setPdfView(String url){
-        Intent intent = new Intent(this,PdfActivityActivity.class);
+        Intent intent = new Intent(this,PdfActivity.class);
         intent.putExtra("url",url);
         startActivity(intent);
     }

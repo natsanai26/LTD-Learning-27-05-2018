@@ -13,7 +13,7 @@ import android.webkit.WebViewClient;
 import com.example.windows10.ltd_learning.R;
 
 
-public class PdfActivityActivity extends AppCompatActivity {
+public class PdfActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private static final String MyPREFERENCES = "MyPrefs" ;
     private WebView  wv;
