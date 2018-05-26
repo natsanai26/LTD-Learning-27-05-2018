@@ -60,7 +60,9 @@ public class MyCouresFragment extends Fragment {
         TabLayout tabLayout = rootView.findViewById(R.id.tabs);
         tabLayout.addOnTabSelectedListener(onTabSelectedListener);
 //        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#045757"));
-        tabLayout.setTabTextColors(Color.parseColor("#000000"),Color.parseColor("#045757"));
+        tabLayout.setTabTextColors(Color.parseColor("#000000"),Color.parseColor("#ffffff"));
+        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#045757"));
+
 
         return rootView;
     }

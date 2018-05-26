@@ -25,4 +25,6 @@
         <item name="colorButtonNormal">@android:color/holo_orange_dark</item>
         <item name="colorControlHighlight">#ed0023</item>
     </style>
+
+
 </resources>

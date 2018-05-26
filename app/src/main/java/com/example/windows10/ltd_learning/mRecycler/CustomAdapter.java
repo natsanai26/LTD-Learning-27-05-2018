@@ -1,5 +1,6 @@
 package com.example.windows10.ltd_learning.mRecycler;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,6 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private Context mContext;
     private List<Course.CoursesBean> mData;
 
+
     public interface OnItemClickListener {
         public void onItemClick(View view , int position);
     }
@@ -49,6 +51,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     {
         mContext = context;
         mData = data;
+
+
 
     }
     @Override

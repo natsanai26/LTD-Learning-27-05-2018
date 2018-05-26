@@ -192,9 +192,9 @@ public class ProfileFragment extends Fragment {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
-                    editor.putString("pName",p.getName());
-                    editor.putString("pSurname",p.getSurname());
-                    editor.putString("pEmail",p.getEmail());
+                    editor.putString("pName", pName.getText().toString());
+                    editor.putString("pSurname", pSurname.getText().toString());
+                    editor.putString("pEmail",pEmail.getText().toString());
                     editor.commit();
 
                     Toast.makeText(getContext(),"Saved!",Toast.LENGTH_SHORT).show();

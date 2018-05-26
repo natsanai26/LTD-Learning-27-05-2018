@@ -132,17 +132,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setHomeAsUpIndicator(R.drawable.ic_action_list);
+        ab.setHomeAsUpIndicator(R.drawable.ic_list_black_24dp);
 //        configureNavigationDrawer();
 
         toolbar.setTitle("Home");
-        toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"));
+        toolbar.setTitleTextColor(Color.parseColor("#000000"));
 
         bottomNavigationItem = (AHBottomNavigation) findViewById(R.id.myBottomNavigation_ID);
+
         bottomNavigationItem.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigationItem.setBehaviorTranslationEnabled(false);
-        bottomNavigationItem.setAccentColor(Color.parseColor("#343434"));
-        bottomNavigationItem.setInactiveColor(Color.parseColor("#FFFFFF"));
+        bottomNavigationItem.setAccentColor(Color.parseColor("#045757"));
+        bottomNavigationItem.setInactiveColor(Color.parseColor("#bec6c1"));
         bottomNavigationItem.setTranslucentNavigationEnabled(true);
 
 //        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                             toolbar.setTitle("Search");
                             bottomNavigationItem.disableItemAtPosition(1);
                             bottomNavigationItem.enableItemAtPosition(0);
-                            bottomNavigationItem.enableItemAtPosition(0);
+                            bottomNavigationItem.enableItemAtPosition(2);
                             break;
 //                        case 2:
 //                            MyCouresFragment myCouresFragment = new MyCouresFragment();
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                             MyCouresFragment myCouresFragment = new MyCouresFragment();
 
                                 getSupportFragmentManager().beginTransaction().replace(R.id.content_id, myCouresFragment).commit();
-                            toolbar.setTitle("MyCourses");
+                            toolbar.setTitle("My Courses");
                             bottomNavigationItem.disableItemAtPosition(2);
                             bottomNavigationItem.enableItemAtPosition(0);
                             bottomNavigationItem.enableItemAtPosition(1);
@@ -248,28 +249,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getInfoCategory(){
-        /*StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_getAllCat, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
 
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-
-                java.lang.reflect.Type collectionType = new TypeToken<Collection<CategoryAll>>() {}.getType();
-                Collection<CategoryAll> enums = gson.fromJson(response,collectionType);
-                CategoryAll[] categoryAllsResult = enums.toArray(new CategoryAll[enums.size()]);
-
-                setAllCat(categoryAllsResult);
-
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JSON","Error JSON");
-                    }
-                });
-        MySingleton.getInstance(this).addToReauestQue(stringRequest);*/
         Call<ResponseBody> responseBody = elearningAPI.getAllCategory();
         responseBody.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -332,35 +312,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    private void getInfomation(){
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//
-//                GsonBuilder builder = new GsonBuilder();
-//                Gson gson = builder.create();
-//
-////                List<Course> courses = Arrays.asList(gson.fromJson(response,Course[].class));
-//                java.lang.reflect.Type collectionType = new TypeToken<Collection<Course>>() {}.getType();
-//                Collection<Course> enums = gson.fromJson(response,collectionType);
-//                Course[] courseResult = enums.toArray(new Course[enums.size()]);
-//                Log.d("JSON","##"+courseResult[0].getCourses().get(2).getName());
-//
-//            }
-//        },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.d("JSON","Error JSON");
-//                    }
-//                });
-//        MySingleton.getInstance(this).addToReauestQue(stringRequest);
-//    }
+
 
     private void createNavItems(){
         AHBottomNavigationItem homeItem = new AHBottomNavigationItem("Home",R.drawable.ic_home);
         AHBottomNavigationItem searchItem = new AHBottomNavigationItem("Search",R.drawable.ic_search);
-        AHBottomNavigationItem myCourseItem = new AHBottomNavigationItem("MyCourse",R.drawable.ic_school);
+        AHBottomNavigationItem myCourseItem = new AHBottomNavigationItem("My Course",R.drawable.ic_school);
         AHBottomNavigationItem loginItem = new AHBottomNavigationItem("Login",R.drawable.ic_input);
         AHBottomNavigationItem profileItem = new AHBottomNavigationItem("Profile",R.drawable.ic_account);
         SharedPreferences sp = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -383,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        bottomNavigationItem.setDefaultBackgroundColor(Color.parseColor("#045757"));
+        bottomNavigationItem.setDefaultBackgroundColor(Color.parseColor("#f7f7f7"));
         isCheckForEnroll = sp.getBoolean("check_for_enroll",false);
         Log.d("JSON","####Test to login "+isCheckForEnroll);
         if(!isCheckForEnroll){

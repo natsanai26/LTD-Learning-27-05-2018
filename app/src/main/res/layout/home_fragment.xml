@@ -12,7 +12,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/scrollViewHome"
+        android:background="#ffffff">
 
 
         <LinearLayout
@@ -36,14 +38,18 @@
 
                     <TextView
                         android:id="@+id/cat1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text=""
-                        android:textColor="#000000"
-                        android:textSize="25dp" />
+                        android:padding="2dp"
+                        android:text="111"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14dp"
+                        android:background="#c9efef"
+                        android:visibility="invisible"
+                        />
 
                     <android.support.v7.widget.RecyclerView
+                        android:layout_marginTop="17dp"
                         android:id="@+id/home_RV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -52,15 +58,20 @@
 
 
                     <TextView
+                        android:layout_marginTop="17dp"
                         android:id="@+id/cat2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text=""
-                        android:textColor="#000000"
-                        android:textSize="25dp" />
+                        android:padding="2dp"
+                        android:text="222"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14dp"
+                        android:background="#c9efef"
+                        android:visibility="invisible"
+                        />
 
                     <android.support.v7.widget.RecyclerView
+                        android:layout_marginTop="17dp"
                         android:id="@+id/home_RV_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">

@@ -40,7 +40,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary" />
+            android:background="#f7f7f7" />
 
         <!--<com.miguelcatalan.materialsearchview.MaterialSearchView-->
             <!--android:id="@+id/search_view"-->
@@ -70,7 +70,8 @@
             android:id="@+id/myBottomNavigation_ID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            />
         <include
             layout="@layout/content_main"
             />
@@ -82,6 +83,6 @@
         android:layout_gravity="left"
         android:choiceMode="singleChoice"
         android:dividerHeight="1dp"
-        android:background="#FFFFFF"/>
+        android:background="#ffffff"/>
 
 </android.support.v4.widget.DrawerLayout>

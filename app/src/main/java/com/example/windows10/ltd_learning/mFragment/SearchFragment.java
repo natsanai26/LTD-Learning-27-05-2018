@@ -1,5 +1,7 @@
 package com.example.windows10.ltd_learning.mFragment;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,8 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -63,6 +67,10 @@ public class SearchFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerViewReadyCallback recyclerViewReadyCallback;
 
+
+
+
+
     private ElearningAPI elearningAPI;
 
     public interface RecyclerViewReadyCallback {
@@ -82,7 +90,12 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 searchBy="name";
+
                 textSearch.setHint("course name");
+                byCourseName.setBackgroundColor(Color.parseColor("#045757"));
+                byTeacherName.setBackground(getResources().getDrawable(R.drawable.layout_border_thin));
+                byTeacherName.setTextColor(Color.parseColor("#000000"));
+                byCourseName.setTextColor(Color.parseColor("#ffffff"));
             }
         });
         byTeacherName.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +103,10 @@ public class SearchFragment extends Fragment {
             public void onClick(View view) {
                 searchBy="teacherName";
                 textSearch.setHint("teacher name");
+                byTeacherName.setBackgroundColor(Color.parseColor("#045757"));
+                byCourseName.setBackground(getResources().getDrawable(R.drawable.layout_border_thin));
+                byCourseName.setTextColor(Color.parseColor("#000000"));
+                byTeacherName.setTextColor(Color.parseColor("#ffffff"));
             }
         });
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -124,46 +141,6 @@ public class SearchFragment extends Fragment {
     public void getCourse()
     {
 
-
-
-            /*new AsyncTask<String, Void, String>() {
-                @Override
-                protected String doInBackground(String... url) {
-                    String result = "";
-                    try {
-
-                        HttpGet httpGet = new HttpGet(url[0]);
-                        HttpClient client = new DefaultHttpClient();
-
-                        HttpResponse response = client.execute(httpGet);
-
-                        int statusCode = response.getStatusLine().getStatusCode();
-
-                        if (statusCode == 200) {
-                            InputStream inputStream = response.getEntity().getContent();
-                            BufferedReader reader = new BufferedReader
-                                    (new InputStreamReader(inputStream));
-                            String line;
-                            while ((line = reader.readLine()) != null) {
-                                result += line;
-                            }
-                        }
-
-                    } catch (ClientProtocolException e) {
-                        Log.d("ClientProtocolException", e.getMessage());
-
-                    } catch (IOException e) {
-                        Log.d("IOException", e.getMessage());
-                    }
-                    return result;
-                }
-
-                protected void onPostExecute(String jsonString) {
-                    showData(jsonString);
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }.execute(url);*/
-
         Call<ResponseBody> responseBody = elearningAPI.getAllCourses();
         responseBody.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -176,10 +153,13 @@ public class SearchFragment extends Fragment {
                             Gson gson = new Gson();
                             Course data = gson.fromJson(jsonString, Course.class);
 
+
                             Course.StatusBean response = data.getStatus();
                             if (data.getCourses() != null)
                                 if (response.isStatus()) {
                                     List<Course.CoursesBean> courses = data.getCourses();
+
+
 
                                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                                     recyclerView.setAdapter(new CustomAdapter(getContext(), courses));
@@ -256,6 +236,8 @@ public class SearchFragment extends Fragment {
                             if (response.isStatus()) {
                                 List<Course.CoursesBean> courses = data.getCourses();
 
+
+
                                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                                 recyclerView.setAdapter(new CustomAdapter(getContext(), courses));
                                 recyclerView.setHasFixedSize(true);
@@ -299,6 +281,9 @@ public class SearchFragment extends Fragment {
                 }
                 else
                 {
+
+                        getFragmentManager().beginTransaction().add(R.id.course_not_found_content,new CourseNotFoundFragment()).commit();
+
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     recyclerView.setAdapter(null);
                 }
@@ -384,59 +369,7 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-    /*public void showData(String jsonString)
-    {
-        if (!jsonString.equals(""))
-        {
-            Gson gson = new Gson();
-            Course data = gson.fromJson(jsonString,Course.class);
 
-            Course.StatusBean response = data.getStatus();
-
-            if (response.isStatus())
-            {
-                List<Course.CoursesBean> courses = data.getCourses();
-                recyclerView = (RecyclerView) getView().findViewById(R.id.rv_search);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new CustomAdapter(getContext(), courses));
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setVisibility(View.INVISIBLE);
-                recyclerViewReadyCallback = new RecyclerViewReadyCallback() {
-                    @Override
-                    public void onLayoutReady() {
-                        //
-                        //here comes your code that will be executed after all items are laid down
-                        //
-                        loadingImage.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
-                    }
-                };
-                recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (recyclerViewReadyCallback != null) {
-                            recyclerViewReadyCallback.onLayoutReady();
-                        }
-                        recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-
-                });
-
-            }
-            else
-            {
-                RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_search);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(null);
-            }
-        }
-        else
-        {
-            RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.rv_search);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(null);
-        }
-    }*/
     public void bindView(View view)
     {
         elearningAPI = MyAPI.getAPI();
@@ -445,6 +378,7 @@ public class SearchFragment extends Fragment {
         byCourseName = view.findViewById(R.id.byCName);
         byTeacherName = view.findViewById(R.id.byTName);
         recyclerView =  view.findViewById(R.id.rv_search);
+
     }
 
 }

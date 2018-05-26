@@ -11,6 +11,8 @@
         android:layout_height="35dp"
         app:tabMode="fixed"
         app:tabGravity="fill"
+        app:tabBackground="@drawable/tab_selector"
+        android:background="#ffffff"
 
         >
         <android.support.design.widget.TabItem
@@ -20,7 +22,7 @@
 
            />
         <android.support.design.widget.TabItem
-            android:text="finished"
+            android:text="Completed"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             />

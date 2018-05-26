@@ -1,55 +1,70 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="#e4e4e4"
+    android:background="#ffffff"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+    <android.support.v7.widget.CardView
+        card_view:cardBackgroundColor="#f4f4f4"
+        android:layout_width="match_parent"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_margin="15dp"
+        card_view:cardElevation="2dp"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1">
+
+        >
+
 
         <LinearLayout
-            android:gravity="center_horizontal"
-            android:layout_gravity="center"
-            android:layout_width="150dp"
-            android:layout_height="100dp">
-            <ImageView
-                android:scaleType="fitXY"
-                android:id="@+id/image_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/user_512"/>
-        </LinearLayout>
-        <RelativeLayout
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:src="@drawable/ic_create"
-                android:id="@+id/edit_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:text="Username"
-            android:textColor="#000000"/>
-
-        <android.support.v7.widget.CardView
-            card_view:cardBackgroundColor="#ffffff"
             android:layout_width="match_parent"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_margin="10dp"
-            card_view:cardElevation="5dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:orientation="vertical"
             >
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/image_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/user_512" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/edit_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_create" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Username"
+                android:textColor="#007fff" />
 
             <TextView
                 android:id="@+id/pusername"
@@ -57,27 +72,20 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="center"
-                android:padding="4dp"
                 android:background="#DCDCDC"
+                android:padding="4dp"
                 android:text="username"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#000000" />
 
-        </android.support.v7.widget.CardView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:text="Name"
-            android:textColor="#000000"/>
-        <android.support.v7.widget.CardView
-            card_view:cardBackgroundColor="#ffffff"
-            android:layout_width="match_parent"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_margin="10dp"
-            card_view:cardElevation="5dp"
-            android:layout_height="wrap_content"
-            >
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="8dp"
+                android:text="Name"
+                android:textColor="#007fff" />
 
             <EditText
                 android:id="@+id/pname"
@@ -85,28 +93,22 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="center"
+                android:background="@drawable/layout_border_thin"
+                android:backgroundTint="#ffffff"
                 android:padding="4dp"
                 android:text="name"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="#000000"
-                android:backgroundTint="#ffffff"
+                android:textSize="20dp"
                 />
 
-        </android.support.v7.widget.CardView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:text="Lastname"
-            android:textColor="#000000"/>
-        <android.support.v7.widget.CardView
-            card_view:cardBackgroundColor="#ffffff"
-            android:layout_width="match_parent"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_margin="10dp"
-            card_view:cardElevation="5dp"
-            android:layout_height="wrap_content"
-            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="8dp"
+                android:text="Surname"
+                android:textColor="#007fff" />
 
             <EditText
                 android:id="@+id/psurname"
@@ -114,27 +116,20 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="center"
+                android:background="@drawable/layout_border_thin"
+                android:backgroundTint="#ffffff"
                 android:padding="4dp"
                 android:text="surname"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#000000"
-                android:backgroundTint="#ffffff"/>
+                android:textColor="#000000" />
 
-        </android.support.v7.widget.CardView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:text="Email"
-            android:textColor="#000000"/>
-        <android.support.v7.widget.CardView
-            card_view:cardBackgroundColor="#ffffff"
-            android:layout_width="match_parent"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_margin="10dp"
-            card_view:cardElevation="5dp"
-            android:layout_height="wrap_content"
-            >
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Email"
+                android:textColor="#007fff" />
 
             <EditText
                 android:id="@+id/pemail"
@@ -142,91 +137,102 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="center"
+                android:background="@drawable/layout_border_thin"
+                android:backgroundTint="#ffffff"
                 android:padding="4dp"
                 android:text="email"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#000000"
-                android:backgroundTint="#ffffff"/>
+                android:textColor="#000000" />
 
-
-        </android.support.v7.widget.CardView>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_marginLeft="10dp"
-                android:gravity="start"
+            <!--<RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/editProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/layout_border_btn"
-                android:paddingLeft="10dp"
-                android:text="Edit profile"
-                android:textColor="@android:color/white"
-                android:textSize="15dp"
-                android:textStyle="normal"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginRight="10dp"
-                android:gravity="end"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <Button
+                    android:id="@+id/editProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="29dp"
+                    android:background="@drawable/btn_default"
+                    android:text="Update Profile"
+                    android:textColor="#007fff"
+                    android:textSize="9dp" />
+
+                <Button
+                    android:id="@+id/changePasswd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="29dp"
+                    android:background="@drawable/btn_default"
+                    android:text="Change password"
+                    android:textColor="#007fff"
+                    android:textSize="9dp"
+                    android:layout_below="@+id/editProfile"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="9dp" />
+
+                <Button
+                    android:id="@+id/logoutButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="29dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/btn_default"
+                    android:text="Logout"
+                    android:textColor="#007fff"
+                    android:textSize="9dp" />
+            </RelativeLayout>-->
+
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/changePasswd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/layout_border_btn"
-                android:paddingLeft="10dp"
-                android:text="change password"
-                android:textColor="@android:color/white"
-                android:textSize="15dp"
-                android:textStyle="normal"
-                android:layout_marginLeft="10dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
-            </LinearLayout>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="end"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/logoutButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/layout_border_btn"
-                android:paddingLeft="15dp"
-                android:text="Logout"
-                android:textColor="@android:color/white"
-                android:textSize="15dp"
-                android:textStyle="normal"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-        </RelativeLayout>
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-        </RelativeLayout>
+                <Button
+                    android:id="@+id/editProfile"
+                    android:layout_width="88dp"
+                    android:layout_height="32dp"
+                    android:text="Update Profile"
+                    android:layout_marginRight="208dp"
+                    card_view:layout_constraintRight_toRightOf="parent"
+                    card_view:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/btn_default"
+                    android:textColor="#007fff"
+                    android:textSize="10dp"/>
 
+                <Button
+                    android:id="@+id/changePasswd"
+                    android:layout_width="133dp"
+                    android:layout_height="32dp"
+                    android:text="Change password"
+                    android:layout_marginTop="7dp"
+                    card_view:layout_constraintTop_toBottomOf="@+id/editProfile"
+                    android:layout_marginRight="163dp"
+                    card_view:layout_constraintRight_toRightOf="parent"
+                    android:background="@drawable/btn_default"
+                    android:textColor="#007fff"
+                    android:textSize="10dp"
+                    card_view:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="8dp"
+                    card_view:layout_constraintVertical_bias="0.0" />
 
-
-
+                <Button
+                    android:id="@+id/logoutButton"
+                    android:layout_width="73dp"
+                    android:layout_height="29dp"
+                    android:text="Logout"
+                    card_view:layout_constraintLeft_toRightOf="@+id/changePasswd"
+                    android:layout_marginLeft="88dp"
+                    card_view:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="42dp"
+                    android:background="@drawable/btn_default"
+                    android:textColor="#007fff"
+                    android:textSize="10dp"/>
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>

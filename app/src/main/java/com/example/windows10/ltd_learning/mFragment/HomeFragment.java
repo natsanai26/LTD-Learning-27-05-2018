@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ScrollingView;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.AutoScrollHelper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,11 +17,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +92,7 @@ public class HomeFragment extends Fragment {
     private ImageView loadingImage;
     private RecyclerViewReadyCallback recyclerViewReadyCallback;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ScrollView scrollView;
 
     private  boolean b1=false,b2=false;
 
@@ -103,6 +108,8 @@ public class HomeFragment extends Fragment {
         loadingImage = rootView.findViewById(R.id.imageView);
         cat1 = (TextView) rootView.findViewById(R.id.cat1);
         cat2 = (TextView) rootView.findViewById(R.id.cat2);
+        scrollView = rootView.findViewById(R.id.scrollViewHome);
+
         //Glide.with(getContext()).load(R.drawable.spinner).into(loadingImage);
 
         swipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout);
@@ -132,8 +139,7 @@ public class HomeFragment extends Fragment {
         }
 //        getInfomation();
 
-        getInfoNewCourse();
-        getInfoTopCourse();
+
 
         rv = (RecyclerView) rootView.findViewById(R.id.home_RV);
         rv.setLayoutManager(new LinearLayoutManager(this.getActivity(),LinearLayoutManager.HORIZONTAL,false));
@@ -143,7 +149,28 @@ public class HomeFragment extends Fragment {
         rv2 = (RecyclerView) rootView.findViewById(R.id.home_RV_2);
         rv2.setLayoutManager(new LinearLayoutManager(this.getActivity(),LinearLayoutManager.HORIZONTAL,false));
 
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                swipeRefreshLayout.setEnabled(true);
+                return false;
+            }
+        });
+        rv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                swipeRefreshLayout.setEnabled(false);
+                return false;
+            }
+        });
 
+        rv2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                swipeRefreshLayout.setEnabled(false);
+                return false;
+            }
+        });
 
         return rootView;
     }
@@ -167,6 +194,7 @@ public class HomeFragment extends Fragment {
                         rv.setAdapter(homeAdapter);
                         //setNewCourse(course);
                         cat1.setText(String.format("New courses (%d)",course.getCourses().size()));
+                        cat1.setVisibility(View.VISIBLE);
 
                         b1=true;
 
@@ -206,6 +234,7 @@ public class HomeFragment extends Fragment {
 
 
                         cat2.setText(String.format("Top courses (%d)",course.getCourses().size()));
+                        cat2.setVisibility(View.VISIBLE);
                         b2=true;
 
                     } catch (IOException e) {
@@ -412,4 +441,10 @@ public class HomeFragment extends Fragment {
         MySingleton.getInstance(getContext()).addToReauestQue(stringRequest);
     }
 
+    @Override
+    public void onResume() {
+        getInfoNewCourse();
+        getInfoTopCourse();
+        super.onResume();
+    }
 }

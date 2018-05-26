@@ -81,9 +81,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
 
         Log.d("JSON","+++>>>>>"+id_comment+"  "+name_from_profile+"---"+name_check);
         holder.username.setText(mData.get(position).getMember().getName());
-        if(mData.get(position).getSubdialogues().size() != 0){
-            holder.textReplied.setText("View "+mData.get(position).getSubdialogues().size()+" Replies");
-        }else {
+        if(mData.get(position).getSubdialogues().size() > 0){
+            if (mData.get(position).getSubdialogues().size()==1)
+                holder.textReplied.setText("View "+mData.get(position).getSubdialogues().size()+" Reply");
+            else
+                holder.textReplied.setText("View "+mData.get(position).getSubdialogues().size()+" Replies");
+        }
+        else {
             holder.textReplied.setText("Reply");
         }
         holder.textReplied.setOnClickListener(new View.OnClickListener() {
