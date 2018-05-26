@@ -102,7 +102,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 searchBy="teacherName";
-                textSearch.setHint("teacher name");
+                textSearch.setHint("Instructor name");
                 byTeacherName.setBackgroundColor(Color.parseColor("#045757"));
                 byCourseName.setBackground(getResources().getDrawable(R.drawable.layout_border_thin));
                 byCourseName.setTextColor(Color.parseColor("#000000"));
