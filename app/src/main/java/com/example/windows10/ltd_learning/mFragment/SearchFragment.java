@@ -1,15 +1,12 @@
 package com.example.windows10.ltd_learning.mFragment;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +14,10 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.windows10.ltd_learning.MyAPI;
+import com.example.windows10.ltd_learning.mInterface.MyAPI;
 import com.example.windows10.ltd_learning.mInterface.ElearningAPI;
 import com.example.windows10.ltd_learning.mModel.Course;
 import com.example.windows10.ltd_learning.R;
@@ -30,21 +25,12 @@ import com.example.windows10.ltd_learning.mRecycler.CustomAdapter;
 import com.google.gson.Gson;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
 /**
  * Created by Windows10 on 10/10/2017.
  */
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

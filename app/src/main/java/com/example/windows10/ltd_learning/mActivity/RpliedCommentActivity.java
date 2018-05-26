@@ -3,7 +3,6 @@ package com.example.windows10.ltd_learning.mActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -18,26 +17,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.windows10.ltd_learning.mInterface.ElearningAPI;
-import com.example.windows10.ltd_learning.MyAPI;
+import com.example.windows10.ltd_learning.mInterface.MyAPI;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.mModel.SingleDialogue;
 import com.example.windows10.ltd_learning.mRecycler.RepliedAdapter;
 import com.google.gson.Gson;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
-import java.util.logging.StreamHandler;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;

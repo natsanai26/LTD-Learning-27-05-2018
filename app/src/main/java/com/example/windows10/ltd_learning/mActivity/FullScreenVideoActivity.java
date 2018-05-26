@@ -3,13 +3,11 @@ package com.example.windows10.ltd_learning.mActivity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
-import com.example.windows10.ltd_learning.MyAPI;
+import com.example.windows10.ltd_learning.mInterface.MyAPI;
 import com.example.windows10.ltd_learning.R;
 
 

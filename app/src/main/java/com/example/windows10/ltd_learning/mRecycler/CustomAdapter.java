@@ -1,6 +1,5 @@
 package com.example.windows10.ltd_learning.mRecycler;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,12 +19,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
-import com.example.windows10.ltd_learning.MyAPI;
+import com.example.windows10.ltd_learning.mInterface.MyAPI;
 import com.example.windows10.ltd_learning.mModel.Course;
 import com.example.windows10.ltd_learning.mActivity.CourseDetail;
-import com.example.windows10.ltd_learning.MySingleton;
+import com.example.windows10.ltd_learning.mInterface.MySingleton;
 import com.example.windows10.ltd_learning.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
-import com.example.windows10.ltd_learning.MyAPI;
+import com.example.windows10.ltd_learning.mInterface.MyAPI;
 import com.example.windows10.ltd_learning.R;
 
 /**

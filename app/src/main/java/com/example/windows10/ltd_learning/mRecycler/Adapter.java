@@ -28,7 +28,7 @@ import com.example.windows10.ltd_learning.mModel.Course;
 import com.example.windows10.ltd_learning.mActivity.CourseDetail;
 import com.example.windows10.ltd_learning.mActivity.CourseDetailForMyCourse;
 
-import com.example.windows10.ltd_learning.MySingleton;
+import com.example.windows10.ltd_learning.mInterface.MySingleton;
 import com.example.windows10.ltd_learning.R;
 import com.squareup.picasso.Picasso;
 

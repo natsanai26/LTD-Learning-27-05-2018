@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.windows10.ltd_learning.mInterface.ElearningAPI;
-import com.example.windows10.ltd_learning.MyAPI;
+import com.example.windows10.ltd_learning.mInterface.MyAPI;
 import com.example.windows10.ltd_learning.R;
 import com.example.windows10.ltd_learning.mModel.Comment;
 import com.example.windows10.ltd_learning.mRecycler.CommentAdapter;
